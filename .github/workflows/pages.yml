@@ -1,7 +1,5 @@
-name: Deploy Posmos
+name: Manual GitHub Pages backup
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
