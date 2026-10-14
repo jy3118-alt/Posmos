@@ -1,0 +1,135 @@
+{
+  "version": 14,
+  "models": {
+    "atelier": {
+      "file": "./assets/village-v13/models/atelier-web.glb",
+      "triangles": 5303,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "cottage": {
+      "file": "./assets/village-v13/models/cottage-web.glb",
+      "triangles": 3376,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "lookout": {
+      "file": "./assets/village-v13/models/lookout-web.glb",
+      "triangles": 3557,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "tree": {
+      "file": "./assets/village-v13/models/tree-web.glb",
+      "triangles": 2144,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "camp": {
+      "file": "./assets/village-v13/models/camp-web.glb",
+      "triangles": 3585,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "workshop": {
+      "file": "./assets/village-v13/models/workshop-web.glb",
+      "triangles": 3753,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "palette-bridge": {
+      "file": "./assets/village-v13/models/palette-bridge-web.glb",
+      "triangles": 2762,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "paint-tube": {
+      "file": "./assets/village-v13/models/paint-tube-web.glb",
+      "triangles": 2365,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "paint-skiff": {
+      "file": "./assets/village-v13/models/paint-skiff-web.glb",
+      "triangles": 2844,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "paint-hut": {
+      "file": "./assets/village-v13/models/paint-hut-web.glb",
+      "triangles": 3568,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "paint-mill": {
+      "file": "./assets/village-v13/models/paint-mill-web.glb",
+      "triangles": 4494,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "island": {
+      "file": "./assets/story-v14/models/island-web.glb",
+      "triangles": 19475,
+      "textures": [
+        [
+          2048,
+          2048
+        ]
+      ]
+    },
+    "cloud": {
+      "file": "./assets/story-v14/models/cloud-web.glb",
+      "triangles": 3978,
+      "textures": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    }
+  }
+}
