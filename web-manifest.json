@@ -35,7 +35,7 @@
     {
       "name": "assets/forest/scene.json",
       "bytes": 31369,
-      "sha256": "7cb87a6a560659cb43295478de1eebd38697e42555378aeae567e2d207cc8412"
+      "sha256": "db8289f8dbc50668af6930d16f4e590b192935560d688bb1e68447c171c800d0"
     },
     {
       "name": "assets/moa-v17/moa-web.glb",
@@ -190,7 +190,7 @@
     {
       "name": "index.html",
       "bytes": 2762,
-      "sha256": "50d3e9b26c061cdc114e18a9bf2dd0cac42c2c3a3ac50a7c5018171c5dfc0fd2"
+      "sha256": "19f5ca69b67a0cd7c617365f0e887bf66d09dd9422336a354dd858971d561e99"
     },
     {
       "name": "moa-resident.js",
@@ -239,8 +239,8 @@
     },
     {
       "name": "review.js",
-      "bytes": 30298,
-      "sha256": "5491da07afcd334573a7c2ee0407b6fe915f8eed5bc487ad7cd0cf466bec5e25"
+      "bytes": 30358,
+      "sha256": "4c019ac3e3eda9be954ce12eb812c756a7881e0f18c43a06b6be28a27dbc5f82"
     },
     {
       "name": "route-motion.js",
@@ -388,7 +388,7 @@
       "sha256": "37de173fec5a677f8c98ebd249da80c1a95bd6481e6c75fd7bd3301b0903bfcf"
     }
   ],
-  "totalBytes": 77492849,
+  "totalBytes": 77492909,
   "largestFiles": [
     {
       "name": "assets/rig-v20/models/avatar-vat.bin",

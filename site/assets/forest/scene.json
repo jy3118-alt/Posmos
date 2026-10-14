@@ -1499,7 +1499,7 @@
     "enabled": true
   },
   "search": {
-    "count": 100,
+    "count": 150,
     "model": null,
     "poseMetadata": "./assets/rig-v20/models/avatar-vat.json",
     "seed": 8417,

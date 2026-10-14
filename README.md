@@ -1,6 +1,6 @@
 # Posmos · 물감 마을
 
-Po 100명과 Moa 1명이 산책하고 쉬는 작은 3D 물감 세계입니다.
+Po 150명과 Moa 1명이 산책하고 쉬는 작은 3D 물감 세계입니다.
 
 배포 주소: https://jy3118-alt.github.io/Posmos/
 
