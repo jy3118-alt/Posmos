@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {gameMaterial} from './game-material.js';
+import {gameMaterial} from './game-material.js?v=dbedd2c7ac57';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries){
@@ -32,7 +32,7 @@ export async function prepareIsland(scene,gltf,sites){
  // Heal isolated source pinholes; leave coastline and open water intact.
  for(let pass=0;pass<2;pass++){const copy=heights.slice();for(let z=1;z<256;z++)for(let x=1;x<256;x++){const i=z*stride+x;if(copy[i]>-10)continue;let count=0,sum=0;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dz)continue;const h=copy[i+dz*stride+dx];if(h>-8){count++;sum+=h;}}if(count>=7)heights[i]=sum/count;}}
  for(let i=0;i<vertices.count;i++)vertices.setY(i,heights[i]);geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
- const map=await new T.TextureLoader().loadAsync('./assets/polish-v18/island-albedo.png');map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
+ const map=await new T.TextureLoader().loadAsync('./assets/polish-v18/island-albedo.png?v=4327b5c37434');map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
  const material=gameMaterial({map,side:T.DoubleSide},false),mesh=new T.Mesh(geometry,material);mesh.name='continuous-repaired-island';mesh.receiveShadow=true;scene.add(mesh);for(const p of parts)p.geometry.dispose();
  return {meshes:[mesh],height:triangleSurface([geometry])};
 }

@@ -2,7 +2,7 @@
   "version": 14,
   "models": {
     "atelier": {
-      "file": "./assets/village-v13/models/atelier-web.glb",
+      "file": "./assets/village-v13/models/atelier-web.glb?v=b17125e7f7de",
       "triangles": 5303,
       "textures": [
         [
@@ -12,7 +12,7 @@
       ]
     },
     "cottage": {
-      "file": "./assets/village-v13/models/cottage-web.glb",
+      "file": "./assets/village-v13/models/cottage-web.glb?v=adc276c09bc6",
       "triangles": 3376,
       "textures": [
         [
@@ -22,7 +22,7 @@
       ]
     },
     "lookout": {
-      "file": "./assets/village-v13/models/lookout-web.glb",
+      "file": "./assets/village-v13/models/lookout-web.glb?v=b8498e5c52ed",
       "triangles": 3557,
       "textures": [
         [
@@ -32,7 +32,7 @@
       ]
     },
     "tree": {
-      "file": "./assets/village-v13/models/tree-web.glb",
+      "file": "./assets/village-v13/models/tree-web.glb?v=22bba8413da7",
       "triangles": 2144,
       "textures": [
         [
@@ -42,7 +42,7 @@
       ]
     },
     "camp": {
-      "file": "./assets/village-v13/models/camp-web.glb",
+      "file": "./assets/village-v13/models/camp-web.glb?v=3031e1b5d6cc",
       "triangles": 3585,
       "textures": [
         [
@@ -52,7 +52,7 @@
       ]
     },
     "workshop": {
-      "file": "./assets/village-v13/models/workshop-web.glb",
+      "file": "./assets/village-v13/models/workshop-web.glb?v=ad077659ebe4",
       "triangles": 3753,
       "textures": [
         [
@@ -62,7 +62,7 @@
       ]
     },
     "palette-bridge": {
-      "file": "./assets/village-v13/models/palette-bridge-web.glb",
+      "file": "./assets/village-v13/models/palette-bridge-web.glb?v=90acaf72cc87",
       "triangles": 2762,
       "textures": [
         [
@@ -72,7 +72,7 @@
       ]
     },
     "paint-tube": {
-      "file": "./assets/village-v13/models/paint-tube-web.glb",
+      "file": "./assets/village-v13/models/paint-tube-web.glb?v=5476764170dc",
       "triangles": 2365,
       "textures": [
         [
@@ -82,7 +82,7 @@
       ]
     },
     "paint-skiff": {
-      "file": "./assets/village-v13/models/paint-skiff-web.glb",
+      "file": "./assets/village-v13/models/paint-skiff-web.glb?v=1068201ea2ab",
       "triangles": 2844,
       "textures": [
         [
@@ -92,7 +92,7 @@
       ]
     },
     "paint-hut": {
-      "file": "./assets/village-v13/models/paint-hut-web.glb",
+      "file": "./assets/village-v13/models/paint-hut-web.glb?v=e78141b615b0",
       "triangles": 3568,
       "textures": [
         [
@@ -102,7 +102,7 @@
       ]
     },
     "paint-mill": {
-      "file": "./assets/village-v13/models/paint-mill-web.glb",
+      "file": "./assets/village-v13/models/paint-mill-web.glb?v=ab1bbde43440",
       "triangles": 4494,
       "textures": [
         [
@@ -112,7 +112,7 @@
       ]
     },
     "island": {
-      "file": "./assets/story-v14/models/island-web.glb",
+      "file": "./assets/story-v14/models/island-web.glb?v=71d3cb117979",
       "triangles": 19475,
       "textures": [
         [
@@ -122,7 +122,7 @@
       ]
     },
     "cloud": {
-      "file": "./assets/story-v14/models/cloud-web.glb",
+      "file": "./assets/story-v14/models/cloud-web.glb?v=fa7c7f480a12",
       "triangles": 3978,
       "textures": [
         [

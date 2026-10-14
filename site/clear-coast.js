@@ -4,7 +4,7 @@ import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 // Painted panorama + scrolling water albedo, with a CC0 1K HDRI for reflections.
 // Shared sunlight and time keep the background coherent through a full orbit.
 export async function makeClearCoast(scene,camera,height,seaLevel){
- const loader=new T.TextureLoader();const [skyTexture,waves,hdr]=await Promise.all([loader.loadAsync('./assets/crown-v16/painted-sky.png'),loader.loadAsync('./assets/crown-v16/painted-water.png'),new RGBELoader().loadAsync('./assets/crown-v16/kloppenheim_06_puresky_1k.hdr')]);
+ const loader=new T.TextureLoader();const [skyTexture,waves,hdr]=await Promise.all([loader.loadAsync('./assets/crown-v16/painted-sky.png?v=1297b91e04d0'),loader.loadAsync('./assets/crown-v16/painted-water.png?v=7be60faee79c'),new RGBELoader().loadAsync('./assets/crown-v16/kloppenheim_06_puresky_1k.hdr?v=206c67e3a1b9')]);
  skyTexture.colorSpace=waves.colorSpace=T.SRGBColorSpace;skyTexture.wrapS=T.RepeatWrapping;skyTexture.anisotropy=4;waves.wrapS=waves.wrapT=T.RepeatWrapping;waves.anisotropy=8;hdr.mapping=T.EquirectangularReflectionMapping;hdr.wrapS=T.RepeatWrapping;scene.environment=hdr;scene.environmentIntensity=.45;
  const time={value:0},night={value:0},sunset={value:0},tint=new T.Color('white'),sunDirection=new T.Vector3(-31,23,26).normalize();
  const noise=`float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}

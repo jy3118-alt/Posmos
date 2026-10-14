@@ -4,7 +4,7 @@
   "cellSize": 39.19183588453085,
   "character": {
     "id": "character-01",
-    "file": "./assets/rig-v20/painter-web.glb",
+    "file": "./assets/rig-v20/painter-web.glb?v=1ea46ca79da9",
     "height": 1.65,
     "yaw": 2.0915926536,
     "position": [
@@ -1350,7 +1350,7 @@
       ]
     ],
     "villageVersion": 13,
-    "assetManifest": "./assets/story-v14/manifest.json",
+    "assetManifest": "./assets/story-v14/manifest.json?v=e43c59537f10",
     "storybook": true,
     "treeColourDistribution": "mixed"
   },
@@ -1491,7 +1491,7 @@
   "artworks": {
     "statues": [],
     "paintPods": [],
-    "statueModel": "./assets/polish-v18/royal-po-statue-web.glb"
+    "statueModel": "./assets/polish-v18/royal-po-statue-web.glb?v=21a5f3fe1c77"
   },
   "timeCycle": {
     "seconds": 720,
@@ -1501,7 +1501,7 @@
   "search": {
     "count": 150,
     "model": null,
-    "poseMetadata": "./assets/rig-v20/models/avatar-vat.json",
+    "poseMetadata": "./assets/rig-v20/models/avatar-vat.json?v=402810ef520c",
     "seed": 8417,
     "targetIndex": 30,
     "animated": true,
@@ -1510,7 +1510,7 @@
     "fullDetail": true
   },
   "guestCharacter": {
-    "file": "./assets/moa-v17/moa-web.glb",
+    "file": "./assets/moa-v17/moa-web.glb?v=b45015e95ab8",
     "height": 1.65,
     "nativeSpeed": 0.32,
     "route": [

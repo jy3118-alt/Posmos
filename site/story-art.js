@@ -1,19 +1,19 @@
 import * as T from 'three';
 import {DecalGeometry} from 'three/addons/geometries/DecalGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {gameMaterial} from './game-material.js';
+import {gameMaterial} from './game-material.js?v=dbedd2c7ac57';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export async function makeStoryArt(scene,renderer,city,crowd,meta){
  if(!crowd?.source||!crowd.vatData)return;
- const po=await new GLTFLoader().loadAsync('./assets/polish-v18/royal-po-statue-web.glb');
+ const po=await new GLTFLoader().loadAsync('./assets/polish-v18/royal-po-statue-web.glb?v=21a5f3fe1c77');
  const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04).texture;room.dispose();pmrem.dispose();
  const gold=new T.MeshPhysicalMaterial({color:'#edbd4e',metalness:.96,roughness:.20,clearcoat:.36,clearcoatRoughness:.13,envMap:environment,envMapIntensity:1.35});
  const statue=new T.Group();statue.name='one-golden-royal-po-monument';po.scene.traverse(o=>{if(o.isMesh){o.material=gold;o.castShadow=o.receiveShadow=true;}});statue.add(po.scene);
  const x=-62,z=-55,y=city.height(x,z),h=33;statue.scale.setScalar(h);statue.rotation.y=-Math.atan2(55,62);statue.position.set(x,y+2.5,z);scene.add(statue);
  const base=new T.Mesh(new T.CylinderGeometry(8.5,10,2.5,48),new T.MeshStandardMaterial({color:'#eee0bd',roughness:.7}));base.position.set(x,y+1.25,z);base.receiveShadow=base.castShadow=true;scene.add(base);
  // Decals are clipped to real house triangles, so they follow curved/irregular walls.
- const atlas=await new T.TextureLoader().loadAsync('./assets/forest/character-graffiti-atlas-v9.png');atlas.colorSpace=T.SRGBColorSpace;atlas.anisotropy=8;
+ const atlas=await new T.TextureLoader().loadAsync('./assets/forest/character-graffiti-atlas-v9.png?v=e047e382cfbb');atlas.colorSpace=T.SRGBColorSpace;atlas.anisotropy=8;
  const material=new T.MeshToonMaterial({map:atlas,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,side:T.FrontSide}),matrix=new T.Matrix4(),ray=new T.Raycaster(),direction=new T.Vector3(),orientation=new T.Euler(),q=new T.Quaternion(),normal=new T.Vector3();let count=0;
  const batches=[];scene.traverse(o=>{if(o.isInstancedMesh&&['tripo-atelier','tripo-cottage','tripo-paint-hut','tripo-paint-mill','tripo-lookout'].includes(o.name))batches.push(o);});
  for(const batch of batches){for(let i=0;i<Math.min(batch.count,3);i++){batch.getMatrixAt(i,matrix);const wall=new T.Mesh(batch.geometry,batch.material);wall.matrixAutoUpdate=false;wall.matrix.copy(matrix);wall.updateMatrixWorld(true);const b=new T.Box3().setFromObject(wall),c=b.getCenter(new T.Vector3()),s=b.getSize(new T.Vector3());
