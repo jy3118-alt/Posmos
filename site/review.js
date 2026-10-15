@@ -5,21 +5,24 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
-import {createSearchCharacters} from './search-characters.js?v=dbedd2c7ac57';
-import {makeForest,createAmbience,forestHeight} from './forest.js?v=dbedd2c7ac57';
-import {createResident} from './resident.js?v=dbedd2c7ac57';
-import {paintObject,paintInk} from './paint.js?v=dbedd2c7ac57';
-import {makeMurals} from './murals.js?v=dbedd2c7ac57';
-import {makeTiltShift} from './tilt-shift.js?v=dbedd2c7ac57';
-import {makePaintTools,makeArtworks} from './paint-tools.js?v=dbedd2c7ac57';
-import {createAnimatedFriends} from './animated-friends.js?v=dbedd2c7ac57';
-import {createGameResident} from './resident-v13.js?v=dbedd2c7ac57';
-import {gameObject} from './game-material.js?v=dbedd2c7ac57';
-import {makeStoryArt} from './story-art.js?v=dbedd2c7ac57';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=dbedd2c7ac57';
-import {createMoaResident} from './moa-resident.js?v=dbedd2c7ac57';
+import {createSearchCharacters} from './search-characters.js?v=e1c49fb521c6';
+import {makeForest,forestHeight} from './forest.js?v=e1c49fb521c6';
+import {createResident} from './resident.js?v=e1c49fb521c6';
+import {paintObject,paintInk} from './paint.js?v=e1c49fb521c6';
+import {makeMurals} from './murals.js?v=e1c49fb521c6';
+import {makeTiltShift} from './tilt-shift.js?v=e1c49fb521c6';
+import {makePaintTools,makeArtworks} from './paint-tools.js?v=e1c49fb521c6';
+import {createAnimatedFriends} from './animated-friends.js?v=e1c49fb521c6';
+import {createGameResident} from './resident-v13.js?v=e1c49fb521c6';
+import {gameObject} from './game-material.js?v=e1c49fb521c6';
+import {makeStoryArt} from './story-art.js?v=e1c49fb521c6';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=e1c49fb521c6';
+import {createMoaResident} from './moa-resident.js?v=e1c49fb521c6';
 const $=s=>document.querySelector(s),reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let loadingProgress=0;
+function loading(value){const bar=$('#loading-progress'),fill=$('#loading-fill');if(!bar||!fill)return;const next=Math.max(loadingProgress,Math.min(1,value));if(next===loadingProgress)return;loadingProgress=next;fill.style.transform=`scaleX(${next})`;bar.setAttribute('aria-valuenow',String(Math.round(next*100)));}
 async function main(){
+ loading(.03);T.DefaultLoadingManager.onProgress=(_url,loaded,total)=>loading(.06+.58*loaded/Math.max(1,total));
  const config=await fetch('./assets/forest/scene.json?v=ce53afc69beb').then(r=>{if(!r.ok)throw Error('공간 설정을 읽지 못했습니다.');return r.json();});
  const inspect=new URLSearchParams(location.search).has('inspect');
  if(inspect){const previewAction=new URLSearchParams(location.search).get('pose');if(['walk','run','desperate','sit','lie'].includes(previewAction))config.character.previewAction=previewAction;}
@@ -43,6 +46,7 @@ async function main(){
  const load=(file,label)=>{if(!file)return Promise.resolve(null);if(!assetCache.has(file))assetCache.set(file,loader.loadAsync(file).catch(error=>{errors.push(label+'을 불러오지 못했습니다.');console.error(error);return null;}));return assetCache.get(file);};
  const muralPromise=config.murals?.atlas?new T.TextureLoader().loadAsync(config.murals.atlas).catch(error=>{errors.push('그래피티 그림을 불러오지 못했습니다.');console.error(error);return null;}):Promise.resolve(null);
  const [forest,chestGltf,characterGltf,muralTexture,searchGltf,poseMetadata,moaGltf,...propGltfs]=await Promise.all([makeForest(scene,config.forest,camera).catch(error=>{errors.push('물감 세계의 배경을 불러오지 못했습니다.');console.error(error);return null;}),load(config.chest.file,'보물상자'),load(config.character.file,'캐릭터'),muralPromise,load(config.search.model,'숨은 친구들'),fetch(config.search.poseMetadata).then(r=>{if(!r.ok)throw Error('동작 설정을 찾을 수 없습니다.');return r.json();}).catch(error=>{errors.push('친구들의 동작 설정을 불러오지 못했습니다.');console.error(error);return null;}),load(config.guestCharacter?.file,'새 친구 Moa'),...config.props.map(p=>load(p.file,p.label||(p.id==='forest-tent-01'?'텐트':'탁자')))]);
+ loading(.68);
  if(config.forest.storybook&&forest){const y=forestHeight(0,0);controls.target.y+=y;camera.position.y+=y;sun.position.y+=y;sun.target.position.y=y;config.camera.target[1]+=y;config.camera.position[1]+=y;}
  function materials(object,kind){if(v13)gameObject(object);else paintObject(object,kind);}
  // Static instances share decoded geometry, texture and painted materials.
@@ -53,10 +57,12 @@ async function main(){
  const murals=makeMurals(scene,config.murals,muralTexture,forest?.city);if(!v13)makePaintTools(scene,config.paintTools);
  const traffic=forest?.city?createFriendTraffic({height:forestHeight,safe:villageTrafficSafety(forest.city)}):null;
  let resident=null,moa=null;
- if(characterGltf){if(v13)resident=createGameResident(scene,characterGltf,config.character,forestHeight,text=>{$('#activity').textContent=text;},traffic);else{if(config.forest.groundMode==='village')for(const st of config.artworks.statues)st.position[1]=forestHeight(st.position[0],st.position[2])+.03;makeArtworks(scene,config.artworks,characterGltf);materials(characterGltf.scene,'character');resident=createResident(scene,characterGltf,config.character,config.chest,forestHeight,{say:()=>{},onActivity:text=>{$('#activity').textContent=text;},reduced,initialPose:new URLSearchParams(location.search).get('pose')});}if(!resident.hasWalk)errors.push('이 캐릭터에는 걷기 동작이 없어 휴식 자세로 표시합니다.');}
+ if(characterGltf){if(v13)resident=createGameResident(scene,characterGltf,config.character,forestHeight,()=>{},traffic);else{if(config.forest.groundMode==='village')for(const st of config.artworks.statues)st.position[1]=forestHeight(st.position[0],st.position[2])+.03;makeArtworks(scene,config.artworks,characterGltf);materials(characterGltf.scene,'character');resident=createResident(scene,characterGltf,config.character,config.chest,forestHeight,{say:()=>{},onActivity:()=>{},reduced,initialPose:new URLSearchParams(location.search).get('pose')});}if(!resident.hasWalk)errors.push('이 캐릭터에는 걷기 동작이 없어 휴식 자세로 표시합니다.');}
  if(forest?.city){if(v13&&characterGltf&&poseMetadata){try{search=await createAnimatedFriends(scene,characterGltf,forest.city,config.search,poseMetadata,resident,traffic);}catch(error){errors.push('숨은 친구들의 동작을 불러오지 못했습니다.');console.error(error);}}else if(searchGltf)search=createSearchCharacters(scene,searchGltf,forest.city,config.search,poseMetadata,resident,traffic);}
+ loading(.84);
  if(moaGltf&&traffic)moa=createMoaResident(scene,moaGltf,traffic,config.guestCharacter);
  if(config.forest.storybook&&search&&poseMetadata)await makeStoryArt(scene,renderer,forest.city,search,poseMetadata).catch(error=>{errors.push('조형물이나 그래피티를 불러오지 못했습니다.');console.error(error);});
+ loading(.89);
  const palettes={
   morning:{fog:'#8d9fb2',background:'#f4fcff',sun:'#fff1d4',ambient:'#c3deef',ground:'#655778',ink:[.23,.23,.43],intensity:2.5,hemisphere:.78,exposure:1.0,warmth:.002,night:0,label:'오전의 빛'},
   day:{fog:'#9baebe',background:'#ffffff',sun:'#fff8e9',ambient:'#c4e2f5',ground:'#615676',ink:[.23,.23,.43],intensity:2.8,hemisphere:.82,exposure:1.02,warmth:.005,night:0,label:'한낮의 하늘'},
@@ -66,7 +72,7 @@ async function main(){
  };
  for(const p of Object.values(palettes)){for(const k of ['fog','background','sun','ambient','ground'])p[k]=new T.Color(p[k]);p.inkColor=new T.Color().setRGB(...p.ink);}
  const anchors=[[0,'morning'],[.24,'day'],[.44,'sunset'],[.63,'night'],[.80,'night'],[.93,'dawn'],[1,'morning']];
- const blended={};for(const k of ['fog','background','sun','ambient','ground','inkColor'])blended[k]=new T.Color();const horizonTone=new T.Color().setRGB(.18,.54,.96);let lastTimeLabel='';
+ const blended={};for(const k of ['fog','background','sun','ambient','ground','inkColor'])blended[k]=new T.Color();const horizonTone=new T.Color().setRGB(.18,.54,.96);
  function atmosphere(dt){
   const phase=(timeStartPhase+cycleTime/config.timeCycle.seconds)%1;let index=0;while(phase>anchors[index+1][0])index++;
   const a=palettes[anchors[index][1]],b=palettes[anchors[index+1][1]],fraction=(phase-anchors[index][0])/(anchors[index+1][0]-anchors[index][0]),u=fraction*fraction*(3-2*fraction),f=1-Math.exp(-dt*2);
@@ -76,7 +82,6 @@ async function main(){
   sun.intensity=T.MathUtils.lerp(sun.intensity,T.MathUtils.lerp(a.intensity,b.intensity,u),f);ambient.intensity=T.MathUtils.lerp(ambient.intensity,T.MathUtils.lerp(a.hemisphere,b.hemisphere,u),f);renderer.toneMappingExposure=T.MathUtils.lerp(renderer.toneMappingExposure,T.MathUtils.lerp(a.exposure,b.exposure,u),f);grading.uniforms.warmth.value=T.MathUtils.lerp(a.warmth,b.warmth,u);
   if(forest){forest.backgroundMaterial.color.lerp(blended.background,f);nightBlend=T.MathUtils.lerp(nightBlend,T.MathUtils.lerp(a.night,b.night,u),f);forest.setNight(nightBlend);sunsetBlend=T.MathUtils.lerp(sunsetBlend,T.MathUtils.lerp(a.sunset||0,b.sunset||0,u),f);forest.setSunset?.(sunsetBlend);sun.position.y=sun.target.position.y+T.MathUtils.lerp(23,9,sunsetBlend);}
   const active=phase<.17||phase>.93?'morning':phase<.56?'afternoon':'night';for(const button of document.querySelectorAll('[data-time]'))button.setAttribute('aria-pressed',String(button.dataset.time===active));
-  const label=fraction<.5?a.label:b.label;if(label!==lastTimeLabel){$('#time-label').textContent=label;lastTimeLabel=label;}
  }
  for(const button of document.querySelectorAll('[data-time]'))button.onclick=()=>{timeStartPhase=Number(button.dataset.phase);cycleTime=0;};
  atmosphere(10);let viewportWidth=1,viewportHeight=1;
@@ -105,13 +110,12 @@ async function main(){
  function updateCamera(dt){if(!cameraTransition){if(view==='follow'&&followedActor){actorFocus(followTarget);followDelta.copy(followTarget).sub(controls.target).multiplyScalar(1-Math.exp(-dt*2.2));controls.target.add(followDelta);camera.position.add(followDelta);}controls.update(dt);return;}const t=cameraTransition;if(view==='follow'&&followedActor)actorFocus(t.toTarget);t.elapsed+=dt;const p=Math.min(1,t.elapsed/.9),ease=p*p*(3-2*p);controls.target.lerpVectors(t.fromTarget,t.toTarget,ease);t.currentSphere.set(T.MathUtils.lerp(t.fromSphere.radius,t.toSphere.radius,ease),T.MathUtils.lerp(t.fromSphere.phi,t.toSphere.phi,ease),T.MathUtils.lerp(t.fromSphere.theta,t.toSphere.theta,ease));camera.position.setFromSpherical(t.currentSphere).add(controls.target);camera.lookAt(controls.target);if(p===1){cameraTransition=null;controls.enabled=true;controls.update();}}
  if(traffic){for(let i=0;i<12;i++)traffic.step(1/60);for(const a of traffic.agents){a.vx=a.vz=a.dx=a.dz=a.travel=0;}resident?.update(0,0);moa?.update(0,0);search?.update(0);}
  resize();new ResizeObserver(resize).observe($('.viewer'));
+ loading(.94);
  await renderer.compileAsync(scene,camera);renderer.render(scene,camera);renderer.shadowMap.needsUpdate=true;composer.render(0);
- const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',characterModels:moa?'2':'1',totalCharacters:String((search?.count||0)+(moa?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v20',poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),poCount:String(search?.count||0),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'mixed',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});$('#loading').remove();
+ const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',characterModels:moa?'2':'1',totalCharacters:String((search?.count||0)+(moa?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v20',poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),poCount:String(search?.count||0),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'mixed',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});loading(1);T.DefaultLoadingManager.onProgress=undefined;$('#loading').remove();
  if(errors.length){$('#notice').hidden=false;$('#notice').textContent=errors.join(' ')+' 새로고침해서 다시 시도해 주세요.';}
  $('#tilt').onclick=()=>{tiltOn=!tiltOn;$('#tilt').setAttribute('aria-pressed',String(tiltOn));resize();};
 
- function zoom(factor){const offset=camera.position.clone().sub(controls.target),distance=T.MathUtils.clamp(offset.length()*factor,config.camera.minDistance,config.camera.maxDistance);offset.setLength(distance);camera.position.copy(controls.target).add(offset);controls.update();}
- $('#zoom-in').onclick=()=>zoom(.76);$('#zoom-out').onclick=()=>zoom(1/.76);
  const pointer=new T.Vector2(),raycaster=new T.Raycaster(),actorPickSphere=new T.Sphere(),actorPickPoint=new T.Vector3(),actorPickCenter=new T.Vector3();let downX=0,downY=0;
  const realActors=[resident&&{id:'po:'+(config.search.count-1),kind:'Po',root:resident.root,resident,height:resident.height},moa&&{id:'moa',kind:'Moa',root:moa.root,resident:moa,height:moa.height}].filter(Boolean);
  const pickBlockers=[];scene.traverse(o=>{if(o.isMesh&&!o.isSkinnedMesh&&o!==selectionRing&&o!==search?.batches?.[0]&&o.renderOrder!==-100&&!o.material?.transparent&&!search?.royal?.pickMeshes.includes(o))pickBlockers.push(o);});
@@ -130,15 +134,15 @@ async function main(){
  canvas.addEventListener('pointerdown',e=>{downX=e.clientX;downY=e.clientY;if(e.button===2){view='search';stopFollowing();cameraTransition=null;controls.enabled=true;}});
  canvas.addEventListener('pointerup',e=>{if(e.button!==0||Math.hypot(e.clientX-downX,e.clientY-downY)>5)return;const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);selectCharacter();});
  function updateSelection(){if(!followedActor)return;actorPosition(followedActor,selectionRing.position);selectionRing.position.y=(followedActor.person?.roof?followedActor.person.surfaceY:forestHeight(selectionRing.position.x,selectionRing.position.z))+.07;}
- const ambience=createAmbience();$('#audio').onclick=async()=>{try{const playing=await ambience.toggle();$('#audio').setAttribute('aria-pressed',String(playing));$('#audio span').textContent=playing?'소리 끄기':'바람 소리';}catch{$('#notice').hidden=false;$('#notice').textContent='소리를 다시 눌러 재생해 주세요.';}};$('#volume').oninput=e=>ambience.setVolume(Number(e.target.value));
- function ui(value){hiddenUi=value;$('.hud').classList.toggle('is-hidden',value);$('#show').hidden=!value;}$('#hide').onclick=()=>ui(true);$('#show').onclick=()=>ui(false);$('#settings').onclick=()=>{const open=$('#settings').getAttribute('aria-expanded')!=='true';$('#settings').setAttribute('aria-expanded',String(open));$('#panel').hidden=!open;$('#settings b').textContent=open?'−':'+';};
- async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await $('.viewer').requestFullscreen();}catch{$('#notice').hidden=false;$('#notice').textContent='현재 브라우저에서는 전체 화면을 사용할 수 없습니다.';}}$('#fullscreen').onclick=fullscreen;document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD'].includes(e.code)){moveKeys.add(e.code);e.preventDefault();}if(e.key.toLowerCase()==='h')ui(!hiddenUi);if(e.key.toLowerCase()==='f')fullscreen();});
+ function ui(value){hiddenUi=value;$('.hud').classList.toggle('is-hidden',value);}
+ async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await $('.viewer').requestFullscreen();}catch{$('#notice').hidden=false;$('#notice').textContent='현재 브라우저에서는 전체 화면을 사용할 수 없습니다.';}}
+ document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD'].includes(e.code)){moveKeys.add(e.code);e.preventDefault();}if(e.key.toLowerCase()==='h')ui(!hiddenUi);if(e.key.toLowerCase()==='f')fullscreen();});
  document.addEventListener('keyup',e=>moveKeys.delete(e.code));
  const focusPoint=new T.Vector3();
  function updateTilt(dt){if(!resident||!tiltShift.enabled)return;if(view==='follow'&&followedActor)actorFocus(focusPoint);else focusPoint.copy(controls.target);focusPoint.project(camera);const y=T.MathUtils.clamp(focusPoint.y*.5+.5,.20,.67);tiltShift.uniforms.focusY.value=T.MathUtils.lerp(tiltShift.uniforms.focusY.value,y,1-Math.exp(-dt*3));}
- let last=performance.now();document.addEventListener('visibilitychange',()=>{last=performance.now();ambience.visibility(document.hidden);});
+ let last=performance.now();document.addEventListener('visibilitychange',()=>{last=performance.now();});
  const inspectPoint=new T.Vector3();
  function inspectActorScreens(){const list=[];function add(id,position,height){inspectPoint.copy(position);inspectPoint.y+=height*.55;inspectPoint.project(camera);if(Math.abs(inspectPoint.x)<.96&&Math.abs(inspectPoint.y)<.96&&Math.abs(inspectPoint.z)<1)list.push({id,x:Math.round((inspectPoint.x*.5+.5)*viewportWidth),y:Math.round((.5-inspectPoint.y*.5)*viewportHeight)});}for(const a of realActors)add(a.id,a.root.position,a.height);for(const p of search?.placements.slice(0,5)||[])add('po:'+p.id,new T.Vector3().fromArray(p.position),p.height);canvas.dataset.actorScreens=JSON.stringify(list);}
  let lastShadow=-1000,lastDiagnostics=-1000,diagnosticFrames=[];function animate(now){requestAnimationFrame(animate);const frameMs=now-last,dt=Math.min(frameMs/1000,.05);last=now;if(document.hidden)return;cycleTime+=dt;if(!reduced)time+=dt;moveCamera(dt);atmosphere(dt);const motionDt=reduced?0:dt;resident?.prepare?.(motionDt,time);moa?.prepare(motionDt,time);search?.prepare?.(motionDt,time);traffic?.step(motionDt);resident?.update(motionDt,time);moa?.update(motionDt,time);if(forest)forest.update(time,dt);for(const v of hovering)v.root.position.y=v.y+Math.sin(time*.18+v.phase)*.45;search?.update(time);updateSelection();updateCamera(dt);keepAboveGround();updateTilt(dt);if(renderer.shadowMap.enabled&&now-lastShadow>(resident?.shadowMoving()?1000/config.rendering.movingShadowHz:1000/config.rendering.restingShadowHz)){renderer.shadowMap.needsUpdate=true;lastShadow=now;}if(inspect)renderer.info.reset();composer.render(dt);if(inspect){inspectActorScreens();diagnosticFrames.push(frameMs);if(now-lastDiagnostics>2000&&diagnosticFrames.length>30){const sorted=diagnosticFrames.slice().sort((a,b)=>a-b);$('#model').dataset.frameP95=sorted[Math.floor(sorted.length*.95)].toFixed(2);$('#model').dataset.frameP99=sorted[Math.floor(sorted.length*.99)].toFixed(2);$('#model').dataset.renderCalls=String(renderer.info.render.calls);$('#model').dataset.renderTriangles=String(renderer.info.render.triangles);$('#model').dataset.cameraYaw=controls.getAzimuthalAngle().toFixed(4);$('#model').dataset.cameraDistance=controls.getDistance().toFixed(2);$('#model').dataset.traffic=JSON.stringify(traffic?.metrics());$('#model').dataset.following=followedActor?.id||'';if(followedActor){actorFocus(followTarget);$('#model').dataset.followPosition=JSON.stringify(followTarget.toArray());$('#model').dataset.followError=followTarget.distanceTo(controls.target).toFixed(3);}$('#model').dataset.cameraTarget=JSON.stringify(controls.target.toArray());$('#model').dataset.poSkinShadow='disabled';$('#model').dataset.poActivity=resident?.behavior||'';$('#model').dataset.poPoses=JSON.stringify([...new Set(search?.placements.map(p=>p.pose)||[])]);if(moa){$('#model').dataset.moaPosition=JSON.stringify(moa.root.position.toArray());$('#model').dataset.moaAnimation=String(moa.shadowMoving());$('#model').dataset.moaBody=JSON.stringify([moa.body.x,moa.body.z,moa.body.vx,moa.body.vz]);}$('#model').dataset.sunset=String(sunsetBlend.toFixed(3));$('#model').dataset.tiltRadius=String(config.rendering.tiltShift.radius);$('#model').dataset.timePhase=((timeStartPhase+cycleTime/config.timeCycle.seconds)%1).toFixed(3);diagnosticFrames.length=0;lastDiagnostics=now;}}}requestAnimationFrame(animate);
 }
-main().catch(error=>{console.error(error);if($('#loading')){$('#loading p').textContent='쉼터를 열지 못했습니다';$('#loading small').textContent=error.message+' 새로고침해서 다시 시도해 주세요.';}else{$('#notice').hidden=false;$('#notice').textContent=error.message;}});
+main().catch(error=>{console.error(error);const notice=$('#notice');notice.hidden=false;notice.textContent=error.message+' 새로고침해서 다시 시도해 주세요.';const progress=$('#loading-progress');if(progress)progress.setAttribute('aria-label','로딩 실패');});

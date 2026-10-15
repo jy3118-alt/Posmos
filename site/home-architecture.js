@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {paintMaterial} from './paint.js?v=dbedd2c7ac57';
+import {paintMaterial} from './paint.js?v=e1c49fb521c6';
 export function homeContour(config){
  const path=new T.CatmullRomCurve3(config.homeOutline.map(([x,z])=>new T.Vector3(x,0,z)),true,'centripetal');
  return path.getSpacedPoints(112).map(p=>[p.x,p.z]);

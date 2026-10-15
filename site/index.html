@@ -1,16 +1,14 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#e9dbbd"><title>물감 마을</title><link rel="stylesheet" href="./style.css?v=02d2f9ca2245"><script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script></head><body><main class="viewer">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><title>Posmos</title><link rel="stylesheet" href="./style.css?v=53eed930c719"><script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script></head><body><main class="viewer">
 <canvas id="model" aria-label="물감으로 만든 언덕 마을. Po 150명과 Moa 1명이 쉬고 산책하는 공간."></canvas>
-<div id="loading" role="status"><span>❧</span><p>물감 마을을 열고 있어요</p><small>새 마을과 친구들의 동작을 준비하고 있어요.</small></div>
+<div id="loading" role="status" aria-label="Posmos 로딩 중">
+<svg class="brand-logo" viewBox="0 0 128 112" aria-hidden="true"><path fill="currentColor" d="M28 33C35 9 91 8 100 33c25-1 32 45 9 51-15 26-73 26-90 0C-3 77 3 34 28 33Z"/><circle cx="47" cy="65" r="11" fill="white"/><circle cx="83" cy="72" r="11" fill="white"/><circle cx="49" cy="65" r="5" fill="currentColor"/><circle cx="82" cy="71" r="5" fill="currentColor"/><path d="m38 45 13-1m27 8 13 3" stroke="white" stroke-width="4" stroke-linecap="round"/><rect x="54" y="38" width="6" height="8" rx="1" fill="white"/><rect x="62" y="38" width="6" height="8" rx="1" fill="white"/><rect x="70" y="38" width="6" height="8" rx="1" fill="white"/><rect x="52" y="46" width="27" height="9" rx="4.5" fill="white"/></svg>
+<h1>Posmos</h1>
+<div id="loading-progress" role="progressbar" aria-label="Posmos 준비" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="loading-fill"></div></div>
+</div>
 <div class="hud"><nav class="time-strip" aria-label="시간대 선택">
 <button data-time="morning" data-phase="0.02" aria-label="아침" title="아침" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h18M5 21h14M7 17a5 5 0 0 1 10 0M12 2v3M4.2 7.2l2.1 2.1M19.8 7.2l-2.1 2.1M2 12h2M20 12h2"/></svg></button>
 <button data-time="afternoon" data-phase="0.44" aria-label="오후 · 노을" title="오후 · 노을" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h18M5 21h14M7 17a5 5 0 0 1 10 0M12 2v6m-3-3 3 3 3-3M3 10l2 2M21 10l-2 2"/></svg></button>
 <button data-time="night" data-phase="0.68" aria-label="밤" title="밤" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"/><path d="M17 3v4M15 5h4"/></svg></button>
 </nav>
-<aside class="settings"><button id="settings" aria-expanded="false" aria-controls="panel"><span>감상 설정</span><b>+</b></button><div id="panel" hidden>
-<p class="panel-label">천천히 흐르는 시간</p><p id="time-label">오전의 빛</p><p id="activity" class="activity">풍경을 바라보는 중</p>
-<div class="sound"><button id="audio" aria-pressed="false"><span>바람 소리</span></button><input id="volume" type="range" min="0" max="1" step="0.01" value="0.28" aria-label="배경음 볼륨"></div>
-<div class="options"><button id="tilt" aria-pressed="true">틸트 시프트</button><button id="fullscreen">전체 화면</button><button id="hide">UI 숨기기</button></div>
-<p class="panel-note">캐릭터 클릭 추적 · 다시 클릭 해제<br>왼쪽 드래그 회전 · 오른쪽 드래그 이동<br>휠 확대 · H 화면만 보기</p></div></aside>
-
-<div class="zoom"><button id="zoom-in" aria-label="확대">+</button><button id="zoom-out" aria-label="축소">−</button></div>
-</div><button id="show" hidden>설정 보기 <span>H</span></button><div id="notice" hidden role="status"></div></main><script type="module" src="./review.js?v=dbedd2c7ac57"></script></body></html>
+<button id="tilt" class="tilt-icon" aria-label="틸트 시프트" title="틸트 시프트" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14M3 8h18M3 16h18M5 20h14M7 12h10"/></svg></button>
+</div><div id="notice" hidden role="status"></div></main><script type="module" src="./review.js?v=e1c49fb521c6"></script></body></html>
