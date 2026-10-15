@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {gameMaterial} from './game-material.js?v=e1c49fb521c6';
+import {gameMaterial} from './game-material.js?v=fc26f8f07ca1';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries){

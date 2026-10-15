@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=e1c49fb521c6';
-import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=e1c49fb521c6';
+import {gameObject} from './game-material.js?v=fc26f8f07ca1';
+import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=fc26f8f07ca1';
 export function createGameResident(scene,gltf,config,height,onActivity,traffic){
  const model=gltf.scene;model.updateMatrixWorld(true);const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),root=new T.Group();root.name='painter-resident-v20';root.scale.setScalar(config.height/size.y);model.position.sub(new T.Vector3(center.x,box.min.y,center.z));root.add(model);scene.add(root);gameObject(model);model.traverse(o=>{if(o.isSkinnedMesh){o.frustumCulled=false;o.receiveShadow=false;}});
  const mixer=new T.AnimationMixer(model),actions={},weights={};for(const clip of gltf.animations){const a=mixer.clipAction(clip);a.setEffectiveWeight(0).play();actions[clip.name]=a;weights[clip.name]=0;}actions.idle?.setEffectiveWeight(1);

@@ -1,10 +1,10 @@
 import * as T from 'three';
-import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=e1c49fb521c6';
-import {gameMaterial,characterMaterial} from './game-material.js?v=e1c49fb521c6';
-import {villageFriendPlaces} from './friend-places.js?v=e1c49fb521c6';
-import {makeRoyalOutfit} from './royal-outfit.js?v=e1c49fb521c6';
-import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=e1c49fb521c6';
-import {villageTrafficSafety} from './friend-traffic.js?v=e1c49fb521c6';
+import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=fc26f8f07ca1';
+import {gameMaterial,characterMaterial} from './game-material.js?v=fc26f8f07ca1';
+import {villageFriendPlaces} from './friend-places.js?v=fc26f8f07ca1';
+import {makeRoyalOutfit} from './royal-outfit.js?v=fc26f8f07ca1';
+import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=fc26f8f07ca1';
+import {villageTrafficSafety} from './friend-traffic.js?v=fc26f8f07ca1';
 
 // Shared real-rig deformation, independent animation clocks and ground routes.
 export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,traffic){
