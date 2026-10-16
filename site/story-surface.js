@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {gameMaterial} from './game-material.js?v=e5ec221a5af3';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=e5ec221a5af3';
+import {gameMaterial} from './game-material.js?v=3d754442d18a';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=3d754442d18a';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){

@@ -1,12 +1,12 @@
 import * as T from 'three';
-import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=e5ec221a5af3';
-import {gameMaterial,characterMaterial} from './game-material.js?v=e5ec221a5af3';
-import {villageFriendPlaces} from './friend-places.js?v=e5ec221a5af3';
-import {makeRoyalOutfit} from './royal-outfit.js?v=e5ec221a5af3';
-import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=e5ec221a5af3';
-import {villageTrafficSafety} from './friend-traffic.js?v=e5ec221a5af3';
-import {createWaterResidents} from './water-residents.js?v=e5ec221a5af3';
-import {createPoVariantCrowd} from './po-variants.js?v=e5ec221a5af3';
+import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=3d754442d18a';
+import {gameMaterial,characterMaterial} from './game-material.js?v=3d754442d18a';
+import {villageFriendPlaces} from './friend-places.js?v=3d754442d18a';
+import {makeRoyalOutfit} from './royal-outfit.js?v=3d754442d18a';
+import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=3d754442d18a';
+import {villageTrafficSafety} from './friend-traffic.js?v=3d754442d18a';
+import {createWaterResidents} from './water-residents.js?v=3d754442d18a';
+import {createPoVariantCrowd} from './po-variants.js?v=3d754442d18a';
 
 // Shared real-rig deformation, independent animation clocks and ground routes.
 export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,traffic,waterGltf,characterConfig,variantLibrary=[]){
@@ -86,17 +86,17 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  const sourceMeta=meta;
  function prepare(dt,t){for(const p of placements)if(p.follower){const phase=(t+p.id*3.73)%30;p.follower.prepare(dt,p.roaming&&phase<5?0:p.speed);}}
  function sampleRoute(p,dt,t){const meta=p.variantMeta||sourceMeta,point=p.follower.finish(dt),angle=Math.atan2(Math.sin(point.yaw-p.yaw),Math.cos(point.yaw-p.yaw)),turnRate=dt>0?Math.abs(angle)/dt:0,turning=!!meta.clips.turn&&point.speed<.09&&turnRate>.25;
-  const slope=forwardSlope(city.height,point.x,point.z,point.yaw);p.sliding=p.sliding?point.speed>.12&&slope<-.08:point.speed>.2&&slope<-.18;const sliding=p.sliding;
-  const mode=turning?'turn':p.pose==='turn'&&point.speed<.10&&p.animationMix>.05?'turn':sliding?'slide':p.basePose;
+  const slope=forwardSlope(city.height,point.x,point.z,point.yaw);p.sliding=p.id%8===0&&(p.sliding?point.speed>.12&&slope<-.14:point.speed>.2&&slope<-.28);const sliding=p.sliding;p.slideAge=sliding?(p.slideAge||0)+dt:0;
+  const mode=turning?'turn':p.pose==='turn'&&point.speed<.10&&p.animationMix>.05?'turn':sliding?(meta.clips.slide_enter&&p.slideAge<meta.clips.slide_enter.duration+.16?'slide_enter':'slide'):p.basePose;
   if(mode!==p.pose){if(p.pendingMode!==mode){p.pendingMode=mode;p.modeWait=0;}p.modeWait+=dt;
-   if(p.modeWait>.12&&p.poseMix>.95){const old=meta.clips[p.pose];p.previousPose=p.pose;p.previousFrame=p.animationFrame;previousClocks.set([old.start,old.count,0,p.previousFrame],p.id*4);p.pose=mode;const c=meta.clips[mode];p.animationFrame=(p.previousFrame/old.count)*c.count;p.poseMix=0;p.modeWait=0;clocks.set([c.start,c.count,0,p.animationFrame],p.id*4);}}
+   if(p.modeWait>.12&&p.poseMix>.95){const old=meta.clips[p.pose];p.previousPose=p.pose;p.previousFrame=p.animationFrame;previousClocks.set([old.start,old.count,0,p.previousFrame],p.id*4);p.pose=mode;const c=meta.clips[mode];p.animationFrame=c.loop===false?0:(p.previousFrame/old.count)*c.count;p.poseMix=0;p.modeWait=0;clocks.set([c.start,c.count,0,p.animationFrame],p.id*4);}}
   else{p.pendingMode=mode;p.modeWait=0;}
   p.poseMix=Math.min(1,p.poseMix+dt/.30);poseMixes[p.id]=p.poseMix;
-  if(p.previousPose&&p.poseMix<1){const old=meta.clips[p.previousPose];p.previousFrame=(p.previousFrame+(old.nativeSpeed?point.travel/(old.nativeSpeed*p.height)*old.fps:dt*old.fps))%old.count;previousClocks[p.id*4+3]=p.previousFrame;}
+  if(p.previousPose&&p.poseMix<1){const old=meta.clips[p.previousPose];const next=p.previousFrame+(old.nativeSpeed?point.travel/(old.nativeSpeed*p.height)*old.fps:dt*old.fps);p.previousFrame=old.loop===false?Math.min(old.count-1,next):next%old.count;previousClocks[p.id*4+3]=p.previousFrame;}
   const clip=meta.clips[p.pose],wanted=turning?1:p.pose==='turn'?0:point.motion;p.animationMix+=(wanted-p.animationMix)*(1-Math.exp(-dt*7));p.movement.motion=p.animationMix;
   p.position[0]=point.x;p.position[1]=point.y+.035;p.position[2]=point.z;p.yaw=point.yaw;
-  const advance=p.pose==='turn'?dt*clip.fps*T.MathUtils.clamp(turnRate/.9,.6,2):p.pose==='slide'?dt*clip.fps:point.travel/Math.max(.001,(clip.nativeSpeed||.45)*p.height)*clip.fps;
-  p.animationFrame=(p.animationFrame+advance)%clip.count;clocks[p.id*4+3]=p.animationFrame;transitions[p.id*2]=(t*meta.clips.idle.fps+p.clockOffset)%meta.clips.idle.count;transitions[p.id*2+1]=p.animationMix;
+  const advance=p.pose==='turn'?dt*clip.fps*T.MathUtils.clamp(turnRate/.9,.6,2):['slide','slide_enter'].includes(p.pose)?dt*clip.fps:point.travel/Math.max(.001,(clip.nativeSpeed||.45)*p.height)*clip.fps;
+  p.animationFrame=clip.loop===false?Math.min(clip.count-1,p.animationFrame+advance):(p.animationFrame+advance)%clip.count;clocks[p.id*4+3]=p.animationFrame;transitions[p.id*2]=(t*meta.clips.idle.fps+p.clockOffset)%meta.clips.idle.count;transitions[p.id*2+1]=p.animationMix;
  }
  function capAt(clip,frame,out){const a=Math.floor(frame)%clip.count,b=(a+1)%clip.count,u=frame-Math.floor(frame);out.set(T.MathUtils.lerp(clip.cap[a*3],clip.cap[b*3],u),T.MathUtils.lerp(clip.cap[a*3+1],clip.cap[b*3+1],u),T.MathUtils.lerp(clip.cap[a*3+2],clip.cap[b*3+2],u));}
  const restCap=new T.Vector3(),previousCap=new T.Vector3();

@@ -5,27 +5,27 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
-import {createSearchCharacters} from './search-characters.js?v=e5ec221a5af3';
-import {makeForest,forestHeight} from './forest.js?v=e5ec221a5af3';
-import {createResident} from './resident.js?v=e5ec221a5af3';
-import {paintObject,paintInk} from './paint.js?v=e5ec221a5af3';
-import {makeMurals} from './murals.js?v=e5ec221a5af3';
-import {makeTiltShift} from './tilt-shift.js?v=e5ec221a5af3';
-import {makePaintTools,makeArtworks} from './paint-tools.js?v=e5ec221a5af3';
-import {createAnimatedFriends} from './animated-friends.js?v=e5ec221a5af3';
-import {loadPoVariants} from './po-variants.js?v=e5ec221a5af3';
-import {createGameResident} from './resident-v13.js?v=e5ec221a5af3';
-import {gameObject} from './game-material.js?v=e5ec221a5af3';
-import {makeStoryArt} from './story-art.js?v=e5ec221a5af3';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=e5ec221a5af3';
-import {createMoaResident} from './moa-resident.js?v=e5ec221a5af3';
+import {createSearchCharacters} from './search-characters.js?v=3d754442d18a';
+import {makeForest,forestHeight} from './forest.js?v=3d754442d18a';
+import {createResident} from './resident.js?v=3d754442d18a';
+import {paintObject,paintInk} from './paint.js?v=3d754442d18a';
+import {makeMurals} from './murals.js?v=3d754442d18a';
+import {makeTiltShift} from './tilt-shift.js?v=3d754442d18a';
+import {makePaintTools,makeArtworks} from './paint-tools.js?v=3d754442d18a';
+import {createAnimatedFriends} from './animated-friends.js?v=3d754442d18a';
+import {loadPoVariants} from './po-variants.js?v=3d754442d18a';
+import {createGameResident} from './resident-v13.js?v=3d754442d18a';
+import {gameObject} from './game-material.js?v=3d754442d18a';
+import {makeStoryArt} from './story-art.js?v=3d754442d18a';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=3d754442d18a';
+import {createMoaResident} from './moa-resident.js?v=3d754442d18a';
 const $=s=>document.querySelector(s),motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 let reduced=motionPreference.matches;motionPreference.addEventListener('change',event=>{reduced=event.matches;});
 let loadingProgress=0;
 function loading(value){const bar=$('#loading-progress'),fill=$('#loading-fill');if(!bar||!fill)return;const next=Math.max(loadingProgress,Math.min(1,value));if(next===loadingProgress)return;loadingProgress=next;fill.style.transform=`scaleX(${next})`;bar.setAttribute('aria-valuenow',String(Math.round(next*100)));}
 async function main(){
  loading(.03);T.DefaultLoadingManager.onProgress=(_url,loaded,total)=>loading(.06+.58*loaded/Math.max(1,total));
- const config=await fetch('./assets/forest/scene.json?v=d671d761fb8a').then(r=>{if(!r.ok)throw Error('공간 설정을 읽지 못했습니다.');return r.json();});
+ const config=await fetch('./assets/forest/scene.json?v=e5f0f9b971f8').then(r=>{if(!r.ok)throw Error('공간 설정을 읽지 못했습니다.');return r.json();});
  const inspect=new URLSearchParams(location.search).has('inspect');
  if(inspect){const previewAction=new URLSearchParams(location.search).get('pose');if(['walk','run','desperate','sit','lie'].includes(previewAction))config.character.previewAction=previewAction;}
  const v13=config.forest.villageVersion>=13;
@@ -115,7 +115,7 @@ async function main(){
  resize();new ResizeObserver(resize).observe($('.viewer'));
  loading(.94);
  await renderer.compileAsync(scene,camera);renderer.render(scene,camera);renderer.shadowMap.needsUpdate=true;composer.render(0);
- const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',characterModels:String(1+(search?.variants?.groups.length||0)+(moa?1:0)),totalCharacters:String((search?.count||0)+(moa?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v20',poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),poCount:String(search?.count||0),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'mixed',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),swimmers:String(search?.waterResidents?.count||0),poVariants:JSON.stringify(search?.variants?.counts||{}),poRenderCounts:JSON.stringify(search?.renderCounts||{}),variantPaletteBytes:String(search?.variants?.paletteBytes||0),swimmingBay:JSON.stringify(forest?.city?.swimmingBay||null),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});loading(1);T.DefaultLoadingManager.onProgress=undefined;$('#loading').remove();
+ const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',characterModels:String(1+(search?.variants?.groups.length||0)+(moa?1:0)),totalCharacters:String((search?.count||0)+(moa?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v32',poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),poCount:String(search?.count||0),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'mixed',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),swimmers:String(search?.waterResidents?.count||0),poVariants:JSON.stringify(search?.variants?.counts||{}),poRenderCounts:JSON.stringify(search?.renderCounts||{}),variantPaletteBytes:String(search?.variants?.paletteBytes||0),swimmingBay:JSON.stringify(forest?.city?.swimmingBay||null),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});loading(1);T.DefaultLoadingManager.onProgress=undefined;$('#loading').remove();
  if(errors.length){$('#notice').hidden=false;$('#notice').textContent=errors.join(' ')+' 새로고침해서 다시 시도해 주세요.';}
  $('#tilt').onclick=()=>{tiltOn=!tiltOn;$('#tilt').setAttribute('aria-pressed',String(tiltOn));resize();};
 

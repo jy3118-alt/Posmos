@@ -1,10 +1,10 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {paintMaterial} from './paint.js?v=e5ec221a5af3';
-import {makePaintedRooftops} from './paint-city.js?v=e5ec221a5af3';
-import {makeVillage,villageHeight} from './village.js?v=e5ec221a5af3';
-import {makePaintVillage,paintVillageHeight} from './village-v13.js?v=e5ec221a5af3';
-import {makePaintedGarden} from './paint-garden.js?v=e5ec221a5af3';
+import {paintMaterial} from './paint.js?v=3d754442d18a';
+import {makePaintedRooftops} from './paint-city.js?v=3d754442d18a';
+import {makeVillage,villageHeight} from './village.js?v=3d754442d18a';
+import {makePaintVillage,paintVillageHeight} from './village-v13.js?v=3d754442d18a';
+import {makePaintedGarden} from './paint-garden.js?v=3d754442d18a';
 
 let groundMode='rooftop',villageVersion=12;
 // The saved forest and current rooftop share the same height interface.
