@@ -1,8 +1,8 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial,cleanGeometry} from './game-material.js?v=7bd6e17631b5';
-import {makeClearCoast} from './clear-coast.js?v=7bd6e17631b5';
-import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=7bd6e17631b5';
+import {gameMaterial,cleanGeometry} from './game-material.js?v=e5ec221a5af3';
+import {makeClearCoast} from './clear-coast.js?v=e5ec221a5af3';
+import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=e5ec221a5af3';
 
 // One continuous surface is shared by the coastline, roads and every moving foot.
 const N=153,STEP=2,MIN=-152,SEA=-9,field=new Float32Array(N*N);

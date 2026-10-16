@@ -1507,7 +1507,49 @@
     "animated": true,
     "staticLegacyCount": 0,
     "name": "Po",
-    "fullDetail": true
+    "fullDetail": true,
+    "variants": [
+      {
+        "key": "crown",
+        "label": "왕관 Po",
+        "file": "./assets/po-variants-v31/models/crown.glb?v=91f8b21e15c0",
+        "poseMetadata": "./assets/po-variants-v31/models/crown-bones.json?v=c1c07bd39a62",
+        "count": 1,
+        "heightScale": 1
+      },
+      {
+        "key": "ribbon",
+        "label": "리본 Po",
+        "file": "./assets/po-variants-v31/models/ribbon.glb?v=5a7a4a9fbc5b",
+        "poseMetadata": "./assets/po-variants-v31/models/ribbon-bones.json?v=ba106ce44151",
+        "count": 18,
+        "heightScale": 1
+      },
+      {
+        "key": "coral",
+        "label": "코랄 바지 Po",
+        "file": "./assets/po-variants-v31/models/coral.glb?v=6200d5390ad4",
+        "poseMetadata": "./assets/po-variants-v31/models/coral-bones.json?v=ed04c765c2df",
+        "count": 22,
+        "heightScale": 1
+      },
+      {
+        "key": "short",
+        "label": "짧은 Po",
+        "file": "./assets/po-variants-v31/models/short.glb?v=0c00ba204e64",
+        "poseMetadata": "./assets/po-variants-v31/models/short-bones.json?v=0ea06ed4bed2",
+        "count": 18,
+        "heightScale": 0.84
+      },
+      {
+        "key": "plump",
+        "label": "통통 Po",
+        "file": "./assets/po-variants-v31/models/plump.glb?v=d33988fb60fa",
+        "poseMetadata": "./assets/po-variants-v31/models/plump-bones.json?v=7b0b88ea0766",
+        "count": 18,
+        "heightScale": 1
+      }
+    ]
   },
   "guestCharacter": {
     "file": "./assets/moa-v17/moa-web.glb?v=b45015e95ab8",
