@@ -1539,5 +1539,10 @@
         -2
       ]
     ]
+  },
+  "waterActivities": {
+    "model": "./assets/water-v30/painter-water.glb?v=3354e227429d",
+    "count": 6,
+    "durationSeconds": 110
   }
 }

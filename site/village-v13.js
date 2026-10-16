@@ -1,8 +1,8 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial,cleanGeometry} from './game-material.js?v=c971b551bea2';
-import {makeClearCoast} from './clear-coast.js?v=c971b551bea2';
-import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=c971b551bea2';
+import {gameMaterial,cleanGeometry} from './game-material.js?v=7bd6e17631b5';
+import {makeClearCoast} from './clear-coast.js?v=7bd6e17631b5';
+import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=7bd6e17631b5';
 
 // One continuous surface is shared by the coastline, roads and every moving foot.
 const N=153,STEP=2,MIN=-152,SEA=-9,field=new Float32Array(N*N);
@@ -20,19 +20,19 @@ export function paintVillageHeight(x,z){if(renderedHeight)return renderedHeight(
 export async function makePaintVillage(scene,config,camera){
  const manifest=await fetch(config.assetManifest||'./assets/village-v13/manifest.json').then(r=>r.json()),loader=new GLTFLoader(),assets=new Map(await Promise.all(Object.entries(manifest.models).map(async([name,p])=>[name,await loader.loadAsync(p.file)])));
  let seed=5307;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;},guide=new T.Object3D(),dummy=new T.Matrix4();
- renderedHeight=null;let groundMeshes=[];if(assets.has('island')){const terrain=await prepareIsland(scene,assets.get('island'),houseSites);renderedHeight=terrain.height;groundMeshes=terrain.meshes;}else{
+ renderedHeight=null;let groundMeshes=[],swimmingBay=null;if(assets.has('island')){const terrain=await prepareIsland(scene,assets.get('island'),houseSites);renderedHeight=terrain.height;groundMeshes=terrain.meshes;swimmingBay=terrain.swimmingBay;}else{
  const grid=new T.PlaneGeometry(304,304,N-1,N-1);grid.rotateX(-Math.PI/2);const gp=grid.attributes.position;for(let i=0;i<gp.count;i++)gp.setY(i,field[i]);const land=grid.toNonIndexed();land.computeVertexNormals();const p=land.attributes.position,n=land.attributes.normal,colors=[];
  const pigments=['#82ad72','#92b881','#c2bd7d','#dbcb9e','#ad929f'];
  for(let i=0;i<p.count;i+=3){const x=(p.getX(i)+p.getX(i+1)+p.getX(i+2))/3,z=(p.getZ(i)+p.getZ(i+1)+p.getZ(i+2))/3,y=p.getY(i),steep=n.getY(i)<.72;let c=new T.Color(y<-4?'#dfcda4':steep?'#9d9cac':y>22?'#b6b891':pigments[Math.sin(x*.04+z*.055)>.1?0:1]);if(y>-4&&!steep)c.lerp(new T.Color('#c5b98a'),smooth(50,100,Math.hypot(x,z))*.37);for(const [cx,cz,r,ink] of [[42,6,9,'#df897a'],[-36,22,8,'#a3a5cb'],[32,55,5,'#e5b865']]){const angle=Math.atan2(z-cz,x-cx),edge=r*(1+.10*Math.sin(angle*3)+.07*Math.cos(angle*5));if(Math.hypot(x-cx,z-cz)<edge)c.set(ink);}c.multiplyScalar(.975+random()*.05);for(let j=0;j<3;j++)colors.push(c.r,c.g,c.b);}
  land.setAttribute('color',new T.Float32BufferAttribute(colors,3));const ground=new T.Mesh(land,gameMaterial({vertexColors:true}));ground.material.vertexColors=true;ground.receiveShadow=true;ground.name='continuous-village-ground';scene.add(ground);groundMeshes=[ground];grid.dispose();}
- const coast=await makeClearCoast(scene,camera,paintVillageHeight,SEA);
+ const coast=await makeClearCoast(scene,camera,paintVillageHeight,SEA,swimmingBay);
  const paths=[[[0,3],[-22,6],[-41,17],[-55,34],[-40,54],[-63,60]],[[1,5],[20,11],[35,22],[54,39],[65,52]],[[1,-4],[-13,-24],[-32,-39],[-39,-60]],[[1,-4],[15,-22],[35,-31],[58,-39]],[[0,9],[4,27],[0,46],[-2,68]]];
  const pathCurves=paths.map(points=>new T.CatmullRomCurve3(points.map(([x,z])=>new T.Vector3(x,0,z)))),pathSamples=pathCurves.map(curve=>curve.getSpacedPoints(150));
  // Route the paths around each actual GLB footprint, rather than walking through houses.
  const footprints=houseSites.map(h=>{const b=new T.Box3().setFromObject(assets.get(h.asset).scene),s=b.getSize(new T.Vector3());return {...h,r:Math.max(s.x,s.z)/s.y*h.h*.52+1.9};});footprints.push({x:-36,z:22,r:9});
  for(const points of pathSamples)for(const pt of points)for(let pass=0;pass<3;pass++)for(const h of footprints){const dx=pt.x-h.x,dz=pt.z-h.z,d=Math.hypot(dx,dz);if(d<h.r){const scale=h.r/Math.max(.001,d);pt.x=h.x+(d>.001?dx:.01)*scale;pt.z=h.z+dz*scale;}}
 
-  paintGround(groundMeshes,pathSamples);
+  paintGround(groundMeshes,pathSamples,swimmingBay);
  const sources=new Map();for(const [name,gltf]of assets){gltf.scene.updateMatrixWorld(true);const box=new T.Box3().setFromObject(gltf.scene),size=box.getSize(new T.Vector3()),centre=box.getCenter(new T.Vector3()),normalize=new T.Matrix4().makeScale(1/size.y,1/size.y,1/size.y).multiply(new T.Matrix4().makeTranslation(-centre.x,-box.min.y,-centre.z)),parts=[];gltf.scene.traverse(node=>{if(node.isMesh)parts.push({geometry:cleanGeometry(node.geometry.clone().applyMatrix4(dummy.multiplyMatrices(normalize,node.matrixWorld))),material:gameMaterial(node.material,name!=='cloud')});});sources.set(name,{parts,ratio:size.clone().divideScalar(size.y)});}
  function instances(name,places,shadow=true){const source=sources.get(name);if(!source)return;for(const part of source.parts){if(name==='tree')colourCanopy(part.material);if(name==='cloud'){part.material.onBeforeCompile=s=>{s.fragmentShader=s.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\nfloat cloudTone=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));diffuseColor.rgb=vec3(.90,.97,1.)*mix(.82,1.,cloudTone);');};part.material.customProgramCacheKey=()=> 'clean-white-cloud';}const mesh=new T.InstancedMesh(part.geometry,part.material,places.length);mesh.name='tripo-'+name;places.forEach((a,i)=>{guide.position.set(a.x,a.y??paintVillageHeight(a.x,a.z),a.z);guide.rotation.set(a.rx||0,a.yaw||0,a.rz||0);guide.scale.set(a.h*(a.sx||1),a.h,a.h*(a.sz||1));guide.updateMatrix();mesh.setMatrixAt(i,guide.matrix);if(a.tint)mesh.setColorAt(i,new T.Color(a.tint));});mesh.castShadow=shadow;mesh.receiveShadow=true;mesh.computeBoundingSphere();scene.add(mesh);}}
  const buildings=houseSites.map(p=>{const ratio=sources.get(p.asset).ratio,base=paintVillageHeight(p.x,p.z);return {...p,width:ratio.x*p.h,depth:ratio.z*p.h,top:base+p.h,roofHeight:0,type:'tripo',frame:0};});for(const type of ['atelier','cottage','lookout','paint-hut','paint-mill'])instances(type,houseSites.filter(p=>p.asset===type).map((p,i)=>({...p,tint:['#ffffff','#fff0d8','#d8edf2','#f6dae6'][i%4]})));
@@ -44,7 +44,7 @@ export async function makePaintVillage(scene,config,camera){
  instances('paint-skiff',[{x:75,z:52,h:3.4,yaw:-.72,y:paintVillageHeight(75,52)+.04}]);
  // Paint pools are part of the exact ground triangles, without surface overlap.
  const walkingPaths=[];for(const path of pathSamples){let part=[];const save=()=>{if(part.length>7)walkingPaths.push(part);part=[];};for(const pt of path){const y=paintVillageHeight(pt.x,pt.z),last=part.at(-1);if(y<-3){save();continue;}if(last&&Math.abs(y-paintVillageHeight(last.x,last.z))>.40*Math.hypot(pt.x-last.x,pt.z-last.z))save();part.push(pt);}save();}if(!walkingPaths.length)walkingPaths.push(pathSamples[0].slice(0,20));
- const city={village:true,v13:true,groundMeshes,buildings,height:paintVillageHeight,treePositions,paths:walkingPaths,sea:SEA,buildingCount:buildings.length,buildingBatchCount:5,roofPropCount:0,exclusions:[{x:-62,z:-55,radius:18},{x:42,z:4,radius:10},{x:-36,z:22,radius:9},{x:75,z:52,radius:5}]};
+ const city={swimmingBay,village:true,v13:true,groundMeshes,buildings,height:paintVillageHeight,treePositions,paths:walkingPaths,sea:SEA,buildingCount:buildings.length,buildingBatchCount:5,roofPropCount:0,exclusions:[{x:-62,z:-55,radius:18},{x:42,z:4,radius:10},{x:-36,z:22,radius:9},{x:75,z:52,radius:5}]};
  const cloudPlaces=Array.from({length:18},(_,i)=>({x:Math.cos(i*2.4)*195,z:Math.sin(i*2.4)*195,y:61+(i%4)*14,h:12+(i%5)*3.1,yaw:i*.8,sx:1.1+(i%3)*.3,tint:['#ffffff','#f4fbff','#edf7ff'][i%3]}));if(assets.has('cloud'))instances('cloud',cloudPlaces,false);const cloudMeshes=[];scene.traverse(o=>{if(o.name==='tripo-cloud')cloudMeshes.push(o);});
  return {city,backgroundMaterial:coast.material,setNight:coast.setNight,setSunset:coast.setSunset,update(t){coast.update(t);for(const mesh of cloudMeshes){cloudPlaces.forEach((p,i)=>{guide.position.set(p.x+Math.sin(t*.008+i)*3,p.y,p.z);guide.rotation.set(0,p.yaw,0);guide.scale.set(p.h*p.sx,p.h,p.h);guide.updateMatrix();mesh.setMatrixAt(i,guide.matrix);});mesh.instanceMatrix.needsUpdate=true;}},treeCount:treePositions.length};
 }

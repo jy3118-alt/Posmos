@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=c971b551bea2';
-import {createFollower} from './friend-locomotion.js?v=c971b551bea2';
+import {gameObject} from './game-material.js?v=7bd6e17631b5';
+import {createFollower} from './friend-locomotion.js?v=7bd6e17631b5';
 export function createMoaResident(scene,gltf,traffic,config){
  const model=gltf.scene,mixer=new T.AnimationMixer(model),idle=mixer.clipAction(T.AnimationClip.findByName(gltf.animations,'idle')),walk=mixer.clipAction(T.AnimationClip.findByName(gltf.animations,'walk'));
  idle.play();walk.play();walk.setEffectiveWeight(0);mixer.update(0);model.updateMatrixWorld(true);

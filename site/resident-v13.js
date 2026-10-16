@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=c971b551bea2';
-import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=c971b551bea2';
+import {gameObject} from './game-material.js?v=7bd6e17631b5';
+import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=7bd6e17631b5';
 export function createGameResident(scene,gltf,config,height,onActivity,traffic){
  const model=gltf.scene;model.updateMatrixWorld(true);const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),root=new T.Group();root.name='painter-resident-v20';root.scale.setScalar(config.height/size.y);model.position.sub(new T.Vector3(center.x,box.min.y,center.z));root.add(model);scene.add(root);gameObject(model);model.traverse(o=>{if(o.isSkinnedMesh){o.frustumCulled=false;o.receiveShadow=false;}});
  const mixer=new T.AnimationMixer(model),actions={},weights={};for(const clip of gltf.animations){const a=mixer.clipAction(clip);a.setEffectiveWeight(0).play();actions[clip.name]=a;weights[clip.name]=0;}actions.idle?.setEffectiveWeight(1);
@@ -13,7 +13,7 @@ export function createGameResident(scene,gltf,config,height,onActivity,traffic){
   // Seated/lying bodies become stationary obstacles once braking is complete.
   follower.body.movable=!(speed<.07&&['sit','lie'].includes(requested));
   follower.body.radius=config.height*(.34+.29*lieMix)+.06;
-  follower.prepare(dt,['idle','sit','lie'].includes(requested)?0:requested==='desperate'?1.75:requested==='run'?1.44:.52);
+  follower.prepare(dt,['idle','sit','lie'].includes(requested)?0:requested==='desperate'?1.95:requested==='run'?1.70:.65);
  }
  function update(dt,t){
   const p=follower.finish(dt),yawDelta=Math.atan2(Math.sin(p.yaw-root.rotation.y),Math.cos(p.yaw-root.rotation.y)),turnRate=dt>0?Math.abs(yawDelta)/dt:0,f=1-Math.exp(-dt*7);speed=p.speed;

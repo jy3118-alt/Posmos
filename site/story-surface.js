@@ -1,13 +1,14 @@
 import * as T from 'three';
-import {gameMaterial} from './game-material.js?v=c971b551bea2';
+import {gameMaterial} from './game-material.js?v=7bd6e17631b5';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=7bd6e17631b5';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
-export function triangleSurface(geometries){
+export function triangleSurface(geometries,minimumHeight=-11){
  const cell=5,min=-160,size=64,bins=Array.from({length:size*size},()=>[]);
  for(const g of geometries){const p=g.attributes.position,index=g.index;
   for(let i=0;i<(index?.count||p.count);i+=3){const a=index?index.getX(i):i,b=index?index.getX(i+1):i+1,c=index?index.getX(i+2):i+2;
    const ax=p.getX(a),az=p.getZ(a),bx=p.getX(b),bz=p.getZ(b),cx=p.getX(c),cz=p.getZ(c),ay=p.getY(a),by=p.getY(b),cy=p.getY(c),den=(bz-cz)*(ax-cx)+(cx-bx)*(az-cz);
-   if(Math.abs(den)<.0001||Math.max(ay,by,cy)<-11)continue;
+   if(Math.abs(den)<.0001||Math.max(ay,by,cy)<minimumHeight)continue;
    const t=[ax,az,bx,bz,cx,cz,ay,by,cy,den];
    const x0=Math.max(0,Math.floor((Math.min(ax,bx,cx)-min)/cell)),x1=Math.min(size-1,Math.floor((Math.max(ax,bx,cx)-min)/cell)),z0=Math.max(0,Math.floor((Math.min(az,bz,cz)-min)/cell)),z1=Math.min(size-1,Math.floor((Math.max(az,bz,cz)-min)/cell));
    for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++)bins[z*size+x].push(t);
@@ -31,13 +32,15 @@ export async function prepareIsland(scene,gltf,sites){
  for(let i=0;i<vertices.count;i++)heights[i]=upper(vertices.getX(i),vertices.getZ(i));
  // Heal isolated source pinholes; leave coastline and open water intact.
  for(let pass=0;pass<2;pass++){const copy=heights.slice();for(let z=1;z<256;z++)for(let x=1;x<256;x++){const i=z*stride+x;if(copy[i]>-10)continue;let count=0,sum=0;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dz)continue;const h=copy[i+dz*stride+dx];if(h>-8){count++;sum+=h;}}if(count>=7)heights[i]=sum/count;}}
- for(let i=0;i<vertices.count;i++)vertices.setY(i,heights[i]);geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ const swimmingBay=planSwimmingBay(upper,-9);
+ for(let i=0;i<vertices.count;i++)vertices.setY(i,beachHeight(swimmingBay,vertices.getX(i),vertices.getZ(i),heights[i]));geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
  const map=await new T.TextureLoader().loadAsync('./assets/polish-v18/island-albedo.png?v=4327b5c37434');map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
  const material=gameMaterial({map,side:T.DoubleSide},false),mesh=new T.Mesh(geometry,material);mesh.name='continuous-repaired-island';mesh.receiveShadow=true;scene.add(mesh);for(const p of parts)p.geometry.dispose();
- return {meshes:[mesh],height:triangleSurface([geometry])};
+ return {meshes:[mesh],height:triangleSurface([geometry],-20),swimmingBay};
 }
-export function paintGround(meshes,paths){
+export function paintGround(meshes,paths,bay){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=2048;const ctx=canvas.getContext('2d'),scale=2048/304,xy=p=>[(p.x+152)*scale,(p.z+152)*scale];
+ if(bay){ctx.save();ctx.translate((bay.x+152)*scale,(bay.z+152)*scale);ctx.rotate(Math.atan2(bay.nz,bay.nx));const sand=ctx.createRadialGradient(1*scale,0,2*scale,2*scale,0,19*scale);sand.addColorStop(0,'#efd39c');sand.addColorStop(.55,'#e4c38be8');sand.addColorStop(1,'#dfbd8200');ctx.fillStyle=sand;ctx.beginPath();for(let j=0;j<=64;j++){const a=j/64*Math.PI*2,r=1+.05*Math.sin(a*7)+.035*Math.cos(a*11);const x=2*scale+Math.cos(a)*18*scale*r,z=Math.sin(a)*14*scale*r;ctx[j?'lineTo':'moveTo'](x,z);}ctx.closePath();ctx.fill();ctx.clip();for(let i=0;i<180;i++){ctx.fillStyle=i%3?'#fff2d52a':'#b7906540';const x=(Math.sin(i*83.31)*16+2)*scale,z=Math.cos(i*73.15)*13*scale;ctx.fillRect(x,z,(.15+(i%7)*.08)*scale,.11*scale);}ctx.restore();}
  ctx.lineCap=ctx.lineJoin='round';for(const path of paths){ctx.strokeStyle='#e9cd99';ctx.lineWidth=2.9*scale;ctx.beginPath();path.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](...xy(p)));ctx.stroke();ctx.strokeStyle='#f5deb3';ctx.lineWidth=1.6*scale;ctx.stroke();}
  // Irregular pigment marks are painted onto the same triangles as the road.
  let seed=921;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
