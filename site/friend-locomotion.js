@@ -1,4 +1,4 @@
-import {makeRoute,makeRouteState,advanceRoute,sampleRoute} from './route-motion.js?v=3d754442d18a';
+import {makeRoute,makeRouteState,advanceRoute,sampleRoute} from './route-motion.js?v=4efd6bcfdd11';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 // Eligibility uses the same rendered surface as feet and traffic.
 export function groundPatch(height,x,z,radius=.95){
@@ -11,11 +11,11 @@ export function painterSchedule(t){
  const phase=t%132;
  return phase<7?'idle':phase<43?'walk':phase<59?'desperate':phase<63?'idle':phase<69.1?'sit':phase<72?'idle':phase<80.1?'lie':phase<98?'walk':phase<115?'run':'idle';
 }
-export function createFollower(traffic,points,{id,height=1.65,radius=height*.34+.06,fraction=0,direction=1,closed=false}={}){
- const route=makeRoute(points),state=makeRouteState(route,fraction,direction),start=sampleRoute(route,state.distance),body=traffic.add({id,x:start.x,z:start.z,radius,height});
+export function createFollower(traffic,points,{id,height=1.65,radius=height*.34+.06,fraction=0,direction=1,closed=false,speedMultiplier=1}={}){
+ const speedScale=Math.max(.25,Math.min(3,Number(speedMultiplier)||1)),route=makeRoute(points),state=makeRouteState(route,fraction,direction),start=sampleRoute(route,state.distance),body=traffic.add({id,x:start.x,z:start.z,radius,height});
  let oldDistance=state.distance,planned=0,tx=Math.cos(state.yaw),tz=-Math.sin(state.yaw),yaw=state.yaw,motion=0;
  function prepare(dt,speed){
-  oldDistance=state.distance;
+  speed*=speedScale;oldDistance=state.distance;
   if(closed){state.speed+=(speed-state.speed)*(1-Math.exp(-dt*4));planned=state.speed*dt;const ahead=sampleRoute(route,(state.distance+.5)%route.length),here=sampleRoute(route,state.distance);tx=ahead.x-here.x;tz=ahead.z-here.z;const n=Math.hypot(tx,tz)||1;tx/=n;tz/=n;state.yaw=Math.atan2(-tz,tx);}
   else{advanceRoute(route,state,speed,dt);planned=state.travel;state.distance=oldDistance;tx=Math.cos(state.yaw);tz=-Math.sin(state.yaw);}
   const center=sampleRoute(route,oldDistance),cx=center.x-body.x,cz=center.z-body.z,along=cx*tx+cz*tz;

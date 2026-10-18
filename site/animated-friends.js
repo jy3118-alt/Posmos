@@ -1,12 +1,12 @@
 import * as T from 'three';
-import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=3d754442d18a';
-import {gameMaterial,characterMaterial} from './game-material.js?v=3d754442d18a';
-import {villageFriendPlaces} from './friend-places.js?v=3d754442d18a';
-import {makeRoyalOutfit} from './royal-outfit.js?v=3d754442d18a';
-import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=3d754442d18a';
-import {villageTrafficSafety} from './friend-traffic.js?v=3d754442d18a';
-import {createWaterResidents} from './water-residents.js?v=3d754442d18a';
-import {createPoVariantCrowd} from './po-variants.js?v=3d754442d18a';
+import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=4efd6bcfdd11';
+import {gameMaterial,characterMaterial} from './game-material.js?v=4efd6bcfdd11';
+import {villageFriendPlaces} from './friend-places.js?v=4efd6bcfdd11';
+import {makeRoyalOutfit} from './royal-outfit.js?v=4efd6bcfdd11';
+import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=4efd6bcfdd11';
+import {villageTrafficSafety} from './friend-traffic.js?v=4efd6bcfdd11';
+import {createWaterResidents} from './water-residents.js?v=4efd6bcfdd11';
+import {createPoVariantCrowd} from './po-variants.js?v=4efd6bcfdd11';
 
 // Shared real-rig deformation, independent animation clocks and ground routes.
 export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,traffic,waterGltf,characterConfig,variantLibrary=[]){
@@ -79,7 +79,7 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  // Register every visible body once; the hero is registered separately.
  for(const p of placements){
   if(p.water)continue;
-  if(p.route!==undefined||p.localRoute){p.follower=createFollower(traffic,p.localRoute||city.paths[p.route],{id:p.id,height:p.height,fraction:p.localRoute?0:p.phase/(Math.PI*2),direction:p.localRoute?1:p.id%2?1:-1});p.movement=p.follower.state;p.position=[p.follower.body.x,p.follower.body.y+.035,p.follower.body.z];}
+  if(p.route!==undefined||p.localRoute){p.follower=createFollower(traffic,p.localRoute||city.paths[p.route],{id:p.id,height:p.height,fraction:p.localRoute?0:p.phase/(Math.PI*2),direction:p.localRoute?1:p.id%2?1:-1,speedMultiplier:characterConfig.speedMultiplier});p.movement=p.follower.state;p.position=[p.follower.body.x,p.follower.body.y+.035,p.follower.body.z];}
   else if(!p.hero)traffic.add({id:p.id,x:p.position[0],y:p.position[1],z:p.position[2],height:p.height,radius:p.height*(p.pose==='lie'?.63:.34)+.06,movable:false});
  }
  for(const p of placements)if(p.follower){p.basePose=p.pose;p.animationMix=0;p.poseMix=1;p.modeWait=0;}

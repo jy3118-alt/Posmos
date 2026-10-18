@@ -4,7 +4,7 @@
   "cellSize": 39.19183588453085,
   "character": {
     "id": "character-01",
-    "file": "./assets/rig-audit-v32/models/base.glb?v=16330bbeeb30",
+    "file": "./assets/rig-fix-v33/models/base.glb?v=dc4c595d8676",
     "height": 1.65,
     "yaw": 2.0915926536,
     "position": [
@@ -597,7 +597,8 @@
       "hang": 0,
       "slide": 0,
       "slide_enter": 0
-    }
+    },
+    "speedMultiplier": 1.5
   },
   "chest": {
     "file": null,
@@ -1488,7 +1489,7 @@
     "msaaSamples": 4
   },
   "iteration": {
-    "name": "audited-po-rig-v32",
+    "name": "arm-surface-and-speed-v33",
     "previousRoofArea": 416.0000000000001,
     "roofArea": 1248.0000000000005,
     "movementMultiplier": 2,
@@ -1536,8 +1537,8 @@
   },
   "search": {
     "count": 150,
-    "model": "./assets/rig-audit-v32/models/base.glb?v=16330bbeeb30",
-    "poseMetadata": "./assets/rig-audit-v32/models/avatar-vat.json?v=198b3daed214",
+    "model": "./assets/rig-fix-v33/models/base.glb?v=dc4c595d8676",
+    "poseMetadata": "./assets/rig-fix-v33/models/avatar-vat.json?v=5c7ff975ba70",
     "seed": 8417,
     "targetIndex": 30,
     "animated": true,
@@ -1548,40 +1549,40 @@
       {
         "key": "crown",
         "label": "왕관 Po",
-        "file": "./assets/rig-audit-v32/models/crown.glb?v=3e56a400d59a",
-        "poseMetadata": "./assets/rig-audit-v32/models/crown-bones.json?v=9287b34b0673",
+        "file": "./assets/rig-fix-v33/models/crown.glb?v=513a0a394321",
+        "poseMetadata": "./assets/rig-fix-v33/models/crown-bones.json?v=2e1fc8cea0d4",
         "count": 1,
         "heightScale": 1
       },
       {
         "key": "ribbon",
         "label": "리본 Po",
-        "file": "./assets/rig-audit-v32/models/ribbon.glb?v=aed8b0909f50",
-        "poseMetadata": "./assets/rig-audit-v32/models/ribbon-bones.json?v=7acfbeb195ff",
+        "file": "./assets/rig-fix-v33/models/ribbon.glb?v=55f54799fee7",
+        "poseMetadata": "./assets/rig-fix-v33/models/ribbon-bones.json?v=f211f5539ed1",
         "count": 18,
         "heightScale": 1
       },
       {
         "key": "coral",
         "label": "코랄 바지 Po",
-        "file": "./assets/rig-audit-v32/models/coral.glb?v=458b7eabd7e1",
-        "poseMetadata": "./assets/rig-audit-v32/models/coral-bones.json?v=ab00996087d7",
+        "file": "./assets/rig-fix-v33/models/coral.glb?v=1d395fb98307",
+        "poseMetadata": "./assets/rig-fix-v33/models/coral-bones.json?v=18c1ef640804",
         "count": 22,
         "heightScale": 1
       },
       {
         "key": "short",
         "label": "짧은 Po",
-        "file": "./assets/rig-audit-v32/models/short.glb?v=914a9f5c9d91",
-        "poseMetadata": "./assets/rig-audit-v32/models/short-bones.json?v=653d0144871a",
+        "file": "./assets/rig-fix-v33/models/short.glb?v=b66439a06108",
+        "poseMetadata": "./assets/rig-fix-v33/models/short-bones.json?v=f0aa82a8564f",
         "count": 18,
         "heightScale": 0.84
       },
       {
         "key": "plump",
         "label": "통통 Po",
-        "file": "./assets/rig-audit-v32/models/plump.glb?v=73ae43f58f45",
-        "poseMetadata": "./assets/rig-audit-v32/models/plump-bones.json?v=4fccc97fb4ab",
+        "file": "./assets/rig-fix-v33/models/plump.glb?v=98fe3006e401",
+        "poseMetadata": "./assets/rig-fix-v33/models/plump-bones.json?v=b370ecbb1c66",
         "count": 18,
         "heightScale": 1
       }
@@ -1616,10 +1617,11 @@
         7,
         -2
       ]
-    ]
+    ],
+    "speedMultiplier": 1.5
   },
   "waterActivities": {
-    "model": "./assets/rig-audit-v32/models/water.glb?v=c757d90c0310",
+    "model": "./assets/rig-fix-v33/models/water.glb?v=94ce274b1589",
     "count": 6,
     "durationSeconds": 110
   }

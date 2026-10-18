@@ -1,12 +1,12 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {gameObject} from './game-material.js?v=3d754442d18a';
-import {bayPoint,swimmingState} from './water-space.js?v=3d754442d18a';
+import {gameObject} from './game-material.js?v=4efd6bcfdd11';
+import {bayPoint,swimmingState} from './water-space.js?v=4efd6bcfdd11';
 
 // Six real skins replace six crowd slots; they never add to the Po population.
 // Geometry, material and clips are shared, with small independent bone palettes.
 export function createWaterResidents(scene,gltf,city,placements,config){
- const bay=city.swimmingBay;if(!bay)return null;
+ const bay=city.swimmingBay;if(!bay)return null;const speedScale=config.speedMultiplier||1;
  const people=placements.filter(p=>!p.hero&&!p.roof).slice(-6);
  const model=gltf.scene;model.updateMatrixWorld(true);
  const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3());
@@ -38,11 +38,11 @@ export function createWaterResidents(scene,gltf,city,placements,config){
  function update(t){
   const dt=Math.min(.05,Math.max(0,t-last));last=t;
   for(const a of actors){
-   const s=swimmingState(bay,a.index,t,a.p.height,city.height),first=!a.previous;
+   const s=swimmingState(bay,a.index,t*speedScale,a.p.height,city.height),first=!a.previous;
    const dx=first?0:s.x-a.previous.x,dz=first?0:s.z-a.previous.z,travel=Math.hypot(dx,dz),speed=dt>0?travel/dt:0;
    if(travel>.0001){const target=Math.atan2(-dz,dx),angle=Math.atan2(Math.sin(target-a.yaw),Math.cos(target-a.yaw));a.yaw+=T.MathUtils.clamp(angle,-dt*2.1,dt*2.1);}else if(first)a.yaw=Math.atan2(-bay.nz,bay.nx);
    const walk=T.MathUtils.smoothstep(speed,.02,.28)*(1-s.waterMix),desired={idle:1-s.waterMix-walk,walk,swim:s.waterMix*(1-s.floatMix)*(1-s.treadMix),float:s.waterMix*s.floatMix,tread:s.waterMix*(1-s.floatMix)*s.treadMix};
-   for(const [name,action]of Object.entries(a.actions)){a.weights[name]=first?desired[name]:T.MathUtils.lerp(a.weights[name],desired[name],1-Math.exp(-dt*7));action.setEffectiveWeight(a.weights[name]);if(name==='walk')action.setEffectiveTimeScale(speed/Math.max(.01,(config.motionNativeSpeeds?.walk||.25)*a.p.height));}
+   for(const [name,action]of Object.entries(a.actions)){a.weights[name]=first?desired[name]:T.MathUtils.lerp(a.weights[name],desired[name],1-Math.exp(-dt*7));action.setEffectiveWeight(a.weights[name]);action.setEffectiveTimeScale(name==='walk'?speed/Math.max(.01,(config.motionNativeSpeeds?.walk||.25)*a.p.height):speedScale);}
    a.mixer.update(dt);a.root.position.set(s.x,s.y-(config.motionFloors?.walk||0)*a.p.height*walk,s.z);a.root.rotation.y=a.yaw;
    a.p.position=a.root.position.toArray(a.p.position);a.p.yaw=a.yaw;a.p.waterY=bay.sea;a.p.waterActivity=s.mode;a.p.waterDepth=s.depth;
    guide.position.set(s.x,bay.sea+.035,s.z);guide.rotation.set(0,0,0);guide.scale.set(s.depth>.1?1.0+Math.sin(t*2+a.index)*.1:0,1,s.depth>.1?.7:0);guide.updateMatrix();wakes.setMatrixAt(a.index,guide.matrix);

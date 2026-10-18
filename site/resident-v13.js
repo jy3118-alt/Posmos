@@ -1,11 +1,11 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=3d754442d18a';
-import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=3d754442d18a';
+import {gameObject} from './game-material.js?v=4efd6bcfdd11';
+import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=4efd6bcfdd11';
 export function createGameResident(scene,gltf,config,height,onActivity,traffic){
  const model=gltf.scene;model.updateMatrixWorld(true);const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),root=new T.Group();root.name='painter-resident-v20';root.scale.setScalar(config.height/size.y);model.position.sub(new T.Vector3(center.x,box.min.y,center.z));root.add(model);scene.add(root);gameObject(model);model.traverse(o=>{if(o.isSkinnedMesh){o.frustumCulled=false;o.receiveShadow=false;}});
  const mixer=new T.AnimationMixer(model),actions={},weights={};for(const clip of gltf.animations){const a=mixer.clipAction(clip);a.setEffectiveWeight(0).play();if(['sit','lie','slide_enter'].includes(clip.name)){a.setLoop(T.LoopOnce,1);a.clampWhenFinished=true;}actions[clip.name]=a;weights[clip.name]=0;}actions.idle?.setEffectiveWeight(1);
  const curve=new T.CatmullRomCurve3([[3,2],[-2,7],[-9,5],[-6,-1],[-4,-5],[3,-5],[6,-1]].map(([x,z])=>new T.Vector3(x,0,z)),true,'centripetal');
- const follower=createFollower(traffic,curve.getSpacedPoints(240),{id:'hero',height:config.height,closed:true});let speed=0,lastActivity='',requested='idle',turnMix=0,runMix=0,desperateMix=0,sitMix=0,lieMix=0,slideMix=0,restMode='idle',sliding=false,slideEntering=false;
+ const follower=createFollower(traffic,curve.getSpacedPoints(240),{id:'hero',height:config.height,closed:true,speedMultiplier:config.speedMultiplier});let speed=0,lastActivity='',requested='idle',turnMix=0,runMix=0,desperateMix=0,sitMix=0,lieMix=0,slideMix=0,restMode='idle',sliding=false,slideEntering=false;
  const floor=name=>{const frames=config.motionFloorFrames?.[name],action=actions[name];if(!frames||!action)return config.motionFloors?.[name]||0;const ratio=action.time/action.getClip().duration,once=['sit','lie','slide_enter'].includes(name),f=once?T.MathUtils.clamp(ratio,0,1)*(frames.length-1):(ratio%1)*frames.length,i=Math.floor(f),next=once?Math.min(frames.length-1,i+1):(i+1)%frames.length;return T.MathUtils.lerp(frames[i],frames[next],f-i);};
  function prepare(dt,t){
   requested=config.previewAction||painterSchedule(t);if(restMode!=='idle'&&actions[restMode].time<actions[restMode].getClip().duration-.04)requested=restMode;const resting=requested==='sit'||requested==='lie';
@@ -26,7 +26,7 @@ export function createGameResident(scene,gltf,config,height,onActivity,traffic){
   if(wantsSlide&&!sliding){actions.slide_enter?.reset().setEffectiveTimeScale(1).play();slideEntering=!!actions.slide_enter;}sliding=wantsSlide;
   if(slideEntering&&actions.slide_enter.time>=actions.slide_enter.getClip().duration-.025)slideEntering=false;
   slideMix+=((sliding?1:0)-slideMix)*f;
-  desperateMix+=((requested==='desperate'?1:0)-desperateMix)*f;runMix+=(T.MathUtils.smoothstep(speed,.58,1.3)-runMix)*f;
+  desperateMix+=((requested==='desperate'?1:0)-desperateMix)*f;runMix+=(T.MathUtils.smoothstep(speed/(config.speedMultiplier||1),.58,1.3)-runMix)*f;
   const motion=p.motion*(1-restMix)*(1-turnMix),slide=motion*slideMix,moving=motion-slide;
   weights.sit=sitMix;weights.lie=lieMix;weights.turn=turnMix*(1-restMix);weights.slide=slideEntering?0:slide;weights.slide_enter=slideEntering?slide:0;weights.walk=moving*(1-runMix);weights.run=moving*runMix*(1-desperateMix);weights.desperate=moving*runMix*desperateMix;weights.idle=Math.max(0,1-restMix-weights.turn-motion);weights.hang=0;
   root.position.set(p.x,p.y+.03,p.z);root.rotation.y=p.yaw;
