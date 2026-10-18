@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {paintMaterial} from './paint.js?v=4efd6bcfdd11';
-import {inPolygon} from './paint-city.js?v=4efd6bcfdd11';
+import {paintMaterial} from './paint.js?v=c66fd58a3001';
+import {inPolygon} from './paint-city.js?v=c66fd58a3001';
 
 function clumpGeometry(crossed=true){
   const positions=[],uvs=[],normals=[],indices=[],angles=crossed?[0,Math.PI/3,Math.PI*2/3]:[0];

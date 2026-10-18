@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {characterMaterial} from './game-material.js?v=4efd6bcfdd11';
-import {prepareSmoothNormals} from './normal-smoothing.js?v=4efd6bcfdd11';
+import {characterMaterial} from './game-material.js?v=c66fd58a3001';
+import {prepareSmoothNormals} from './normal-smoothing.js?v=c66fd58a3001';
 
 export async function loadPoVariants(config,load){
  return (await Promise.all((config||[]).map(async item=>{
@@ -15,7 +15,7 @@ export async function loadPoVariants(config,load){
 // bones once per resident, then upload a compact palette; never one mixer or a
 // 48MB vertex animation texture per new character type.
 export function createPoVariantCrowd(scene,library,placements,clocks,transitions,previousClocks,poseMixes,target){
- const available=placements.filter(p=>!p.hero&&!p.water&&!p.grip),claimed=new Set(),groups=[];
+ const available=placements.filter(p=>!p.hero&&!p.water&&!p.grip&&!p.statue),claimed=new Set(),groups=[];
  const shuffled=[...available].sort((a,b)=>((a.id*2654435761)>>>0)-((b.id*2654435761)>>>0));
  for(const item of library){
   const members=item.key==='crown'?available.filter(p=>p.id===target):shuffled.filter(p=>p.id!==target&&!claimed.has(p.id)).slice(0,item.count);

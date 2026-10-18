@@ -1,12 +1,13 @@
 import * as T from 'three';
-import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=4efd6bcfdd11';
-import {gameMaterial,characterMaterial} from './game-material.js?v=4efd6bcfdd11';
-import {villageFriendPlaces} from './friend-places.js?v=4efd6bcfdd11';
-import {makeRoyalOutfit} from './royal-outfit.js?v=4efd6bcfdd11';
-import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=4efd6bcfdd11';
-import {villageTrafficSafety} from './friend-traffic.js?v=4efd6bcfdd11';
-import {createWaterResidents} from './water-residents.js?v=4efd6bcfdd11';
-import {createPoVariantCrowd} from './po-variants.js?v=4efd6bcfdd11';
+import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=c66fd58a3001';
+import {gameMaterial,characterMaterial} from './game-material.js?v=c66fd58a3001';
+import {villageFriendPlaces} from './friend-places.js?v=c66fd58a3001';
+import {makeRoyalOutfit} from './royal-outfit.js?v=c66fd58a3001';
+import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=c66fd58a3001';
+import {villageTrafficSafety} from './friend-traffic.js?v=c66fd58a3001';
+import {createWaterResidents} from './water-residents.js?v=c66fd58a3001';
+import {createPoVariantCrowd} from './po-variants.js?v=c66fd58a3001';
+import {createStatuePlay} from './statue-play.js?v=c66fd58a3001';
 
 // Shared real-rig deformation, independent animation clocks and ground routes.
 export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,traffic,waterGltf,characterConfig,variantLibrary=[]){
@@ -45,11 +46,13 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
   else{const place=roof?places.takeRoof():places.takeGround(true);p.position=[place.x,place.y,place.z];p.zone=place.zone;p.surfaceY=place.y;p.flat=place.flat??groundPatch(city.height,place.x,place.z).flat;p.roof=place.zone==='지붕';if(p.roof)p.yaw=place.yaw+Math.PI*.5;p.home=Math.hypot(place.x,place.z)<25;}
   roots[i]=new T.Matrix4();placements.push(p);const clip=meta.clips[pose];clocks.set([clip.start,clip.count,moving?0:clip.fps,p.clockOffset*clip.fps],i*4);transitions.set([0,moving?0:1],i*2);
  }
+ const statuePerson=placements[Math.max(56,config.count-8)];statuePerson.statue=true;
+ let statuePlay=null;
  const waterResidents=waterGltf&&city.swimmingBay?createWaterResidents(scene,waterGltf,city,placements,characterConfig):null;
  // Short terrain-checked outings let mountain/coastal friends move without
  // being routed down a cliff. Most now take longer, more frequent outings.
  const safeGround=villageTrafficSafety(city);
- for(const p of placements){if(p.hero||p.roof||p.water||p.route!==undefined||(p.flat&&p.id%11===0))continue;let best=null,bestLength=0;
+ for(const p of placements){if(p.hero||p.roof||p.water||p.statue||p.route!==undefined||(p.flat&&p.id%11===0))continue;let best=null,bestLength=0;
   for(const r of [6,3.8,2.0,1.1]){for(let n=0;n<12;n++){const angle=p.yaw+n*Math.PI/6,dx=Math.cos(angle),dz=Math.sin(angle),steps=[];let valid=true,lastY=p.position[1]-.035;
    const count=Math.ceil(r/.25);for(let j=0;j<=count;j++){const x=p.position[0]+dx*r*j/count,z=p.position[2]+dz*r*j/count,y=city.height(x,z);if(!safeGround(x,z,{radius:p.height*.34+.06})||Math.abs(y-lastY)>.20||Math.abs(y-p.position[1])>1.0){valid=false;break;}lastY=y;steps.push({x,z});}
    if(valid&&r>bestLength){best=steps;bestLength=r;}}if(best)break;}
@@ -57,7 +60,7 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  }
  // Only rest on flat surfaces; only hang where a real grounded support exists.
  let hangingCount=0,restCount=0;
- for(const p of placements){if(p.hero||p.route!==undefined||p.localRoute||p.water||!p.flat)continue;
+ for(const p of placements){if(p.hero||p.statue||p.route!==undefined||p.localRoute||p.water||!p.flat)continue;
   if(!p.roof&&hangingCount<3&&restCount++%5===0){p.pose='hang';p.position[1]+=.35;p.grip=true;hangingCount++;}
   else if(!p.roof&&restCount%3===0)p.pose='lie';else if(restCount%2===0||p.roof)p.pose='sit';
   const c=meta.clips[p.pose];clocks.set([c.start,c.count,c.fps,p.clockOffset*c.fps],p.id*4);transitions.set([0,1],p.id*2);
@@ -78,7 +81,7 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  previousClocks.set(clocks);
  // Register every visible body once; the hero is registered separately.
  for(const p of placements){
-  if(p.water)continue;
+  if(p.water||p.statue)continue;
   if(p.route!==undefined||p.localRoute){p.follower=createFollower(traffic,p.localRoute||city.paths[p.route],{id:p.id,height:p.height,fraction:p.localRoute?0:p.phase/(Math.PI*2),direction:p.localRoute?1:p.id%2?1:-1,speedMultiplier:characterConfig.speedMultiplier});p.movement=p.follower.state;p.position=[p.follower.body.x,p.follower.body.y+.035,p.follower.body.z];}
   else if(!p.hero)traffic.add({id:p.id,x:p.position[0],y:p.position[1],z:p.position[2],height:p.height,radius:p.height*(p.pose==='lie'?.63:.34)+.06,movable:false});
  }
@@ -101,7 +104,7 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  function capAt(clip,frame,out){const a=Math.floor(frame)%clip.count,b=(a+1)%clip.count,u=frame-Math.floor(frame);out.set(T.MathUtils.lerp(clip.cap[a*3],clip.cap[b*3],u),T.MathUtils.lerp(clip.cap[a*3+1],clip.cap[b*3+1],u),T.MathUtils.lerp(clip.cap[a*3+2],clip.cap[b*3+2],u));}
  const restCap=new T.Vector3(),previousCap=new T.Vector3();
  function setHat(t){if(variants.hasCrown)return;const p=placements[target],clip=meta.clips[p.pose],rate=clocks[target*4+2],f=((t*rate+clocks[target*4+3])%clip.count+clip.count)%clip.count,a=Math.floor(f),b=(a+1)%clip.count,u=f-a;localCap.set(T.MathUtils.lerp(clip.cap[a*3],clip.cap[b*3],u),T.MathUtils.lerp(clip.cap[a*3+1],clip.cap[b*3+1],u),T.MathUtils.lerp(clip.cap[a*3+2],clip.cap[b*3+2],u));if(p.previousPose&&p.poseMix<1){capAt(meta.clips[p.previousPose],p.previousFrame,previousCap);localCap.lerp(previousCap,1-p.poseMix);}if(p.movement){capAt(meta.clips.idle,transitions[target*2],restCap);localCap.lerp(restCap,1-p.movement.motion);}hat.position.copy(localCap).applyMatrix4(roots[target]);hat.scale.setScalar(p.height);yawQ.setFromAxisAngle(up,p.yaw);capQ.setFromEuler(capEuler.fromArray(clip.capRotation));hat.quaternion.copy(yawQ).multiply(capQ);localCap.y-=.42;royal.cape.position.copy(localCap.applyMatrix4(roots[target]));royal.cape.scale.setScalar(p.height);royal.cape.quaternion.copy(hat.quaternion);royal.clock.value=t;}
- function update(t){const dt=Math.min(.05,Math.max(0,t-lastTime));lastTime=t;clock.value=t;waterResidents?.update(t);for(const p of placements){if(p.hero){hero.root.position.toArray(p.position);p.yaw=hero.root.rotation.y;}if(p.follower)sampleRoute(p,dt,t);guide.position.fromArray(p.position);guide.rotation.set(0,p.yaw,0);guide.scale.setScalar(p.hero||p.water?0:p.height);guide.updateMatrix();roots[p.id].copy(guide.matrix);if(p.vatInstance!==undefined)mesh.setMatrixAt(p.vatInstance,guide.matrix);guide.position.y=(p.surfaceY??city.height(p.position[0],p.position[2]))+.055;guide.scale.set(p.hero||p.water?0:p.height*(p.pose==='lie'?1.12:.78),1,p.hero||p.water?0:p.height*.60);guide.updateMatrix();shadows.setMatrixAt(p.id,guide.matrix);}variants.update(t,roots);for(let i=0;i<baseMembers.length;i++){const id=baseMembers[i].id;for(let k=0;k<4;k++){drawClocks[i*4+k]=clocks[id*4+k];drawPrevious[i*4+k]=previousClocks[id*4+k];}drawTransitions[i*2]=transitions[id*2];drawTransitions[i*2+1]=transitions[id*2+1];drawMixes[i]=poseMixes[id];}geo.attributes.aPrevious.needsUpdate=true;geo.attributes.aPoseMix.needsUpdate=true;geo.attributes.aAnimation.needsUpdate=true;geo.attributes.aTransition.needsUpdate=true;mesh.instanceMatrix.needsUpdate=true;shadows.instanceMatrix.needsUpdate=true;setHat(t);if(found){ring.position.fromArray(placements[target].position);ring.position.y+=.05;}}
+ function update(t){const dt=Math.min(.05,Math.max(0,t-lastTime));lastTime=t;clock.value=t;waterResidents?.update(t);statuePlay?.update(t);for(const p of placements){if(p.hero){hero.root.position.toArray(p.position);p.yaw=hero.root.rotation.y;}if(p.follower)sampleRoute(p,dt,t);guide.position.fromArray(p.position);guide.rotation.set(0,p.yaw,0);guide.scale.setScalar(p.hero||p.water?0:p.height);guide.updateMatrix();roots[p.id].copy(guide.matrix);if(p.vatInstance!==undefined)mesh.setMatrixAt(p.vatInstance,guide.matrix);guide.position.y=(p.surfaceY??city.height(p.position[0],p.position[2]))+.055;guide.scale.set(p.hero||p.water?0:p.height*(p.pose==='lie'?1.12:.78),1,p.hero||p.water?0:p.height*.60);guide.updateMatrix();shadows.setMatrixAt(p.id,guide.matrix);}variants.update(t,roots);for(let i=0;i<baseMembers.length;i++){const id=baseMembers[i].id;for(let k=0;k<4;k++){drawClocks[i*4+k]=clocks[id*4+k];drawPrevious[i*4+k]=previousClocks[id*4+k];}drawTransitions[i*2]=transitions[id*2];drawTransitions[i*2+1]=transitions[id*2+1];drawMixes[i]=poseMixes[id];}geo.attributes.aPrevious.needsUpdate=true;geo.attributes.aPoseMix.needsUpdate=true;geo.attributes.aAnimation.needsUpdate=true;geo.attributes.aTransition.needsUpdate=true;mesh.instanceMatrix.needsUpdate=true;shadows.instanceMatrix.needsUpdate=true;setHat(t);if(found){ring.position.fromArray(placements[target].position);ring.position.y+=.05;}}
  update(0);
  // A generous body capsule keeps tiny moving friends easy to select. Occlusion
  // still uses the real terrain/GLBs, so friends cannot be selected through walls.
@@ -110,5 +113,5 @@ export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,tra
  function visible(raycaster,distance){const oldFar=raycaster.far;raycaster.far=distance-.08;const blocked=raycaster.intersectObjects(occluders,false).length>0;raycaster.far=oldFar;return !blocked;}
  function pick(raycaster){const hits=raycaster.intersectObjects(variants.hasCrown?[mesh]:[mesh,...royal.pickMeshes],false);for(const hit of hits){if(!visible(raycaster,hit.distance))continue;const p=hit.object===mesh?placements[hit.instanceId]:placements[target];return {correct:p.id===target,person:p,distance:hit.distance};}return null;}
  function foundTarget(){found=true;ring.visible=false;}
- return {variants,renderCounts:{baseVAT:baseMembers.length,variants:Object.values(variants.counts).reduce((a,b)=>a+b,0),water:waterResidents?.count||0,hero:1},waterResidents,source,vatData:data,placements,batches:[mesh,...variants.batches],count:placements.length,distribution,hat,royal,fullDetail:true,localRoamers:placements.filter(p=>p.roaming).length,activePoses:[...new Set(placements.map(p=>p.pose))],animated:true,pick,visible,foundTarget,prepare,update,getTarget:()=>placements[target],hint:()=>({position:placements[target].position.slice(),home:placements[target].home,zone:placements[target].zone}),reset(){if(variants.hasCrown){found=false;ring.visible=false;return;}target=eligible[(eligible.indexOf(config.targetIndex)+(++round)*31+eligible.length)%eligible.length];found=false;ring.visible=false;setHat(lastTime);}};
+ return {get statuePlay(){return statuePlay;},attachStatue(statue,material){const old=statuePerson.zone;statuePlay=createStatuePlay(scene,statue,material,statuePerson,meta,clocks,previousClocks,poseMixes,transitions);distribution[old]--;distribution[statuePerson.zone]=1;statue.traverse(o=>{if(o.isMesh)occluders.push(o);});occluders.push(statuePlay.rail);update(lastTime);},variants,renderCounts:{baseVAT:baseMembers.length,variants:Object.values(variants.counts).reduce((a,b)=>a+b,0),water:waterResidents?.count||0,hero:1},waterResidents,source,vatData:data,placements,batches:[mesh,...variants.batches],count:placements.length,distribution,hat,royal,fullDetail:true,localRoamers:placements.filter(p=>p.roaming).length,activePoses:[...new Set(placements.map(p=>p.pose))],animated:true,pick,visible,foundTarget,prepare,update,getTarget:()=>placements[target],hint:()=>({position:placements[target].position.slice(),home:placements[target].home,zone:placements[target].zone}),reset(){if(variants.hasCrown){found=false;ring.visible=false;return;}target=eligible[(eligible.indexOf(config.targetIndex)+(++round)*31+eligible.length)%eligible.length];found=false;ring.visible=false;setHat(lastTime);}};
 }

@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {DecalGeometry} from 'three/addons/geometries/DecalGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {gameMaterial} from './game-material.js?v=4efd6bcfdd11';
+import {gameMaterial} from './game-material.js?v=c66fd58a3001';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export async function makeStoryArt(scene,renderer,city,crowd,meta){
@@ -12,6 +12,7 @@ export async function makeStoryArt(scene,renderer,city,crowd,meta){
  const statue=new T.Group();statue.name='one-golden-royal-po-monument';po.scene.traverse(o=>{if(o.isMesh){o.material=gold;o.castShadow=o.receiveShadow=true;}});statue.add(po.scene);
  const x=-62,z=-55,y=city.height(x,z),h=33;statue.scale.setScalar(h);statue.rotation.y=-Math.atan2(55,62);statue.position.set(x,y+2.5,z);scene.add(statue);
  const base=new T.Mesh(new T.CylinderGeometry(8.5,10,2.5,48),new T.MeshStandardMaterial({color:'#eee0bd',roughness:.7}));base.position.set(x,y+1.25,z);base.receiveShadow=base.castShadow=true;scene.add(base);
+ crowd.attachStatue?.(statue,gold);city.statue=statue;
  // Decals are clipped to real house triangles, so they follow curved/irregular walls.
  const atlas=await new T.TextureLoader().loadAsync('./assets/forest/character-graffiti-atlas-v9.png?v=e047e382cfbb');atlas.colorSpace=T.SRGBColorSpace;atlas.anisotropy=8;
  const material=new T.MeshToonMaterial({map:atlas,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,side:T.FrontSide}),matrix=new T.Matrix4(),ray=new T.Raycaster(),direction=new T.Vector3(),orientation=new T.Euler(),q=new T.Quaternion(),normal=new T.Vector3();let count=0;
