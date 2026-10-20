@@ -1,6 +1,7 @@
 import * as T from 'three';
-import {gameMaterial} from './game-material.js?v=c66fd58a3001';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=c66fd58a3001';
+import {gridTriangleHeight} from './terrain-grid.js?v=33a550a771a7';
+import {gameMaterial} from './game-material.js?v=33a550a771a7';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=33a550a771a7';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){
@@ -18,7 +19,7 @@ export function triangleSurface(geometries,minimumHeight=-11){
   for(const t of bins[iz*size+ix]){const u=((t[3]-t[5])*(x-t[4])+(t[4]-t[2])*(z-t[5]))/t[9],v=((t[5]-t[1])*(x-t[4])+(t[0]-t[4])*(z-t[5]))/t[9];if(u>=-.00001&&v>=-.00001&&u+v<=1.00001)y=Math.max(y,t[6]*u+t[7]*v+t[8]*(1-u-v));}return y;
  };
 }
-export async function prepareIsland(scene,gltf,sites){
+export async function prepareIsland(scene,gltf,sites,study={}){
  gltf.scene.updateMatrixWorld(true);const box=new T.Box3().setFromObject(gltf.scene),s=box.getSize(new T.Vector3()),c=box.getCenter(new T.Vector3());
  const transform=new T.Matrix4().makeScale(260/s.x,48/s.y,260/s.z).multiply(new T.Matrix4().makeTranslation(-c.x,-box.min.y,-c.z));transform.elements[13]-=16;
  const parts=[];gltf.scene.traverse(o=>{if(o.isMesh){const geometry=o.geometry.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(transform,o.matrixWorld));parts.push({geometry,source:o.material});}});
@@ -28,15 +29,23 @@ export async function prepareIsland(scene,gltf,sites){
  // A single upper envelope replaces the folded/overlapping faces created
  // when a generated island is flattened under houses. The same triangles
  // drive rendering, feet, roads and camera height.
- const upper=triangleSurface(parts.map(p=>p.geometry)),geometry=new T.PlaneGeometry(304,304,256,256);geometry.rotateX(-Math.PI/2);const vertices=geometry.attributes.position,heights=new Float32Array(vertices.count),stride=257;
+ const sourceUpper=triangleSurface(parts.map(p=>p.geometry));
+ const upper=study.height||study.heightTransform?.(sourceUpper)||sourceUpper,geometry=new T.PlaneGeometry(304,304,256,256);geometry.rotateX(-Math.PI/2);const vertices=geometry.attributes.position,heights=new Float32Array(vertices.count),stride=257;
  for(let i=0;i<vertices.count;i++)heights[i]=upper(vertices.getX(i),vertices.getZ(i));
  // Heal isolated source pinholes; leave coastline and open water intact.
  for(let pass=0;pass<2;pass++){const copy=heights.slice();for(let z=1;z<256;z++)for(let x=1;x<256;x++){const i=z*stride+x;if(copy[i]>-10)continue;let count=0,sum=0;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dz)continue;const h=copy[i+dz*stride+dx];if(h>-8){count++;sum+=h;}}if(count>=7)heights[i]=sum/count;}}
  const swimmingBay=planSwimmingBay(upper,-9);
- for(let i=0;i<vertices.count;i++)vertices.setY(i,beachHeight(swimmingBay,vertices.getX(i),vertices.getZ(i),heights[i]));geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ for(let i=0;i<vertices.count;i++){
+  const x=vertices.getX(i),z=vertices.getZ(i);let y=beachHeight(swimmingBay,x,z,heights[i]);
+  // The experimental cove must not scoop away an existing house foundation.
+  if(study.height||study.heightTransform)for(const p of sites)y=T.MathUtils.lerp(y,heights[i],1-smooth(8.3,13,Math.hypot(x-p.x,z-p.z)));
+  vertices.setY(i,y);
+ }
+ geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
  const map=await new T.TextureLoader().loadAsync('./assets/polish-v18/island-albedo.png?v=4327b5c37434');map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
  const material=gameMaterial({map,side:T.DoubleSide},false),mesh=new T.Mesh(geometry,material);mesh.name='continuous-repaired-island';mesh.receiveShadow=true;scene.add(mesh);for(const p of parts)p.geometry.dispose();
- return {meshes:[mesh],height:triangleSurface([geometry],-20),swimmingBay};
+ const groundHeight=gridTriangleHeight(geometry),extraSurfaces=study.addSurfaces?.(scene,groundHeight)||[];
+ return {meshes:[mesh],height:gridTriangleHeight(geometry,extraSurfaces.length?triangleSurface(extraSurfaces,-20):null),swimmingBay};
 }
 export function paintGround(meshes,paths,bay){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=2048;const ctx=canvas.getContext('2d'),scale=2048/304,xy=p=>[(p.x+152)*scale,(p.z+152)*scale];

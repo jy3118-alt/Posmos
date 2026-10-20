@@ -1,0 +1,20 @@
+{
+  "version": 45,
+  "models": {
+    "mushroom-home": {
+      "file": "./assets/paint-island-v45/mushroom-home/mushroom-home-web.glb?v=d24cbad506e5",
+      "triangles": 15997,
+      "textureSize": 1024
+    },
+    "moon-observatory": {
+      "file": "./assets/paint-island-v45/moon-observatory/moon-observatory-web.glb?v=e69ef551c6ea",
+      "triangles": 16000,
+      "textureSize": 1024
+    },
+    "ink-grotto": {
+      "file": "./assets/paint-island-v45/ink-grotto/ink-grotto-web.glb?v=c32a6ecadad8",
+      "triangles": 16000,
+      "textureSize": 1024
+    }
+  }
+}

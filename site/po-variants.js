@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {characterMaterial} from './game-material.js?v=c66fd58a3001';
-import {prepareSmoothNormals} from './normal-smoothing.js?v=c66fd58a3001';
+import {characterMaterial} from './game-material.js?v=33a550a771a7';
+import {prepareSmoothNormals} from './normal-smoothing.js?v=33a550a771a7';
 
 export async function loadPoVariants(config,load){
  return (await Promise.all((config||[]).map(async item=>{
@@ -30,11 +30,11 @@ export function createPoVariantCrowd(scene,library,placements,clocks,transitions
    Object.assign(s.uniforms,{poBoneFrames:{value:texture},poBoneSize:{value:new T.Vector2(width,height)}});
    s.vertexShader=`attribute vec4 skinIndex,skinWeight;attribute float aBoneOffset;uniform sampler2D poBoneFrames;uniform vec2 poBoneSize;
     vec4 poRow(float joint,float row){float index=aBoneOffset+joint*3.+row;return texture2D(poBoneFrames,(vec2(mod(index,poBoneSize.x),floor(index/poBoneSize.x))+.5)/poBoneSize);}
-    vec4 poBlendRow(float row){return poRow(skinIndex.x,row)*skinWeight.x+poRow(skinIndex.y,row)*skinWeight.y+poRow(skinIndex.z,row)*skinWeight.z+poRow(skinIndex.w,row)*skinWeight.w;}
+    vec4 poBlendRow(float row){vec4 result=vec4(0.);if(skinWeight.x>0.)result+=poRow(skinIndex.x,row)*skinWeight.x;if(skinWeight.y>0.)result+=poRow(skinIndex.y,row)*skinWeight.y;if(skinWeight.z>0.)result+=poRow(skinIndex.z,row)*skinWeight.z;if(skinWeight.w>0.)result+=poRow(skinIndex.w,row)*skinWeight.w;return result;}
    `+s.vertexShader;
    s.vertexShader=s.vertexShader.replace('#include <beginnormal_vertex>',`vec4 poR0=poBlendRow(0.),poR1=poBlendRow(1.),poR2=poBlendRow(2.);vec3 poNormal=vec3(dot(poR0.xyz,normal),dot(poR1.xyz,normal),dot(poR2.xyz,normal));vec3 objectNormal=poNormal*inversesqrt(max(dot(poNormal,poNormal),.00001));`);
    s.vertexShader=s.vertexShader.replace('#include <begin_vertex>',`vec4 poVertex=vec4(position,1.);vec3 transformed=vec3(dot(poR0,poVertex),dot(poR1,poVertex),dot(poR2,poVertex));`);
-  };material.customProgramCacheKey=()=> 'po-shared-bone-rows-v31';
+  };material.customProgramCacheKey=()=> 'po-shared-bone-rows-v51-sparse';
   const mesh=new T.InstancedMesh(geo,material,members.length);mesh.name='po-variant-'+item.key;mesh.receiveShadow=mesh.castShadow=false;mesh.boundingSphere=new T.Sphere(new T.Vector3(0,10,0),155);mesh.raycast=()=>{};scene.add(mesh);
   groups.push({...item,members,mesh,current,texture});
  }

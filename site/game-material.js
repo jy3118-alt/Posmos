@@ -1,9 +1,9 @@
 import * as T from 'three';
-import {prepareSmoothNormals} from './normal-smoothing.js?v=c66fd58a3001';
+import {prepareSmoothNormals} from './normal-smoothing.js?v=33a550a771a7';
 const ramp=new T.DataTexture(new Uint8Array([76,126,181,228,255]),5,1,T.RedFormat);
 ramp.minFilter=ramp.magFilter=T.NearestFilter;ramp.needsUpdate=true;
 const cache=new WeakMap();
-export function gameMaterial(source={},flat=true){return new T.MeshToonMaterial({color:source.color?.clone?.()||source.color||'#ffffff',map:source.map||null,gradientMap:ramp,flatShading:flat,side:source.side??T.FrontSide});}
+export function gameMaterial(source={},flat=true){return new T.MeshToonMaterial({color:source.color?.clone?.()||source.color||'#ffffff',map:source.map||null,gradientMap:ramp,side:source.side??T.FrontSide});}
 export function characterMaterial(source={}){return new T.MeshLambertMaterial({color:source.color?.clone?.()||source.color||'#ffffff',map:source.map||null,flatShading:false,side:source.side??T.FrontSide});}
 export function gameObject(object){object.traverse(mesh=>{if(!mesh.isMesh)return;if(mesh.isSkinnedMesh){mesh.geometry.computeVertexNormals();prepareSmoothNormals(mesh.geometry)(mesh.geometry,5);}mesh.castShadow=mesh.receiveShadow=true;const convert=m=>{if(!cache.has(m))cache.set(m,mesh.isSkinnedMesh?characterMaterial(m):gameMaterial(m));return cache.get(m);};mesh.material=Array.isArray(mesh.material)?mesh.material.map(convert):convert(mesh.material);});}
 
