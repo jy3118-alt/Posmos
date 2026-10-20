@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=a2b9f13c5d88';
-import {createFollower} from './friend-locomotion.js?v=a2b9f13c5d88';
-import {villageTrafficSafety} from './friend-traffic.js?v=a2b9f13c5d88';
+import {gameObject} from './game-material.js?v=50e1064b0d79';
+import {createFollower} from './friend-locomotion.js?v=50e1064b0d79';
+import {villageTrafficSafety} from './friend-traffic.js?v=50e1064b0d79';
 
 export function safeDressRoute(city,height){
  const safe=villageTrafficSafety(city),body={radius:height*.43},segments=[];

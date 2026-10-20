@@ -1,7 +1,8 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial} from './game-material.js?v=a2b9f13c5d88';
-import {landmarkSites} from './paint-island-plan.js?v=a2b9f13c5d88';
+import {gameMaterial} from './game-material.js?v=50e1064b0d79';
+import {landmarkSites} from './paint-island-plan.js?v=50e1064b0d79';
+import {makeLiquidWater} from './liquid-water.js?v=50e1064b0d79';
 
 // Native Tripo buildings and props stay shared; only five small floating batches
 // change matrices. No additional skeletons, physics simulation or per-frame loads.
@@ -61,20 +62,19 @@ export async function addPaintIslandDetails(scene,city,sources){
  extra.push(t=>{for(let i=0;i<3;i++){const p=floats[i];guide.position.set(p.x,p.y-.7+Math.sin(t*.36+p.phase)*.55,p.z);guide.rotation.set(.1,i,.15);guide.scale.set(p.h*.52,.9,p.h*.46);guide.updateMatrix();rocks.setMatrixAt(i,guide.matrix);}rocks.instanceMatrix.needsUpdate=true;});
 
  }
- const river=city.worldPlan.river,positions=[],uvs=[],indices=[],flows=[];
+ const river=city.worldPlan.river.slice(0,city.worldPlan.estuary.endIndex+1),positions=[],uvs=[],indices=[];
  // Build a shallow water ribbon on the carved river, with a shared flow shader.
  for(let i=0;i<river.length;i++){
   const p=river[i],a=river[Math.max(0,i-1)],b=river[Math.min(river.length-1,i+1)],dx=b.x-a.x,dz=b.z-a.z,l=Math.hypot(dx,dz)||1,nx=-dz/l,nz=dx/l;
   for(const side of [-1,1]){positions.push(p.x+nx*p.width*side,p.y+.025,p.z+nz*p.width*side);uvs.push(side*.5+.5,i*.13);}
   if(i<river.length-1){const k=i*2;indices.push(k,k+2,k+1,k+1,k+2,k+3);}
-  if(i%9===0&&p.y>city.sea+.2)flows.push({x:p.x,z:p.z,y:p.y+.06,yaw:Math.atan2(dx,dz),scale:.4+(i%4)*.1});
  }
  const riverGeo=new T.BufferGeometry();riverGeo.setAttribute('position',new T.Float32BufferAttribute(positions,3));riverGeo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));riverGeo.setIndex(indices);riverGeo.computeVertexNormals();
- const time={value:0},disturbances=Array.from({length:4},()=>new T.Vector4(0,0,0,10)),riverMaterial=new T.ShaderMaterial({side:T.DoubleSide,uniforms:{time,disturbances:{value:disturbances}},vertexShader:'varying vec2 vUv;varying vec3 riverWorld;void main(){vUv=uv;riverWorld=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 vUv;varying vec3 riverWorld;uniform float time;uniform vec4 disturbances[4];void main(){float bank=smoothstep(.30,.50,abs(vUv.x-.5));float line=pow(max(0.,sin(vUv.y*15.-time*1.25+sin(vUv.x*14.)*.35)),18.);float ripple=0.;for(int i=0;i<4;i++){float d=distance(riverWorld.xz,disturbances[i].xy);ripple+=pow(max(0.,sin(d*12.-time*6.)),9.)*exp(-d*1.45)*disturbances[i].z*.6;}vec3 c=mix(vec3(.035,.30,.43),vec3(.13,.56,.61),1.-abs(vUv.x-.5)*2.);c=mix(c,vec3(.78,.94,.88),min(.85,line*.40+bank*.22+ripple));gl_FragColor=vec4(c,1.);}`});
- city.streamSurface={disturbances};
- const water=new T.Mesh(riverGeo,riverMaterial);water.name='painted-flowing-river';scene.add(water);
+ const riverMaterial=makeLiquidWater(city.waterContext,{river:true});
+ city.streamSurface={disturbances:city.waterContext.disturbances.value};
+ const water=new T.Mesh(riverGeo,riverMaterial);water.name='painted-flowing-river';water.userData.keepCrayonMaterial=true;scene.add(water);
  // The accepted bridge itself is the deck and collision surface. No helper
  // box or plank is rendered outside the real GLB footprint.
- city.paintIslandMetrics={originalIsland:true,regions:city.worldPlan.regions.length,landmarks:actualLandmarks.map(p=>({id:p.id,position:[p.x,p.y,p.z],height:p.h})),floatingProps:floats.length,riverSegments:river.length-1,additionalPaidModels:Object.keys(manifest.models).length};
- return {update(t){time.value=t;for(const update of extra)update(t);}};
+ city.paintIslandMetrics={originalIsland:true,regions:city.worldPlan.regions.length,landmarks:actualLandmarks.map(p=>({id:p.id,position:[p.x,p.y,p.z],height:p.h})),floatingProps:floats.length,riverSegments:river.length-1,estuary:city.worldPlan.estuary,liquidWater:true,additionalPaidModels:Object.keys(manifest.models).length};
+ return {update(t){for(const update of extra)update(t);}};
 }

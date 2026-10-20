@@ -1,8 +1,8 @@
 import * as T from 'three';
-import {storybookBeds,pathDistance} from './storybook-landscape.js?v=a2b9f13c5d88';
-import {makeStorybookGarden} from './storybook-garden.js?v=a2b9f13c5d88';
-import {chapterGroundTexture} from './chapter-paint.js?v=a2b9f13c5d88';
-import {paintIslandGroundTexture} from './paint-island-ground.js?v=a2b9f13c5d88';
+import {storybookBeds,pathDistance} from './storybook-landscape.js?v=50e1064b0d79';
+import {makeStorybookGarden} from './storybook-garden.js?v=50e1064b0d79';
+import {chapterGroundTexture} from './chapter-paint.js?v=50e1064b0d79';
+import {paintIslandGroundTexture} from './paint-island-ground.js?v=50e1064b0d79';
 
 // Wax grain is baked once, shared by every material, and sampled in bind/local
 // space. There is no animated noise, extra full-screen pass or outline skin.

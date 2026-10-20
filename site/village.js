@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {ConvexGeometry} from 'three/addons/geometries/ConvexGeometry.js';
-import {paintMaterial} from './paint.js?v=a2b9f13c5d88';
+import {paintMaterial} from './paint.js?v=50e1064b0d79';
 
 const sites=[[-8,-8,6,5],[-29,12,5.5,4.5],[-37,25,4.7,4],[-32,-12,5,4.5],[-35,-30,5.8,5],[-15,-39,5,4],[13,-31,5.5,4.5],[30,-18,5.4,4],[31,10,6,5],[19,28,5.5,4.5],[0,38,6,5],[-26,42,5,4],[41,29,4.5,4]];
 const N=81,STEP=2,MIN=-80,sea=-9,heights=new Float32Array(N*N);

@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {DecalGeometry} from 'three/addons/geometries/DecalGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {gameMaterial} from './game-material.js?v=a2b9f13c5d88';
+import {gameMaterial} from './game-material.js?v=50e1064b0d79';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export async function makeStoryArt(scene,renderer,city,crowd,meta){

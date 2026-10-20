@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {planGroundedBridge,fitBridgeLandings} from './bridge-grounding.js?v=a2b9f13c5d88';
+import {planGroundedBridge,fitBridgeLandings} from './bridge-grounding.js?v=50e1064b0d79';
 
 // One continuous original island. These overlapping fields are art direction,
 // not biome tiles: new residents can add a home without replacing the coast.
@@ -42,7 +42,7 @@ export function createPaintIslandStudy(){
  const samples=curve.getSpacedPoints(210),bins=new Map(),cell=10;
  samples.forEach((p,i)=>{p.width=2.65+Math.sin(i*.07)*.28;p.index=i;});
  for(let i=0;i<samples.length-1;i++){
-  const a=samples[i],b=samples[i+1],pad=7;
+  const a=samples[i],b=samples[i+1],pad=12;
   for(let z=Math.floor((Math.min(a.z,b.z)-pad)/cell);z<=Math.floor((Math.max(a.z,b.z)+pad)/cell);z++)for(let x=Math.floor((Math.min(a.x,b.x)-pad)/cell);x<=Math.floor((Math.max(a.x,b.x)+pad)/cell);x++){
    const k=x+','+z;if(!bins.has(k))bins.set(k,[]);bins.get(k).push(i);
   }
@@ -64,7 +64,16 @@ export function createPaintIslandStudy(){
   // Sample the unmodified island before carving, so water and banks agree.
   world.baseHeight=base;
   const pads=landmarkSites.map(p=>({...p,y:base(p.x,p.z)}));
-  let level=Infinity;for(const p of samples){level=Math.min(level,base(p.x,p.z)-.50);p.y=Math.max(-8.975,level);}
+  const sea=-9,shoreHit=samples.findIndex(p=>base(p.x,p.z)<=sea),shore=shoreHit<0?samples.length-3:Math.max(16,shoreHit);
+  const end=Math.min(samples.length-1,shore+2),start=Math.max(0,end-13);
+  let level=Infinity;
+  for(const p of samples){
+   level=Math.min(level,base(p.x,p.z)-.50);
+   const merge=smooth(start,end,p.index);
+   p.y=T.MathUtils.lerp(Math.max(sea-.025,level),sea-.025,merge);
+   p.width*=1+merge*1.55;
+  }
+  world.estuary={startIndex:start,endIndex:end,shoreIndex:shore,x:samples[end].x,z:samples[end].z,surfaceY:sea,width:samples[end].width*2};
   return (x,z)=>{
    const original=base(x,z);let y=original;
    if(original>-6)for(const p of pads){if(p.y<-6)continue;y=T.MathUtils.lerp(y,p.y,1-smooth(p.r,p.r+5,Math.hypot(x-p.x,z-p.z)));}

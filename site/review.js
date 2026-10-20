@@ -1,4 +1,4 @@
-import {createDressResident} from './dress-resident.js?v=a2b9f13c5d88';
+import {createDressResident} from './dress-resident.js?v=50e1064b0d79';
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -6,25 +6,25 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
-import {createSearchCharacters} from './search-characters.js?v=a2b9f13c5d88';
-import {makeForest,forestHeight} from './forest.js?v=a2b9f13c5d88';
-import {createResident} from './resident.js?v=a2b9f13c5d88';
-import {paintObject,paintInk} from './paint.js?v=a2b9f13c5d88';
-import {makeMurals} from './murals.js?v=a2b9f13c5d88';
-import {makeTiltShift} from './tilt-shift.js?v=a2b9f13c5d88';
-import {makePaintTools,makeArtworks} from './paint-tools.js?v=a2b9f13c5d88';
-import {createAnimatedFriends} from './animated-friends.js?v=a2b9f13c5d88';
-import {loadPoVariants} from './po-variants.js?v=a2b9f13c5d88';
-import {createGameResident} from './resident-v13.js?v=a2b9f13c5d88';
-import {gameObject} from './game-material.js?v=a2b9f13c5d88';
-import {makeStoryArt} from './story-art.js?v=a2b9f13c5d88';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=a2b9f13c5d88';
-import {createMoaResident} from './moa-resident.js?v=a2b9f13c5d88';
-import {createCrayonWorld} from './crayon-world.js?v=a2b9f13c5d88';
-import {makeEncounters} from './encounters.js?v=a2b9f13c5d88';
-import {makeShadowFocus} from './shadow-focus.js?v=a2b9f13c5d88';
-import {createStreamResidents} from './stream-residents.js?v=a2b9f13c5d88';
-import {loadViewDetails,makeViewDetail} from './view-detail.js?v=a2b9f13c5d88';
+import {createSearchCharacters} from './search-characters.js?v=50e1064b0d79';
+import {makeForest,forestHeight} from './forest.js?v=50e1064b0d79';
+import {createResident} from './resident.js?v=50e1064b0d79';
+import {paintObject,paintInk} from './paint.js?v=50e1064b0d79';
+import {makeMurals} from './murals.js?v=50e1064b0d79';
+import {makeTiltShift} from './tilt-shift.js?v=50e1064b0d79';
+import {makePaintTools,makeArtworks} from './paint-tools.js?v=50e1064b0d79';
+import {createAnimatedFriends} from './animated-friends.js?v=50e1064b0d79';
+import {loadPoVariants} from './po-variants.js?v=50e1064b0d79';
+import {createGameResident} from './resident-v13.js?v=50e1064b0d79';
+import {gameObject} from './game-material.js?v=50e1064b0d79';
+import {makeStoryArt} from './story-art.js?v=50e1064b0d79';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=50e1064b0d79';
+import {createMoaResident} from './moa-resident.js?v=50e1064b0d79';
+import {createCrayonWorld} from './crayon-world.js?v=50e1064b0d79';
+import {makeEncounters} from './encounters.js?v=50e1064b0d79';
+import {makeShadowFocus} from './shadow-focus.js?v=50e1064b0d79';
+import {createStreamResidents} from './stream-residents.js?v=50e1064b0d79';
+import {loadViewDetails,makeViewDetail} from './view-detail.js?v=50e1064b0d79';
 const $=s=>document.querySelector(s),motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 let reduced=motionPreference.matches;motionPreference.addEventListener('change',event=>{reduced=event.matches;});
 let loadingProgress=0;
@@ -105,6 +105,7 @@ async function main(){
  if(new URLSearchParams(location.search).get('view')==='dress'&&dress){controls.target.copy(dress.root.position).add(new T.Vector3(0,1,0));camera.position.copy(controls.target).add(new T.Vector3(5,3.8,5));controls.update();}
  if(inspect&&new URLSearchParams(location.search).get('view')==='bridge'){const b=forest.city.worldPlan.bridge;controls.target.set(b.x,b.y,b.z);camera.position.copy(controls.target).add(new T.Vector3(12,8,12));controls.update();}
  if(inspect&&new URLSearchParams(location.search).get('view')==='stream'){const p=forest.city.worldPlan.river[116];controls.target.set(p.x,p.y+.6,p.z);camera.position.copy(controls.target).add(new T.Vector3(11,9,12));controls.update();}
+ if(inspect&&new URLSearchParams(location.search).get('view')==='estuary'){const p=forest.city.worldPlan.estuary;controls.target.set(p.x+7,p.surfaceY+1,p.z+5);camera.position.copy(controls.target).add(new T.Vector3(27,25,30));controls.update();}
  atmosphere(10);let viewportWidth=1,viewportHeight=1;
  const fitFor=(v,offset)=>Math.max(1,v.minimumWidth/(2*Math.tan(T.MathUtils.degToRad(camera.fov/2))*offset.length()*camera.aspect));
  function resize(){const rect=$('.viewer').getBoundingClientRect();viewportWidth=rect.width;viewportHeight=rect.height;camera.aspect=rect.width/rect.height;const fit=fitFor(viewConfig,originalOffset);if(Math.abs(fit-aspectFit)>.002){camera.position.sub(controls.target).multiplyScalar(fit/aspectFit).add(controls.target);aspectFit=fit;}camera.updateProjectionMatrix();const dpr=Math.min(devicePixelRatio,config.rendering.devicePixelRatioCap),requestedW=rect.width*dpr,requestedH=rect.height*dpr,budgetFit=Math.min(1,Math.sqrt(config.rendering.standardPixelBudget/(requestedW*requestedH))),w=Math.max(1,Math.floor(requestedW*budgetFit)),h=Math.max(1,Math.floor(requestedH*budgetFit));renderer.setSize(w,h,false);composer.setSize(w,h);tiltShift.enabled=tiltShift.horizontal.enabled=tiltOn;tiltShift.uniforms.texel.value.set(1/w,1/h);tiltShift.uniforms.radius.value=config.rendering.tiltShift.radius*w/rect.width;if(forest)forest.update(reduced?0:time);}
@@ -136,7 +137,7 @@ async function main(){
  if(encounters)for(const a of encounters.pool.actors.values())a.root.visible=true;if(stream)for(const a of stream.pool)a.root.visible=true;
  await renderer.compileAsync(scene,camera);renderer.render(scene,camera);
  if(encounters)for(const a of encounters.pool.actors.values())a.root.visible=false;if(stream)for(const a of stream.pool)a.root.visible=!!a.p;detail.update();renderer.shadowMap.needsUpdate=true;composer.render(0);
- const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',grounding:JSON.stringify(forest?.city?.grounding||null),renderStyle:config.rendering.style,colourGrading:String(grading.enabled),shadowFilter:renderer.shadowMap.type===T.PCFSoftShadowMap?'pcf-soft':'pcf',crayonBudget:JSON.stringify(crayon?.metrics||null),islandLandmarks:JSON.stringify(forest?.city?.paintIslandMetrics||null),characterModels:String(1+(search?.variants?.groups.length||0)+(moa?1:0)+(dress?1:0)),totalCharacters:String((search?.count||0)+(moa?1:0)+(dress?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v33',residentSpeedMultiplier:String(config.character.speedMultiplier||1),poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),dressPo:String(dress?1:0),poCount:String((search?.count||0)+(dress?1:0)),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'mixed',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),swimmers:String(search?.waterResidents?.count||0),poVariants:JSON.stringify(search?.variants?.counts||{}),poRenderCounts:JSON.stringify(search?.renderCounts||{}),variantPaletteBytes:String(search?.variants?.paletteBytes||0),swimmingBay:JSON.stringify(forest?.city?.swimmingBay||null),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});canvas.setAttribute('aria-label',`물감으로 만든 언덕 마을. Po ${config.search.count+(dress?1:0)}명과 Moa 1명이 쉬고 산책하는 공간.`);loading(1);T.DefaultLoadingManager.onProgress=undefined;$('#loading').remove();
+ const canvas=$('#model');Object.assign(canvas.dataset,{parkCount:String(forest?.city?.parks?.length||0),parkTrees:String(forest?.city?.parkTrees?.length||0),cityBuildings:String(forest?.city?.buildingCount||0),roofObjects:String(forest?.city?.roofPropCount||0),cityBatches:String(forest?.city?.buildingBatchCount||0),muralCount:String(forest?.city?.graffitiCount||murals?.count||0),hiddenCharacters:String(search?.count||0),crowns:search?'1':'0',capes:search?'1':'0',statueCrown:String(!!forest?.city?.statueCrown),statueCape:String(!!forest?.city?.statueCape),terrain:'single-continuous-surface',grounding:JSON.stringify(forest?.city?.grounding||null),renderStyle:config.rendering.style,colourGrading:String(grading.enabled),shadowFilter:renderer.shadowMap.type===T.PCFSoftShadowMap?'pcf-soft':'pcf',crayonBudget:JSON.stringify(crayon?.metrics||null),islandLandmarks:JSON.stringify(forest?.city?.paintIslandMetrics||null),characterModels:String(1+(search?.variants?.groups.length||0)+(moa?1:0)+(dress?1:0)),totalCharacters:String((search?.count||0)+(moa?1:0)+(dress?1:0)),moaInitial:moa?JSON.stringify([moa.body.x,moa.body.z]):'',poModel:'v14-B-full',poRig:'Blender-MCP-v33',residentSpeedMultiplier:String(config.character.speedMultiplier||1),poRigBones:String(poseMetadata?.sourceBones||0),poClips:JSON.stringify(Object.keys(poseMetadata?.clips||{})),poPoses:JSON.stringify(search?.activePoses||[]),dressPo:String(dress?1:0),poCount:String((search?.count||0)+(dress?1:0)),mountainCoastRoamers:String(search?.localRoamers||0),treeColours:'vivid-pigments-v56',waterStyle:'shared-liquid-v56',moaRig:moa?'Mixamo':'',moaClips:moa?'idle,walk':'',friendDistribution:JSON.stringify(search?.distribution||{}),animatedFriends:String(!!search?.animated),swimmers:String(search?.waterResidents?.count||0),poVariants:JSON.stringify(search?.variants?.counts||{}),poRenderCounts:JSON.stringify(search?.renderCounts||{}),variantPaletteBytes:String(search?.variants?.paletteBytes||0),swimmingBay:JSON.stringify(forest?.city?.swimmingBay||null),villageTrees:String(forest?.treeCount||0),renderSamples:String(config.rendering.msaaSamples),timeCycleSeconds:String(config.timeCycle.seconds)});canvas.setAttribute('aria-label',`물감으로 만든 언덕 마을. Po ${config.search.count+(dress?1:0)}명과 Moa 1명이 쉬고 산책하는 공간.`);loading(1);T.DefaultLoadingManager.onProgress=undefined;$('#loading').remove();
  if(errors.length){$('#notice').hidden=false;$('#notice').textContent=errors.join(' ')+' 새로고침해서 다시 시도해 주세요.';}
  $('#tilt').onclick=()=>{tiltOn=!tiltOn;$('#tilt').setAttribute('aria-pressed',String(tiltOn));resize();};
 

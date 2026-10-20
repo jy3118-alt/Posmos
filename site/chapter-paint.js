@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {chapters,chapterAt,chapterDistance} from './storybook-chapters.js?v=a2b9f13c5d88';
-import {storybookBeds} from './storybook-landscape.js?v=a2b9f13c5d88';
+import {chapters,chapterAt,chapterDistance} from './storybook-chapters.js?v=50e1064b0d79';
+import {storybookBeds} from './storybook-landscape.js?v=50e1064b0d79';
 
 export function chapterGroundTexture(city){
  const c=document.createElement('canvas');c.width=c.height=2048;const ctx=c.getContext('2d'),s=2048/304;

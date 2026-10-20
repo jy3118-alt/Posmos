@@ -1,15 +1,15 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial,cleanGeometry} from './game-material.js?v=a2b9f13c5d88';
-import {makeClearCoast} from './clear-coast.js?v=a2b9f13c5d88';
-import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=a2b9f13c5d88';
-import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=a2b9f13c5d88';
-import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=a2b9f13c5d88';
-import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=a2b9f13c5d88';
-import {createPaintIslandStudy,paintIslandSites,landmarkSites,regionWeights,paintRegions} from './paint-island-plan.js?v=a2b9f13c5d88';
-import {addPaintIslandDetails} from './paint-island-details.js?v=a2b9f13c5d88';
-import {installStreamSpace} from './stream-space.js?v=a2b9f13c5d88';
-import {addGroundSupports} from './bridge-grounding.js?v=a2b9f13c5d88';
+import {gameMaterial,cleanGeometry} from './game-material.js?v=50e1064b0d79';
+import {makeClearCoast} from './clear-coast.js?v=50e1064b0d79';
+import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=50e1064b0d79';
+import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=50e1064b0d79';
+import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=50e1064b0d79';
+import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=50e1064b0d79';
+import {createPaintIslandStudy,paintIslandSites,landmarkSites} from './paint-island-plan.js?v=50e1064b0d79';
+import {addPaintIslandDetails} from './paint-island-details.js?v=50e1064b0d79';
+import {installStreamSpace} from './stream-space.js?v=50e1064b0d79';
+import {addGroundSupports} from './bridge-grounding.js?v=50e1064b0d79';
 
 // One continuous surface is shared by the coastline, roads and every moving foot.
 const N=153,STEP=2,MIN=-152,SEA=-9,field=new Float32Array(N*N);
@@ -78,10 +78,11 @@ export async function makePaintVillage(scene,config,camera){
    treePositions.push({x,y,z,h:height,height:6,radius:height*.55,yaw:random()*6.28});
   }
  }
+ // Choose intact pigments, never average complementary hues into grey.
+ const canopyPalette=['#ff8a22','#f34e37','#ffc82f','#fca522','#e83e56','#f3d84c','#e46eaa','#5cc4ad','#83b94a','#cb7dcd'];
  if(paintWorld)for(let i=0;i<treePositions.length;i++){
-  const p=treePositions[i],weights=regionWeights(p.x,p.z),tint=new T.Color(0,0,0);
-  weights.forEach((w,j)=>{const c=new T.Color(paintRegions[j].trees[i%3]);tint.r+=c.r*w;tint.g+=c.g*w;tint.b+=c.b*w;});
-  p.tint='#'+tint.getHexString();
+  const p=treePositions[i],hash=(Math.imul(i+71,1597334677)^Math.round(p.x*83)^Math.round(p.z*137))>>>0;
+  p.tint=canopyPalette[hash%canopyPalette.length];
  }
  if(paintWorld)for(let i=treePositions.length-1;i>=0;i--){const p=treePositions[i],river=islandStudy.world.closestRiver(p.x,p.z);if(((p.x+2)/14)**2+((p.z-7)/12)**2<1||landmarkSites.some(l=>Math.hypot(p.x-l.x,p.z-l.z)<l.r+1.6)||river&&river.d<river.point.width+2.8)treePositions.splice(i,1);}
  instances('tree',treePositions,paintWorld);
@@ -93,7 +94,7 @@ export async function makePaintVillage(scene,config,camera){
  // Paint pools are part of the exact ground triangles, without surface overlap.
  const walkingPaths=[];for(const path of pathSamples){let part=[];const save=()=>{if(part.length>7)walkingPaths.push(part);part=[];};for(const pt of path){const y=paintVillageHeight(pt.x,pt.z),last=part.at(-1);if(y<-3){save();continue;}if(last&&Math.abs(y-paintVillageHeight(last.x,last.z))>.40*Math.hypot(pt.x-last.x,pt.z-last.z))save();part.push(pt);}save();}if(!walkingPaths.length)walkingPaths.push(pathSamples[0].slice(0,20));
  const chapterMetrics=multiverse?addChapterLandmarks(scene,paintVillageHeight):null;
- const city={multiverse,paintWorld,residentWorld:!!config.residentWorld,worldPlan:islandStudy?.world,terrainHeight,chapterMetrics,swimmingBay,village:true,v13:true,storybook,groundMeshes,buildings,height:paintVillageHeight,treePositions,paths:walkingPaths,paintPaths:storybook?pathSamples:undefined,sea:SEA,buildingCount:buildings.length,buildingBatchCount:5,roofPropCount:0,exclusions:[{x:-62,z:-55,radius:18},{x:42,z:4,radius:10},{x:islandStudy?.world.bridge?.x??-36,z:islandStudy?.world.bridge?.z??22,radius:7},{x:75,z:52,radius:5}]};
+ const city={waterContext:coast.waterContext,multiverse,paintWorld,residentWorld:!!config.residentWorld,worldPlan:islandStudy?.world,terrainHeight,chapterMetrics,swimmingBay,village:true,v13:true,storybook,groundMeshes,buildings,height:paintVillageHeight,treePositions,paths:walkingPaths,paintPaths:storybook?pathSamples:undefined,sea:SEA,buildingCount:buildings.length,buildingBatchCount:5,roofPropCount:0,exclusions:[{x:-62,z:-55,radius:18},{x:42,z:4,radius:10},{x:islandStudy?.world.bridge?.x??-36,z:islandStudy?.world.bridge?.z??22,radius:7},{x:75,z:52,radius:5}]};
  installStreamSpace(city);
  const paintDetails=paintWorld?await addPaintIslandDetails(scene,city,sources):null;
  city.grounding=addGroundSupports(scene,city);

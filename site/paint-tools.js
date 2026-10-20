@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {paintMaterial} from './paint.js?v=a2b9f13c5d88';
+import {paintMaterial} from './paint.js?v=50e1064b0d79';
 
 // Small code-native paint containers complement the existing Tripo studio/chest.
 export function makePaintTools(scene,config){

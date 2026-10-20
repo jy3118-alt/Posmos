@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gridTriangleHeight} from './terrain-grid.js?v=a2b9f13c5d88';
-import {gameMaterial} from './game-material.js?v=a2b9f13c5d88';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=a2b9f13c5d88';
+import {gridTriangleHeight} from './terrain-grid.js?v=50e1064b0d79';
+import {gameMaterial} from './game-material.js?v=50e1064b0d79';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=50e1064b0d79';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){
@@ -62,5 +62,5 @@ export function paintGround(meshes,paths,bay){
  for(const mesh of meshes){mesh.material.onBeforeCompile=s=>{s.uniforms.storyGround={value:map};s.vertexShader='varying vec2 storyUv;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nstoryUv=(position.xz+152.)/304.;');s.fragmentShader='uniform sampler2D storyGround;varying vec2 storyUv;\n'+s.fragmentShader;s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nvec4 paint=texture2D(storyGround,storyUv);diffuseColor.rgb=mix(diffuseColor.rgb,paint.rgb,paint.a);');};mesh.material.customProgramCacheKey=()=> 'actual-ground-paint-v14';}
 }
 export function colourCanopy(material){
- material.onBeforeCompile=s=>{s.vertexShader='varying float canopyY;varying vec3 canopyColour;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ncanopyY=position.y;canopyColour=instanceColor;');s.fragmentShader='varying float canopyY;varying vec3 canopyColour;\n'+s.fragmentShader;s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`float leaf=smoothstep(.23,.52,canopyY);float detail=clamp(dot(diffuseColor.rgb,vec3(.3,.6,.1))*1.65,.52,1.15);diffuseColor.rgb=mix(diffuseColor.rgb,canopyColour*detail,leaf*.88);`);};material.customProgramCacheKey=()=> 'storybook-canopy-v14';
+ material.onBeforeCompile=s=>{s.vertexShader='varying float canopyY;varying vec3 canopyColour;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ncanopyY=position.y;canopyColour=instanceColor;');s.fragmentShader='varying float canopyY;varying vec3 canopyColour;\n'+s.fragmentShader;s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`float leaf=smoothstep(.24,.48,canopyY);float detail=clamp(dot(diffuseColor.rgb,vec3(.3,.6,.1))*1.5+.52,.68,1.12);diffuseColor.rgb=mix(diffuseColor.rgb,canopyColour*detail,leaf);`);};material.customProgramCacheKey=()=> 'vivid-canopy-v56';
 }
