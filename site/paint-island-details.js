@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial} from './game-material.js?v=a1ea6da47f55';
-import {landmarkSites} from './paint-island-plan.js?v=a1ea6da47f55';
+import {gameMaterial} from './game-material.js?v=678b68d9df9d';
+import {landmarkSites} from './paint-island-plan.js?v=678b68d9df9d';
 
 // Native Tripo buildings and props stay shared; only five small floating batches
 // change matrices. No additional skeletons, physics simulation or per-frame loads.

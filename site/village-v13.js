@@ -1,13 +1,13 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial,cleanGeometry} from './game-material.js?v=a1ea6da47f55';
-import {makeClearCoast} from './clear-coast.js?v=a1ea6da47f55';
-import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=a1ea6da47f55';
-import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=a1ea6da47f55';
-import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=a1ea6da47f55';
-import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=a1ea6da47f55';
-import {createPaintIslandStudy,paintIslandSites,landmarkSites,regionWeights,paintRegions} from './paint-island-plan.js?v=a1ea6da47f55';
-import {addPaintIslandDetails} from './paint-island-details.js?v=a1ea6da47f55';
+import {gameMaterial,cleanGeometry} from './game-material.js?v=678b68d9df9d';
+import {makeClearCoast} from './clear-coast.js?v=678b68d9df9d';
+import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=678b68d9df9d';
+import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=678b68d9df9d';
+import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=678b68d9df9d';
+import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=678b68d9df9d';
+import {createPaintIslandStudy,paintIslandSites,landmarkSites,regionWeights,paintRegions} from './paint-island-plan.js?v=678b68d9df9d';
+import {addPaintIslandDetails} from './paint-island-details.js?v=678b68d9df9d';
 
 // One continuous surface is shared by the coastline, roads and every moving foot.
 const N=153,STEP=2,MIN=-152,SEA=-9,field=new Float32Array(N*N);

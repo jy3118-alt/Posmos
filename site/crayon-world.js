@@ -1,8 +1,8 @@
 import * as T from 'three';
-import {storybookBeds,pathDistance} from './storybook-landscape.js?v=a1ea6da47f55';
-import {makeStorybookGarden} from './storybook-garden.js?v=a1ea6da47f55';
-import {chapterGroundTexture} from './chapter-paint.js?v=a1ea6da47f55';
-import {paintIslandGroundTexture} from './paint-island-ground.js?v=a1ea6da47f55';
+import {storybookBeds,pathDistance} from './storybook-landscape.js?v=678b68d9df9d';
+import {makeStorybookGarden} from './storybook-garden.js?v=678b68d9df9d';
+import {chapterGroundTexture} from './chapter-paint.js?v=678b68d9df9d';
+import {paintIslandGroundTexture} from './paint-island-ground.js?v=678b68d9df9d';
 
 // Wax grain is baked once, shared by every material, and sampled in bind/local
 // space. There is no animated noise, extra full-screen pass or outline skin.
@@ -103,7 +103,8 @@ function groundTexture(city){
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.flipY=false;t.anisotropy=8;return t;
 }
 
-export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,managedAtmosphere=false,outlineActors=null}){
+export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,managedAtmosphere=false,outlineActors=null,surfaceStyle='crayon'}){
+ const clean=surfaceStyle==='clean-cel';
  const garden=forest.city.storybook?makeStorybookGarden(scene,forest.city):null;
  let terrainChecks=null;
  if(garden){
@@ -130,7 +131,7 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
  }
  const clearIslandFog=forest.city.paintWorld?new T.Fog('#afe7fa',520,1080):null;
  const before={fogObject:scene.fog,fog:scene.fog?.color.clone(),fogDensity:scene.fog?.density,environment:scene.environment,hemisphere:hemisphere.color.clone(),hemiGround:hemisphere.groundColor.clone(),hemiIntensity:hemisphere.intensity,sun:sunlight.color.clone(),sunPosition:sunlight.position.clone(),sunIntensity:sunlight.intensity,toneMapping:renderer.toneMapping,exposure:renderer.toneMappingExposure};
- const marks={daylight:'warm-sun-clear-blue-v50',meshes:0,materials:0,extraGeometry:garden?2:0,nearOutlineDraws:0,fullScreenPasses:0,texturePixels:256*256+1024*512+512*512+2048*2048,landscape:garden?{...garden,...forest.city.chapterMetrics,trees:forest.treeCount,paths:forest.city.paintPaths.length,terrainTriangles:forest.city.groundMeshes[0].geometry.index.count/3,terrainChecks}:null};
+ const marks={daylight:'warm-sun-clear-blue-v50',surfaceStyle,colourFilter:!clean,waxOverlay:!clean,meshes:0,materials:0,extraGeometry:garden?2:0,nearOutlineDraws:0,fullScreenPasses:0,texturePixels:256*256+1024*512+512*512+2048*2048,landscape:garden?{...garden,...forest.city.chapterMetrics,trees:forest.treeCount,paths:forest.city.paintPaths.length,terrainTriangles:forest.city.groundMeshes[0].geometry.index.count/3,terrainChecks}:null};
  function material(source,mesh){
   const isGround=mesh.name==='continuous-repaired-island',isSkin=mesh.isSkinnedMesh||mesh.name==='crayon-crowd-skin'||mesh.name==='animated-hidden-friends'||mesh.name.startsWith('po-variant-');
   const key=source.uuid+':'+(isGround?'ground':isSkin?'skin':'world');if(cache.has(key))return cache.get(key);
@@ -142,7 +143,10 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
    s.vertexShader='varying vec3 vWaxPosition;varying vec3 vWaxNormal;\n'+s.vertexShader;
    s.vertexShader=s.vertexShader.replace('void main() {','void main() {\nvWaxPosition=position;vWaxNormal=normal;');
    s.fragmentShader=`uniform sampler2D crayonWax,crayonGroundMap;uniform vec3 crayonPaper,crayonInk;uniform float crayonNight,crayonSunset,crayonScale,crayonAmount,crayonGround,crayonSubject;varying vec3 vWaxPosition,vWaxNormal;\n`+s.fragmentShader;
-   s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_begin>',`
+   s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_begin>',clean?`
+    // Keep the authored albedo. No paper tint, pigment quantization or grain.
+    if(crayonGround>.5)diffuseColor.rgb=texture2D(crayonGroundMap,(vWaxPosition.xz+152.)/304.).rgb;
+    #include <normal_fragment_begin>`:`
     if(crayonGround>.5)diffuseColor.rgb=texture2D(crayonGroundMap,(vWaxPosition.xz+152.)/304.).rgb;
     vec3 waxN=abs(normalize(vWaxNormal));vec2 waxUv=vWaxPosition.xy;
     if(waxN.y>waxN.x&&waxN.y>waxN.z)waxUv=vWaxPosition.xz;
@@ -157,7 +161,30 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
     diffuseColor.rgb=mix(pigment,crayonPaper,holes);
     if(crayonGround>.5)diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.55,.39,.20),(1.-smoothstep(.35,.82,waxN.y))*.13);
     #include <normal_fragment_begin>`);
-   s.fragmentShader=s.fragmentShader.replace('#include <opaque_fragment>',`
+   s.fragmentShader=s.fragmentShader.replace('#include <opaque_fragment>',clean?`
+    float colourL=max(.015,dot(diffuseColor.rgb,vec3(.2126,.7152,.0722)));
+    float directL=dot(reflectedLight.directDiffuse,vec3(.2126,.7152,.0722))/colourL;
+    // Quantize surface lighting, not shadow-map texels. Keep the existing PCF
+    // coverage across cast-shadow edges instead of thresholding it into stairs.
+    float sunBand=1.;
+    #if NUM_DIR_LIGHTS > 0
+     float facingSun=max(0.,dot(normal,directionalLights[0].direction));
+     float bandWidth=max(.018,fwidth(facingSun)*.85);
+     float faceBand=smoothstep(.22-bandWidth,.22+bandWidth,facingSun);
+     float unshadowed=facingSun*RECIPROCAL_PI*dot(directionalLights[0].color,vec3(.2126,.7152,.0722));
+     float coverage=clamp(directL/max(.0001,unshadowed),0.,1.);
+     sunBand=faceBand*coverage;
+    #endif
+    vec3 shadowFactor=mix(vec3(.40,.43,.60),vec3(.64,.66,.76),crayonSubject);
+    outgoingLight=diffuseColor.rgb*mix(shadowFactor,vec3(1.),sunBand);
+    float viewDot=abs(dot(normal,normalize(vViewPosition)));
+    float lineWidth=max(.009,fwidth(viewDot)*.75);
+    float edge=1.-smoothstep(.055-lineWidth,.055+lineWidth,viewDot);
+    outgoingLight=mix(outgoingLight,outgoingLight*.26,edge*mix(.72,.38,crayonGround));
+    // These are time-of-day lighting changes, not a permanent colour grade.
+    outgoingLight*=mix(vec3(1.),vec3(1.,.70,.50),crayonSunset*.50);
+    outgoingLight*=mix(vec3(1.),vec3(.20,.28,.50),crayonNight*.89);
+    #include <opaque_fragment>`:`
     float colourL=max(.015,dot(diffuseColor.rgb,vec3(.2126,.7152,.0722)));
     float directL=dot(reflectedLight.directDiffuse,vec3(.2126,.7152,.0722))/colourL;
     // Keep actual directional light and shadow visibility in the painted bands.
@@ -175,7 +202,7 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
     outgoingLight*=mix(vec3(1.),vec3(1.,.72,.58),crayonSunset*.55);
     outgoingLight*=mix(vec3(1.),vec3(.22,.30,.56),crayonNight*.87);
     #include <opaque_fragment>`);
-  };m.customProgramCacheKey=()=> 'crayon-sun-v51-'+(isGround?'ground':isSkin?'skin':'world')+'-'+(source.customProgramCacheKey?.()||'plain');
+  };m.customProgramCacheKey=()=> (clean?'clean-cel-v53-':'crayon-sun-v51-')+(isGround?'ground':isSkin?'skin':'world')+'-'+(source.customProgramCacheKey?.()||'plain');
   cache.set(key,m);return m;
  }
  const palette=['#e97060','#f0be3b','#36acae','#a17bcb','#89ba50'];
@@ -187,7 +214,7 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
   let replacement;
   if(mesh.name==='clear-summer-sky')replacement=phaseShader(new T.MeshBasicMaterial({map:sky,side:T.BackSide,depthWrite:false,fog:false}),true);
   else if(mesh.name==='clear-turquoise-ocean')replacement=phaseShader(new T.MeshBasicMaterial({map:water,color:'white',fog:true}),false);
-  else if(mesh.name==='sun-disc')replacement=new T.MeshBasicMaterial({color:'#ffe29a',map:wax,toneMapped:false,fog:false});
+  else if(mesh.name==='sun-disc')replacement=new T.MeshBasicMaterial({color:'#ffe29a',map:clean?null:wax,toneMapped:false,fog:false});
   else if(mesh.material?.isShaderMaterial)return;
   else replacement=Array.isArray(mesh.material)?mesh.material.map(m=>material(m,mesh)):material(mesh.material,mesh);
   entries.push({mesh,original:mesh.material,crayon:replacement});marks.meshes++;
@@ -210,10 +237,9 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
  for(const a of entries.filter(a=>a.mesh.isSkinnedMesh&&(!outlineActors||outlinedSkins.has(a.mesh)))){
   const m=new T.MeshBasicMaterial({color:'#45416b',side:T.BackSide});
   m.onBeforeCompile=s=>{
-   s.uniforms.outlineWax={value:wax};
-   s.vertexShader='uniform sampler2D outlineWax;\n'+s.vertexShader;
-   s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nfloat pressure=texture2D(outlineWax,position.xy*3.4).r;transformed+=normal*(.0035+pressure*.0025);');
-  };m.customProgramCacheKey=()=> 'near-wax-outline-v40';
+   if(clean)s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed+=normal*.0055;');
+   else{s.uniforms.outlineWax={value:wax};s.vertexShader='uniform sampler2D outlineWax;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nfloat pressure=texture2D(outlineWax,position.xy*3.4).r;transformed+=normal*(.0035+pressure*.0025);');}
+  };m.customProgramCacheKey=()=> clean?'near-clean-outline-v53':'near-wax-outline-v40';
   const o=a.mesh.clone(false);o.name='crayon-near-outline';o.material=m;o.skeleton=a.mesh.skeleton;o.castShadow=o.receiveShadow=false;o.frustumCulled=false;o.visible=false;
   a.mesh.parent.add(o);outlines.push(o);marks.nearOutlineDraws++;
  }

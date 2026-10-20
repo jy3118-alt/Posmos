@@ -1451,7 +1451,7 @@
     "newCharactersRequireOwnAssets": true
   },
   "rendering": {
-    "style": "crayon-sun-v50",
+    "style": "clean-cel-v53",
     "shadowInk": [
       0.23,
       0.23,
