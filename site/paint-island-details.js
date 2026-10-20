@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial} from './game-material.js?v=4463ff4f4170';
-import {landmarkSites} from './paint-island-plan.js?v=4463ff4f4170';
+import {gameMaterial} from './game-material.js?v=a2b9f13c5d88';
+import {landmarkSites} from './paint-island-plan.js?v=a2b9f13c5d88';
 
 // Native Tripo buildings and props stay shared; only five small floating batches
 // change matrices. No additional skeletons, physics simulation or per-frame loads.
@@ -45,7 +45,7 @@ export async function addPaintIslandDetails(scene,city,sources){
  const bay=city.swimmingBay,shipX=bay.x+bay.nz*14-bay.nx*2,shipZ=bay.z-bay.nx*14-bay.nz*2;
  batch('spaceship',[{x:shipX,z:shipZ,y:Math.max(city.sea+.45,city.height(shipX,shipZ))-.3,h:6.3,yaw:-.65,rz:-.25}]);
 
- const floats=[
+ const floats=city.residentWorld?[]:[
   {asset:'cottage',x:49,z:34,h:7,y:city.height(49,34)+15,yaw:-.7,rz:.20,phase:0},
   {asset:'paint-hut',x:64,z:23,h:5.5,y:city.height(64,23)+15,yaw:1.7,rx:Math.PI,rz:.12,phase:1.7},
   {asset:'paint-mill',x:35,z:43,h:6,y:city.height(35,43)+20,yaw:.5,rz:-.34,phase:3.5},
@@ -54,11 +54,13 @@ export async function addPaintIslandDetails(scene,city,sources){
  ];
  for(const name of new Set(floats.map(p=>p.asset)))batch(name,floats.filter(p=>p.asset===name),{floating:true,cast:false});
  // Float supports are irregular chunks of painted rock, one shared cheap mesh.
+ if(floats.length){
  const rockGeometry=new T.IcosahedronGeometry(1,1),rockMaterial=new T.MeshLambertMaterial({color:'#a0a3b4',flatShading:true});
  const rocks=new T.InstancedMesh(rockGeometry,rockMaterial,3);
  for(let i=0;i<3;i++){const p=floats[i];guide.position.set(p.x,p.y-.7,p.z);guide.rotation.set(.1,i,.15);guide.scale.set(p.h*.52,.9,p.h*.46);guide.updateMatrix();rocks.setMatrixAt(i,guide.matrix);}rocks.computeBoundingSphere();rocks.boundingSphere.radius+=1.5;rocks.name='painted-floating-rocks';scene.add(rocks);
  extra.push(t=>{for(let i=0;i<3;i++){const p=floats[i];guide.position.set(p.x,p.y-.7+Math.sin(t*.36+p.phase)*.55,p.z);guide.rotation.set(.1,i,.15);guide.scale.set(p.h*.52,.9,p.h*.46);guide.updateMatrix();rocks.setMatrixAt(i,guide.matrix);}rocks.instanceMatrix.needsUpdate=true;});
 
+ }
  const river=city.worldPlan.river,positions=[],uvs=[],indices=[],flows=[];
  // Build a shallow water ribbon on the carved river, with a shared flow shader.
  for(let i=0;i<river.length;i++){
@@ -71,8 +73,8 @@ export async function addPaintIslandDetails(scene,city,sources){
  const time={value:0},disturbances=Array.from({length:4},()=>new T.Vector4(0,0,0,10)),riverMaterial=new T.ShaderMaterial({side:T.DoubleSide,uniforms:{time,disturbances:{value:disturbances}},vertexShader:'varying vec2 vUv;varying vec3 riverWorld;void main(){vUv=uv;riverWorld=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 vUv;varying vec3 riverWorld;uniform float time;uniform vec4 disturbances[4];void main(){float bank=smoothstep(.30,.50,abs(vUv.x-.5));float line=pow(max(0.,sin(vUv.y*15.-time*1.25+sin(vUv.x*14.)*.35)),18.);float ripple=0.;for(int i=0;i<4;i++){float d=distance(riverWorld.xz,disturbances[i].xy);ripple+=pow(max(0.,sin(d*12.-time*6.)),9.)*exp(-d*1.45)*disturbances[i].z*.6;}vec3 c=mix(vec3(.035,.30,.43),vec3(.13,.56,.61),1.-abs(vUv.x-.5)*2.);c=mix(c,vec3(.78,.94,.88),min(.85,line*.40+bank*.22+ripple));gl_FragColor=vec4(c,1.);}`});
  city.streamSurface={disturbances};
  const water=new T.Mesh(riverGeo,riverMaterial);water.name='painted-flowing-river';scene.add(water);
- // Visible deck equals the height-sampler surface returned during terrain build.
- const bridge=city.worldPlan.bridge,deck=new T.Mesh(new T.BoxGeometry(bridge.width,.24,bridge.depth),new T.MeshLambertMaterial({color:'#c5ac83'}));deck.position.set(bridge.x,bridge.y-.12,bridge.z);deck.name='stream-bridge-deck';deck.castShadow=deck.receiveShadow=true;scene.add(deck);
+ // The accepted bridge itself is the deck and collision surface. No helper
+ // box or plank is rendered outside the real GLB footprint.
  city.paintIslandMetrics={originalIsland:true,regions:city.worldPlan.regions.length,landmarks:actualLandmarks.map(p=>({id:p.id,position:[p.x,p.y,p.z],height:p.h})),floatingProps:floats.length,riverSegments:river.length-1,additionalPaidModels:Object.keys(manifest.models).length};
  return {update(t){time.value=t;for(const update of extra)update(t);}};
 }

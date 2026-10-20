@@ -13,7 +13,7 @@ export function streamImmersion(depth,height){const a=height*.20,b=height*.68,u=
 export function streamCrossings(city,safe){
  if(!city.waterAt)return [];const routes=[];
  for(let i=108;i<146&&routes.length<2;i+=4){
-  const p=city.worldPlan.river[i],q=city.worldPlan.sampleStream(p.x,p.z),nx=-q.flowZ,nz=q.flowX,r=q.width+3.6;
+  const p=city.worldPlan.river[i];if(!city.waterAt(p.x,p.z))continue;const q=city.worldPlan.sampleStream(p.x,p.z),nx=-q.flowZ,nz=q.flowX,r=q.width+3.6;
   const points=[-1,-.5,0,.5,1].map(u=>({x:p.x+nx*r*u,z:p.z+nz*r*u}));
   if(city.waterAt(points[0].x,points[0].z)||city.waterAt(points[4].x,points[4].z))continue;
   if(routes.some(route=>Math.hypot(route[2].x-p.x,route[2].z-p.z)<9))continue;

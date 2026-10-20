@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {planGroundedBridge,fitBridgeLandings} from './bridge-grounding.js?v=a2b9f13c5d88';
 
 // One continuous original island. These overlapping fields are art direction,
 // not biome tiles: new residents can add a home without replacing the coast.
@@ -34,6 +35,7 @@ export function paintIslandSites(sites){return sites.concat([
 
 const smooth=(a,b,v)=>{const u=T.MathUtils.clamp((v-a)/(b-a),0,1);return u*u*(3-2*u);};
 export function createPaintIslandStudy(){
+ let bridgeModel=null;
  // Start in the high western hills and descend to the western sea, never
  // animate an uphill ribbon over the original uncut terrain.
  const curve=new T.CatmullRomCurve3([[-72,61],[-59,51],[-48,40],[-36,22],[-32,10],[-43,-8],[-65,-24],[-84,-35],[-106,-48]].map(([x,z])=>new T.Vector3(x,0,z)));
@@ -58,7 +60,7 @@ export function createPaintIslandStudy(){
   return T.MathUtils.lerp(original,Math.min(original,bed),weight);
  }
  const world={regions:paintRegions,landmarks:landmarkSites,river:samples,closestRiver:closest,sampleStream:sample,carveStream:carve,riverCurve:curve,originalCoast:true};
- return {world,heightTransform(base){
+ return {world,setBridgeModel(gltf){bridgeModel=gltf;},heightTransform(base){
   // Sample the unmodified island before carving, so water and banks agree.
   world.baseHeight=base;
   const pads=landmarkSites.map(p=>({...p,y:base(p.x,p.z)}));
@@ -68,11 +70,9 @@ export function createPaintIslandStudy(){
    if(original>-6)for(const p of pads){if(p.y<-6)continue;y=T.MathUtils.lerp(y,p.y,1-smooth(p.r,p.r+5,Math.hypot(x-p.x,z-p.z)));}
    return carve(x,z,y);
   };
- },carveFinal:carve,addSurfaces(_scene,height){
-  // The visible existing Tripo palette bridge crosses this same stream.
-  // Its collision deck is invisible; rendered terrain is never an overlay.
-  const y=Math.max(height(-41,22),height(-31,22))+.28;
-  world.bridge={x:-36,z:22,y,width:12,depth:3.1};
-  const g=new T.PlaneGeometry(12,3.1);g.rotateX(-Math.PI/2);g.translate(-36,y,22);return [g];
- }};
+ },carveFinal:carve,finishGround(geometry,height){
+  if(!bridgeModel)return;
+  world.bridge=planGroundedBridge(bridgeModel,height,sample,samples[116]);
+  fitBridgeLandings(geometry,world.bridge,sample);
+ },addSurfaces(){return world.bridge?.surfaces||[];}};
 }

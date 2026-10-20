@@ -1,14 +1,14 @@
 import * as T from 'three';
-import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=4463ff4f4170';
-import {gameMaterial,characterMaterial} from './game-material.js?v=4463ff4f4170';
-import {villageFriendPlaces} from './friend-places.js?v=4463ff4f4170';
-import {makeRoyalOutfit} from './royal-outfit.js?v=4463ff4f4170';
-import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=4463ff4f4170';
-import {villageTrafficSafety} from './friend-traffic.js?v=4463ff4f4170';
-import {createWaterResidents} from './water-residents.js?v=4463ff4f4170';
-import {createPoVariantCrowd} from './po-variants.js?v=4463ff4f4170';
-import {createStatuePlay} from './statue-play.js?v=4463ff4f4170';
-import {streamCrossings} from './stream-space.js?v=4463ff4f4170';
+import {makeRoute,makeRouteState,advanceRoute} from './route-motion.js?v=a2b9f13c5d88';
+import {gameMaterial,characterMaterial} from './game-material.js?v=a2b9f13c5d88';
+import {villageFriendPlaces} from './friend-places.js?v=a2b9f13c5d88';
+import {makeRoyalOutfit} from './royal-outfit.js?v=a2b9f13c5d88';
+import {createFollower,groundPatch,forwardSlope} from './friend-locomotion.js?v=a2b9f13c5d88';
+import {villageTrafficSafety} from './friend-traffic.js?v=a2b9f13c5d88';
+import {createWaterResidents} from './water-residents.js?v=a2b9f13c5d88';
+import {createPoVariantCrowd} from './po-variants.js?v=a2b9f13c5d88';
+import {createStatuePlay} from './statue-play.js?v=a2b9f13c5d88';
+import {streamCrossings} from './stream-space.js?v=a2b9f13c5d88';
 
 // Shared real-rig deformation, independent animation clocks and ground routes.
 export async function createAnimatedFriends(scene,gltf,city,config,meta,hero,traffic,waterGltf,characterConfig,variantLibrary=[]){

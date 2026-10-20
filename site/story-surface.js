@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gridTriangleHeight} from './terrain-grid.js?v=4463ff4f4170';
-import {gameMaterial} from './game-material.js?v=4463ff4f4170';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=4463ff4f4170';
+import {gridTriangleHeight} from './terrain-grid.js?v=a2b9f13c5d88';
+import {gameMaterial} from './game-material.js?v=a2b9f13c5d88';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=a2b9f13c5d88';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){
@@ -42,11 +42,12 @@ export async function prepareIsland(scene,gltf,sites,study={}){
   if(study.carveFinal)y=study.carveFinal(x,z,y);
   vertices.setY(i,y);
  }
+ study.finishGround?.(geometry,gridTriangleHeight(geometry));
  geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
  const map=await new T.TextureLoader().loadAsync('./assets/polish-v18/island-albedo.png?v=4327b5c37434');map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
  const material=gameMaterial({map,side:T.DoubleSide},false),mesh=new T.Mesh(geometry,material);mesh.name='continuous-repaired-island';mesh.receiveShadow=true;scene.add(mesh);for(const p of parts)p.geometry.dispose();
  const groundHeight=gridTriangleHeight(geometry),extraSurfaces=study.addSurfaces?.(scene,groundHeight)||[];
- return {meshes:[mesh],height:gridTriangleHeight(geometry,extraSurfaces.length?triangleSurface(extraSurfaces,-20):null),swimmingBay};
+ return {meshes:[mesh],groundHeight,height:gridTriangleHeight(geometry,extraSurfaces.length?triangleSurface(extraSurfaces,-20):null),swimmingBay};
 }
 export function paintGround(meshes,paths,bay){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=2048;const ctx=canvas.getContext('2d'),scale=2048/304,xy=p=>[(p.x+152)*scale,(p.z+152)*scale];

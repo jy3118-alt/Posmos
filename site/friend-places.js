@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {groundPatch} from './friend-locomotion.js?v=4463ff4f4170';
+import {groundPatch} from './friend-locomotion.js?v=a2b9f13c5d88';
 
 // Resolve roofs once against real Tripo geometry. No per-frame roof raycasts.
 export function villageFriendPlaces(scene,city,random){

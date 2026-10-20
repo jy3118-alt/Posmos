@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {paintMaterial} from './paint.js?v=4463ff4f4170';
-import {makeArtistHome} from './home-architecture.js?v=4463ff4f4170';
-import {CITY_BASE,createCityLayout} from './city-layout.js?v=4463ff4f4170';
+import {paintMaterial} from './paint.js?v=a2b9f13c5d88';
+import {makeArtistHome} from './home-architecture.js?v=a2b9f13c5d88';
+import {CITY_BASE,createCityLayout} from './city-layout.js?v=a2b9f13c5d88';
 
 export function inPolygon(x, z, points) {
   let inside = false;
