@@ -2,13 +2,13 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const length=(x,z)=>Math.hypot(x,z);
 // Everyone proposes before anyone moves. Anticipatory steering passes on the
 // right; a final disc constraint prevents bodies tunnelling through each other.
-export function createFriendTraffic({height=()=>0,safe=()=>true}={}){
+export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null}={}){
  const agents=[];let contacts=0,yielding=0;
  function add({id,x,z,y=height(x,z),radius=.61,height:bodyHeight=1.65,movable=true}){
   const a={id,x,z,y,radius,height:bodyHeight,movable,vx:0,vz:0,wantX:0,wantZ:0,dx:0,dz:0,travel:0,yielding:false};agents.push(a);return a;
  }
- const sameLevel=(a,b)=>Math.abs(a.y-b.y)<Math.min(a.height,b.height)*.72;
- function allowed(a,x,z){return safe(x,z,a)&&Math.abs(height(x,z)-a.y)<.42;}
+ const sameLevel=(a,b)=>Math.abs((a.contactY??a.y)-(b.contactY??b.y))<Math.min(a.height,b.height)*.72;
+ function allowed(a,x,z){const drop=a.y-height(x,z);return safe(x,z,a)&&(Math.abs(drop)<.42||a.canSwim&&water(x,z)&&drop>=0&&drop<2.6);}
  function step(dt){
   dt=clamp(dt,0,.05);if(!dt)return;contacts=0;yielding=0;
   for(const a of agents){a.nx=a.x;a.nz=a.z;a.yielding=false;if(!a.movable)continue;
@@ -65,8 +65,9 @@ export function createFriendTraffic({height=()=>0,safe=()=>true}={}){
 export function villageTrafficSafety(city){
  return (x,z,a)=>{
   const y=city.height(x,z);if(y<city.sea+.7)return false;
-  const r=a.radius*.7;
-  if(Math.abs(city.height(x+r,z)-y)>.6||Math.abs(city.height(x-r,z)-y)>.6||Math.abs(city.height(x,z+r)-y)>.6||Math.abs(city.height(x,z-r)-y)>.6)return false;
+  const water=city.waterAt?.(x,z,a.waterProbe||(a.waterProbe={}));if(water&&water.waterDepth>.18&&!a.canSwim)return false;
+  const bank=a.canSwim&&city.streamNear?.(x,z,a.bankProbe||(a.bankProbe={})),r=a.radius*.7;
+  if(!bank&&(Math.abs(city.height(x+r,z)-y)>.6||Math.abs(city.height(x-r,z)-y)>.6||Math.abs(city.height(x,z+r)-y)>.6||Math.abs(city.height(x,z-r)-y)>.6))return false;
   for(const b of city.buildings){const dx=x-b.x,dz=z-b.z,c=Math.cos(b.yaw||0),s=Math.sin(b.yaw||0);if(Math.abs(c*dx-s*dz)<b.width*.48+r&&Math.abs(s*dx+c*dz)<b.depth*.48+r)return false;}
   for(const t of city.treePositions)if(length(x-t.x,z-t.z)<Math.max(.38,t.h*.035)+r)return false;
   return true;

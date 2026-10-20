@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {groundPatch} from './friend-locomotion.js?v=678b68d9df9d';
+import {groundPatch} from './friend-locomotion.js?v=4463ff4f4170';
 
 // Resolve roofs once against real Tripo geometry. No per-frame roof raycasts.
 export function villageFriendPlaces(scene,city,random){
@@ -14,7 +14,7 @@ export function villageFriendPlaces(scene,city,random){
   }
  }
  // Stratified candidates cover the actual entire island, including outer bays.
- const ground=[];for(let z=-124;z<=124;z+=4.8)for(let x=-124;x<=124;x+=4.8){const px=x+(random()-.5)*2.5,pz=z+(random()-.5)*2.5,y=city.height(px,pz);if(y<city.sea+1.0)continue;
+ const ground=[];for(let z=-124;z<=124;z+=4.8)for(let x=-124;x<=124;x+=4.8){const px=x+(random()-.5)*2.5,pz=z+(random()-.5)*2.5,y=city.height(px,pz);if(y<city.sea+1.0||city.waterAt?.(px,pz))continue;
   const slope=Math.max(...[[.7,0],[-.7,0],[0,.7],[0,-.7]].map(([dx,dz])=>Math.abs(city.height(px+dx,pz+dz)-y)))/.7;if(slope>.68)continue;
   if(city.buildings.some(b=>Math.hypot(px-b.x,pz-b.z)<Math.max(b.width,b.depth)*.54+1.1)||(city.exclusions||[]).some(e=>Math.hypot(px-e.x,pz-e.z)<e.radius)||(city.treePositions||[]).some(t=>Math.hypot(px-t.x,pz-t.z)<Math.min(1.6,t.h*.21)))continue;
   ground.push({x:px,z:pz,y:y+.035,flat:groundPatch(city.height,px,pz).flat,zone:y<city.sea+8?'해안':y>17?'언덕':Math.hypot(px,pz)>68?'바깥 숲':'마을 정원'});

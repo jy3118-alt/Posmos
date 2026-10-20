@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gridTriangleHeight} from './terrain-grid.js?v=678b68d9df9d';
-import {gameMaterial} from './game-material.js?v=678b68d9df9d';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=678b68d9df9d';
+import {gridTriangleHeight} from './terrain-grid.js?v=4463ff4f4170';
+import {gameMaterial} from './game-material.js?v=4463ff4f4170';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=4463ff4f4170';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){
@@ -39,6 +39,7 @@ export async function prepareIsland(scene,gltf,sites,study={}){
   const x=vertices.getX(i),z=vertices.getZ(i);let y=beachHeight(swimmingBay,x,z,heights[i]);
   // The experimental cove must not scoop away an existing house foundation.
   if(study.height||study.heightTransform)for(const p of sites)y=T.MathUtils.lerp(y,heights[i],1-smooth(8.3,13,Math.hypot(x-p.x,z-p.z)));
+  if(study.carveFinal)y=study.carveFinal(x,z,y);
   vertices.setY(i,y);
  }
  geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();

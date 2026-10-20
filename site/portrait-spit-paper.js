@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {styleForWork,stylePortraitRows,PORTRAIT_STYLE_PRESETS} from './portrait-style-rules.js?v=678b68d9df9d';
+import {styleForWork,stylePortraitRows,PORTRAIT_STYLE_PRESETS} from './portrait-style-rules.js?v=4463ff4f4170';
 
 // One capture target, one live canvas texture, and one worker shared by all 100
 // style rules. A finished work is rendered once, then revealed by paint impacts.

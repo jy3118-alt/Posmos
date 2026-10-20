@@ -1,10 +1,10 @@
 import * as T from 'three';
-import {createEncounterScheduler,encounterKind,pairKey} from './encounter-rules.js?v=678b68d9df9d';
-import {createEncounterPerformers} from './encounter-performers.js?v=678b68d9df9d';
-import {createSpitPortraitPaper} from './portrait-spit-paper.js?v=678b68d9df9d';
-import {createPaintSpitter} from './paint-spitter.js?v=678b68d9df9d';
-import {villageTrafficSafety} from './friend-traffic.js?v=678b68d9df9d';
-import {groundPatch} from './friend-locomotion.js?v=678b68d9df9d';
+import {createEncounterScheduler,encounterKind,pairKey} from './encounter-rules.js?v=4463ff4f4170';
+import {createEncounterPerformers} from './encounter-performers.js?v=4463ff4f4170';
+import {createSpitPortraitPaper} from './portrait-spit-paper.js?v=4463ff4f4170';
+import {createPaintSpitter} from './paint-spitter.js?v=4463ff4f4170';
+import {villageTrafficSafety} from './friend-traffic.js?v=4463ff4f4170';
+import {groundPatch} from './friend-locomotion.js?v=4463ff4f4170';
 
 export function makeEncounters(scene,renderer,camera,city,traffic,crowd,realActors,definitions,acting){
  const pool=createEncounterPerformers(scene,definitions,acting),entities=[],safe=villageTrafficSafety(city),point=new T.Vector3(),projected=new T.Vector3(),painterPoint=new T.Vector3(),modelPoint=new T.Vector3(),canvasPoint=new T.Vector3(),dir=new T.Vector3();
@@ -22,7 +22,7 @@ export function makeEncounters(scene,renderer,camera,city,traffic,crowd,realActo
  }
  for(const p of crowd.placements)if(p.follower&&!p.hero&&!p.water&&!p.statue&&!p.roof)add('po:'+p.id,p.variant||'po',p.variant||'base',p.follower.body,p.height,p,null);
  for(const a of realActors)add(a.id,a.kind,a.skin,a.resident.body,a.resident.height,null,a.resident);
- const eligible=a=>!a.body.social&&a.y>city.sea+2&&groundPatch(city.height,a.x,a.z,.55).rise<.21;
+ const eligible=a=>!a.body.social&&!a.body.inStream&&a.y>city.sea+2&&groundPatch(city.height,a.x,a.z,.55).rise<.21;
  const visible=(a,b)=>{projected.set((a.x+b.x)/2,Math.max(a.y,b.y)+1,(a.z+b.z)/2).project(camera);return Math.abs(projected.x)<.86&&Math.abs(projected.y)<.82&&projected.z>-1&&projected.z<1;};
  let active=null,stageName='idle',age=0,lastTime=0,captureDone=false,completed=0,cancelled=0;
  const params=new URLSearchParams(location.search),reviewHold=params.has('inspect')&&params.get('hold')==='admire',forced=params.has('inspect')?params.get('encounter'):null,forcedKey=forced?pairKey(...forced.split('-')):null;

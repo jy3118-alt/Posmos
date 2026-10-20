@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {paintRegions,regionWeights} from './paint-island-plan.js?v=678b68d9df9d';
+import {paintRegions,regionWeights} from './paint-island-plan.js?v=4463ff4f4170';
 
 // A single startup-baked ground map: soft overlapping colour fields, continuous
 // paths and distinct small garden beds on the real original terrain triangles.
@@ -18,7 +18,7 @@ export function paintIslandGroundTexture(city){
  const point=(x,z)=>[(x+152)*s,(z+152)*s],stroke=(points,width,colour)=>{ctx.lineWidth=width*s;ctx.strokeStyle=colour;ctx.beginPath();points.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](...point(p.x,p.z)));ctx.stroke();};
  ctx.lineCap=ctx.lineJoin='round';
  // River banks fade into neighbouring regions rather than ending at a tile edge.
- stroke(city.worldPlan.river,9.5,'#c9c7a05e');stroke(city.worldPlan.river,7,'#c5c4a4a5');
+ stroke(city.worldPlan.river,9.2,'#bca77f');stroke(city.worldPlan.river,7.1,'#d4c39e');
  for(const points of city.paintPaths||city.paths){stroke(points,4.1,'#a99b72');stroke(points,3.5,'#e6d5ad');stroke(points,1.8,'#eddfbb');}
  function patch(x,z,rx,rz,colour){ctx.save();ctx.translate(...point(x,z));ctx.rotate(Math.sin(x*.12)*.35);ctx.fillStyle=colour;ctx.beginPath();for(let i=0;i<=48;i++){const a=i/48*Math.PI*2,r=1+.05*Math.sin(a*5+x);ctx[i?'lineTo':'moveTo'](Math.cos(a)*rx*s*r,Math.sin(a)*rz*s*r);}ctx.closePath();ctx.fill();ctx.restore();}
  // A clear work area, then pigment gardens on either side, not grass on paths.

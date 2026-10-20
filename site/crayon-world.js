@@ -1,8 +1,8 @@
 import * as T from 'three';
-import {storybookBeds,pathDistance} from './storybook-landscape.js?v=678b68d9df9d';
-import {makeStorybookGarden} from './storybook-garden.js?v=678b68d9df9d';
-import {chapterGroundTexture} from './chapter-paint.js?v=678b68d9df9d';
-import {paintIslandGroundTexture} from './paint-island-ground.js?v=678b68d9df9d';
+import {storybookBeds,pathDistance} from './storybook-landscape.js?v=4463ff4f4170';
+import {makeStorybookGarden} from './storybook-garden.js?v=4463ff4f4170';
+import {chapterGroundTexture} from './chapter-paint.js?v=4463ff4f4170';
+import {paintIslandGroundTexture} from './paint-island-ground.js?v=4463ff4f4170';
 
 // Wax grain is baked once, shared by every material, and sampled in bind/local
 // space. There is no animated noise, extra full-screen pass or outline skin.
@@ -180,7 +180,7 @@ export function createCrayonWorld(scene,{forest,hemisphere,sunlight,renderer,man
     float viewDot=abs(dot(normal,normalize(vViewPosition)));
     float lineWidth=max(.009,fwidth(viewDot)*.75);
     float edge=1.-smoothstep(.055-lineWidth,.055+lineWidth,viewDot);
-    outgoingLight=mix(outgoingLight,outgoingLight*.26,edge*mix(.72,.38,crayonGround));
+    outgoingLight=mix(outgoingLight,outgoingLight*.26,edge*mix(.72,.38,crayonGround)*(1.-crayonSubject));
     // These are time-of-day lighting changes, not a permanent colour grade.
     outgoingLight*=mix(vec3(1.),vec3(1.,.70,.50),crayonSunset*.50);
     outgoingLight*=mix(vec3(1.),vec3(.20,.28,.50),crayonNight*.89);

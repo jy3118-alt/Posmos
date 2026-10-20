@@ -1,13 +1,14 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial,cleanGeometry} from './game-material.js?v=678b68d9df9d';
-import {makeClearCoast} from './clear-coast.js?v=678b68d9df9d';
-import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=678b68d9df9d';
-import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=678b68d9df9d';
-import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=678b68d9df9d';
-import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=678b68d9df9d';
-import {createPaintIslandStudy,paintIslandSites,landmarkSites,regionWeights,paintRegions} from './paint-island-plan.js?v=678b68d9df9d';
-import {addPaintIslandDetails} from './paint-island-details.js?v=678b68d9df9d';
+import {gameMaterial,cleanGeometry} from './game-material.js?v=4463ff4f4170';
+import {makeClearCoast} from './clear-coast.js?v=4463ff4f4170';
+import {prepareIsland,paintGround,colourCanopy} from './story-surface.js?v=4463ff4f4170';
+import {chapterHomes,createChapterHeight,chapterPaths,chapterLinks,chapterTreeCandidates,chapterAt} from './storybook-chapters.js?v=4463ff4f4170';
+import {addChapterBridges,addChapterLandmarks} from './chapter-surfaces.js?v=4463ff4f4170';
+import {createStorybookHeight,storybookPaths,storybookTreeCandidates,pathDistance} from './storybook-landscape.js?v=4463ff4f4170';
+import {createPaintIslandStudy,paintIslandSites,landmarkSites,regionWeights,paintRegions} from './paint-island-plan.js?v=4463ff4f4170';
+import {addPaintIslandDetails} from './paint-island-details.js?v=4463ff4f4170';
+import {installStreamSpace} from './stream-space.js?v=4463ff4f4170';
 
 // One continuous surface is shared by the coastline, roads and every moving foot.
 const N=153,STEP=2,MIN=-152,SEA=-9,field=new Float32Array(N*N);
@@ -91,6 +92,7 @@ export async function makePaintVillage(scene,config,camera){
  const walkingPaths=[];for(const path of pathSamples){let part=[];const save=()=>{if(part.length>7)walkingPaths.push(part);part=[];};for(const pt of path){const y=paintVillageHeight(pt.x,pt.z),last=part.at(-1);if(y<-3){save();continue;}if(last&&Math.abs(y-paintVillageHeight(last.x,last.z))>.40*Math.hypot(pt.x-last.x,pt.z-last.z))save();part.push(pt);}save();}if(!walkingPaths.length)walkingPaths.push(pathSamples[0].slice(0,20));
  const chapterMetrics=multiverse?addChapterLandmarks(scene,paintVillageHeight):null;
  const city={multiverse,paintWorld,residentWorld:!!config.residentWorld,worldPlan:islandStudy?.world,chapterMetrics,swimmingBay,village:true,v13:true,storybook,groundMeshes,buildings,height:paintVillageHeight,treePositions,paths:walkingPaths,paintPaths:storybook?pathSamples:undefined,sea:SEA,buildingCount:buildings.length,buildingBatchCount:5,roofPropCount:0,exclusions:[{x:-62,z:-55,radius:18},{x:42,z:4,radius:10},{x:-36,z:22,radius:9},{x:75,z:52,radius:5}]};
+ installStreamSpace(city);
  const paintDetails=paintWorld?await addPaintIslandDetails(scene,city,sources):null;
  const cloudPlaces=Array.from({length:18},(_,i)=>({x:Math.cos(i*2.4)*(storybook?355:195),z:Math.sin(i*2.4)*(storybook?355:195),y:(storybook?110:61)+(i%4)*14,h:12+(i%5)*3.1,yaw:i*.8,sx:1.1+(i%3)*.3,tint:['#ffffff','#f4fbff','#edf7ff'][i%3]}));if(assets.has('cloud'))instances('cloud',cloudPlaces,false);const cloudMeshes=[];scene.traverse(o=>{if(o.name==='tripo-cloud')cloudMeshes.push(o);});
  return {city,backgroundMaterial:coast.material,setNight:coast.setNight,setSunset:coast.setSunset,update(t){coast.update(t);paintDetails?.update(t);for(const mesh of cloudMeshes){cloudPlaces.forEach((p,i)=>{guide.position.set(p.x+Math.sin(t*.008+i)*3,p.y,p.z);guide.rotation.set(0,p.yaw,0);guide.scale.set(p.h*p.sx,p.h,p.h);guide.updateMatrix();mesh.setMatrixAt(i,guide.matrix);});mesh.instanceMatrix.needsUpdate=true;}},treeCount:treePositions.length};

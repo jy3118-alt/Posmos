@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {gameMaterial} from './game-material.js?v=678b68d9df9d';
-import {landmarkSites} from './paint-island-plan.js?v=678b68d9df9d';
+import {gameMaterial} from './game-material.js?v=4463ff4f4170';
+import {landmarkSites} from './paint-island-plan.js?v=4463ff4f4170';
 
 // Native Tripo buildings and props stay shared; only five small floating batches
 // change matrices. No additional skeletons, physics simulation or per-frame loads.
@@ -68,7 +68,8 @@ export async function addPaintIslandDetails(scene,city,sources){
   if(i%9===0&&p.y>city.sea+.2)flows.push({x:p.x,z:p.z,y:p.y+.06,yaw:Math.atan2(dx,dz),scale:.4+(i%4)*.1});
  }
  const riverGeo=new T.BufferGeometry();riverGeo.setAttribute('position',new T.Float32BufferAttribute(positions,3));riverGeo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));riverGeo.setIndex(indices);riverGeo.computeVertexNormals();
- const time={value:0},riverMaterial=new T.ShaderMaterial({side:T.DoubleSide,uniforms:{time},vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 vUv;uniform float time;void main(){float bank=smoothstep(.30,.50,abs(vUv.x-.5));float line=pow(max(0.,sin(vUv.y*15.-time*1.25+sin(vUv.x*14.)*.35)),18.);vec3 c=mix(vec3(.16,.56,.62),vec3(.40,.77,.76),1.-abs(vUv.x-.5)*2.);c=mix(c,vec3(.78,.92,.87),line*.36+bank*.32);gl_FragColor=vec4(c,1.);}`});
+ const time={value:0},disturbances=Array.from({length:4},()=>new T.Vector4(0,0,0,10)),riverMaterial=new T.ShaderMaterial({side:T.DoubleSide,uniforms:{time,disturbances:{value:disturbances}},vertexShader:'varying vec2 vUv;varying vec3 riverWorld;void main(){vUv=uv;riverWorld=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 vUv;varying vec3 riverWorld;uniform float time;uniform vec4 disturbances[4];void main(){float bank=smoothstep(.30,.50,abs(vUv.x-.5));float line=pow(max(0.,sin(vUv.y*15.-time*1.25+sin(vUv.x*14.)*.35)),18.);float ripple=0.;for(int i=0;i<4;i++){float d=distance(riverWorld.xz,disturbances[i].xy);ripple+=pow(max(0.,sin(d*12.-time*6.)),9.)*exp(-d*1.45)*disturbances[i].z*.6;}vec3 c=mix(vec3(.035,.30,.43),vec3(.13,.56,.61),1.-abs(vUv.x-.5)*2.);c=mix(c,vec3(.78,.94,.88),min(.85,line*.40+bank*.22+ripple));gl_FragColor=vec4(c,1.);}`});
+ city.streamSurface={disturbances};
  const water=new T.Mesh(riverGeo,riverMaterial);water.name='painted-flowing-river';scene.add(water);
  // Visible deck equals the height-sampler surface returned during terrain build.
  const bridge=city.worldPlan.bridge,deck=new T.Mesh(new T.BoxGeometry(bridge.width,.24,bridge.depth),new T.MeshLambertMaterial({color:'#c5ac83'}));deck.position.set(bridge.x,bridge.y-.12,bridge.z);deck.name='stream-bridge-deck';deck.castShadow=deck.receiveShadow=true;scene.add(deck);

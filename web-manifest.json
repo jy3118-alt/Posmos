@@ -9,8 +9,8 @@
     },
     {
       "name": "animated-friends.js",
-      "bytes": 20935,
-      "sha256": "8b333e9a116faa09638ef4d35b3076edc67b16c13d4b734111c63289dcab232f"
+      "bytes": 21446,
+      "sha256": "5b91c655d6262997d4b1f3c063c7fabb5b95d9c57370850bee79b392c014e8a4"
     },
     {
       "name": "assets/brand-v27/Inter-Medium.woff2",
@@ -320,12 +320,12 @@
     {
       "name": "chapter-paint.js",
       "bytes": 4415,
-      "sha256": "73c257801ac4554318ad6cba45b22231cbb4ff2cb99846bb3b9fd1cf14b3f9ba"
+      "sha256": "6181f23d4aa6559df51a849345dcfa83f8ab42b6ec12d106190f23ad1769fee8"
     },
     {
       "name": "chapter-surfaces.js",
       "bytes": 5063,
-      "sha256": "ffee19c71053022415ebd6078933056491cc4c8130775caaba8df78738cb01c0"
+      "sha256": "058553db62390d13b13c473608d02459ff2ba8bf05ed22c95fd926a7a265385b"
     },
     {
       "name": "city-layout.js",
@@ -339,8 +339,8 @@
     },
     {
       "name": "crayon-world.js",
-      "bytes": 21513,
-      "sha256": "f50a912317d8113a8b79e96a5d897448eb5492ee3359beebddb964a1acdadcc0"
+      "bytes": 21532,
+      "sha256": "683e1681de7b7ab12e60c59de6c3927b771f0c5efe75feabb7c0030046e7ae70"
     },
     {
       "name": "CREDITS.md",
@@ -350,12 +350,12 @@
     {
       "name": "dress-resident.js",
       "bytes": 4149,
-      "sha256": "981bf19c499ccd1811e487140e886d63fdf6be31f3c9fc8a9ff572bc77786802"
+      "sha256": "8810eb0afa5029260b20839677892b882d2318d88d4a70380ebdf21579036de4"
     },
     {
       "name": "encounter-performers.js",
       "bytes": 6064,
-      "sha256": "b908ba7103e4ed7ac7442d480dc1742d25a9fd9a9850aa704fdbdbef4455a9b2"
+      "sha256": "45c59f0149891bc28c97cc67b608e4a917026ccd779f7490156b6c8978e65a46"
     },
     {
       "name": "encounter-rules.js",
@@ -364,53 +364,53 @@
     },
     {
       "name": "encounters.js",
-      "bytes": 8068,
-      "sha256": "077086e5edd3aaf2ec365f48b0317172b8c92946983e64b74c3799e07dfb2ffb"
+      "bytes": 8086,
+      "sha256": "6782d44aafb3bdab3f9485a40b4878545ed9976d1d67124371ceacb99b88d779"
     },
     {
       "name": "forest.js",
       "bytes": 17974,
-      "sha256": "1d8221afe0b29a8b496cbe613a787dec6beff52d22ebb253c0dcbf209179e6dc"
+      "sha256": "caee3c2b32df070c18930920172ccec7dc2a1fb563388b1b450dcc94a4126731"
     },
     {
       "name": "friend-locomotion.js",
       "bytes": 2771,
-      "sha256": "4548a5679899a03b60229630f906d3343b8595fd6ae7c7f07dd05f9d4944bf11"
+      "sha256": "6a9634032b16cbd4a2ffa75b6fe105670ded7d6b6b8c551dfcd86e45424a3d01"
     },
     {
       "name": "friend-places.js",
-      "bytes": 3400,
-      "sha256": "6065a9dc4b77f3c108708e57cc97ff7f1d668b13871140528797a5f21c2723ff"
+      "bytes": 3423,
+      "sha256": "20b9fd8755bebb07ed25095bcebb53120f4322dae7420b2394ea9db061699344"
     },
     {
       "name": "friend-traffic.js",
-      "bytes": 5022,
-      "sha256": "b002f641a7d23f3583cefba1f1ae2c6209af8c60c48517b97b7be7a9303e0b49"
+      "bytes": 5326,
+      "sha256": "c01d5c9bdacd3a52331cec081aff12f043880c95cfcb777e485ade83ad32434e"
     },
     {
       "name": "game-material.js",
       "bytes": 2089,
-      "sha256": "ef8d0a662afb3e3198266883cbc33abb0d2c24892f06d5c359f3f60e210ae393"
+      "sha256": "97d34c1785c1c79e0c13ba756a0a06bebe5f515f6175f4a2c9b092a22b3d1147"
     },
     {
       "name": "home-architecture.js",
       "bytes": 4782,
-      "sha256": "0855c483082648fbfcd51ed410a0b9e2222681f638d16eab65a98e3b9e04f087"
+      "sha256": "1e5941d9a8d83f8c58b19feccd535107524d427405b97ae985c3cb2f4d4282d1"
     },
     {
       "name": "index.html",
       "bytes": 2198,
-      "sha256": "1e9fe542f2a02879ee6ec0a34a6e78896ba55b997ccf52482c5a01e888381337"
+      "sha256": "292c0b30126d168253d446f61d7685aba15e66bc7d1e4e7f07706c231f3190a7"
     },
     {
       "name": "moa-resident.js",
       "bytes": 1749,
-      "sha256": "427837528d46cad73241e8061d433d1d263d30fb5b33eb1c413489b3a352a98a"
+      "sha256": "4dec3725388cd67acd5992c6003eb3a3a10c4b4e7e7557b7bb1821e2f5b0a2ca"
     },
     {
       "name": "murals.js",
       "bytes": 2915,
-      "sha256": "74b9c8d4b51c3e55a79f1dc823717782e6adc37590281bae8a76559f9b163808"
+      "sha256": "fc60780c075a760c5076548541bca24520b9a7d4f0254cad9a00dce3b0509415"
     },
     {
       "name": "normal-smoothing.js",
@@ -420,27 +420,27 @@
     {
       "name": "paint-city.js",
       "bytes": 22629,
-      "sha256": "e1018e2b2fba2cea383fb0f8ffc440b415dcdcdb42f7dbd543955391c0dce0af"
+      "sha256": "fd5ff88d7eda1ad2d996ac5610c79e844f69990fb72a72154b703958bf551a5e"
     },
     {
       "name": "paint-garden.js",
       "bytes": 6073,
-      "sha256": "64ecb218b7066c97ec2ac7a8bd8670647a1a79a969b243815b4a1d8ad0a0aa13"
+      "sha256": "7648b9e3d351f797525131c5d8fd33cff6aae65ab60bbe620743cd7a0ce2fb89"
     },
     {
       "name": "paint-island-details.js",
-      "bytes": 7624,
-      "sha256": "5ab9bc2f0e124631e13d5bba16e623a7e5f4b995babfca84404a72e2a177bafb"
+      "bytes": 8065,
+      "sha256": "7cf42a9cff62a57db21f82767f76cafe840406de5992e7bda0d57ed8876bdda5"
     },
     {
       "name": "paint-island-ground.js",
-      "bytes": 3385,
-      "sha256": "7b25692f093574f68c7494162fb8f7844ccbe0f97fe10c23bca184a627c36292"
+      "bytes": 3383,
+      "sha256": "7369fa6e2c45b121cc70813b963c273e9c243c514ddc7f4dbc024298f4a59380"
     },
     {
       "name": "paint-island-plan.js",
-      "bytes": 4553,
-      "sha256": "00bdfa6e6982ec5ca74213ccd1924dae6d7613d31d117264cb27f9c9678a0346"
+      "bytes": 5594,
+      "sha256": "c5a0a8e94ade2bde938adedfd02224575c76a743d84c8e7d675a12dc37f5ba42"
     },
     {
       "name": "paint-spitter.js",
@@ -450,7 +450,7 @@
     {
       "name": "paint-tools.js",
       "bytes": 5972,
-      "sha256": "4f40e96c48c1d6ef80a46d5882e81858367cab21b6f1b258814fb7443a898dbf"
+      "sha256": "dd488c741758953e181c3a64f7efe9269e79b71d8b643444f44fec17e905dd24"
     },
     {
       "name": "paint.js",
@@ -460,12 +460,12 @@
     {
       "name": "po-variants.js",
       "bytes": 5958,
-      "sha256": "b17cf87158aae86aabc0c7b398693ab1944398f222e925124d12ac2e7c4881c8"
+      "sha256": "c35b2db625f3fd6bde444402140807f44b74354971d03ac9f1cab7097b932540"
     },
     {
       "name": "portrait-spit-paper.js",
       "bytes": 6436,
-      "sha256": "1e7c0707c178cb337528b71823c03e9d3a91f99abdd5c95ab6d00aa9f6b7074f"
+      "sha256": "8ec3c7442efe69ba5e883e842ab7eae8a865d654492581c1336f380e8f0a94ca"
     },
     {
       "name": "portrait-style-rules.js",
@@ -475,12 +475,12 @@
     {
       "name": "portrait-style-worker.js",
       "bytes": 382,
-      "sha256": "bb4eab4eb13ba1a35e888f921f745526f6edfafcb75e4445192c195b3cf4e258"
+      "sha256": "5af1467e0846a013ace9c173322a8f3bb40a529f1786c6e35d932c28d978fe33"
     },
     {
       "name": "resident-v13.js",
       "bytes": 5542,
-      "sha256": "16e09b7e0b21f673225d9ea2d9c1bfa6ea26875e1b8e7c9b8046058f69795f99"
+      "sha256": "2339a2b4fe0cfc03b78ceb6dcabc18e64aaeb2f8734e90b55f93295093578916"
     },
     {
       "name": "resident.js",
@@ -489,8 +489,8 @@
     },
     {
       "name": "review.js",
-      "bytes": 36936,
-      "sha256": "9f1a97990703c0e85eeb50a619cd1df53fdd8e400b88ef32458dbf49fbac06be"
+      "bytes": 37808,
+      "sha256": "d8e3eba31680f666389cfd38eee3eccd569ae7666c41294a143f0cffec586f2c"
     },
     {
       "name": "route-motion.js",
@@ -505,7 +505,7 @@
     {
       "name": "search-characters.js",
       "bytes": 7352,
-      "sha256": "8f35ef3bba3c553d07f3488accda5fc2063adb348ecdd104ad535eb43d307a3e"
+      "sha256": "e3f8f1d5d4a9c5b63be348cf45bf06bd827d34ba7dcdfab50dc992d0afff43e4"
     },
     {
       "name": "shadow-focus.js",
@@ -520,12 +520,12 @@
     {
       "name": "story-art.js",
       "bytes": 3867,
-      "sha256": "84bae2a147af74eec4639870a906a32a6271474ab23c76b98d4bee8e0bbaaf0a"
+      "sha256": "847b7b34154aa171b94237a55b1d882e9a38e9116edbc9d27a1741e588df2950"
     },
     {
       "name": "story-surface.js",
-      "bytes": 8618,
-      "sha256": "7e9a721d961175c369791da54d60a9ce794fce15202171967df62689a33abbfb"
+      "bytes": 8667,
+      "sha256": "941fbf4e2a5d4e70449cc34a0bc6c3735502caf08ae9718f32f59720762cab7b"
     },
     {
       "name": "storybook-chapters.js",
@@ -535,12 +535,22 @@
     {
       "name": "storybook-garden.js",
       "bytes": 3301,
-      "sha256": "70653edf6e87beff876aefde5a6ad7e3b99495e426c00f06653c897fa79ee66f"
+      "sha256": "2efa5006bd83a7199897f51d997cfe1eaa119f1843de8b0a3bcb67086adb83fb"
     },
     {
       "name": "storybook-landscape.js",
       "bytes": 3933,
       "sha256": "a39b93ae7996acec38e72822635e0af79cf91786ed6e5116a2272bad46d9e00f"
+    },
+    {
+      "name": "stream-residents.js",
+      "bytes": 6080,
+      "sha256": "22b0c80c8694c47f3f388105a062e11e8ddea1aafbd8eeed143e5aaf686f7914"
+    },
+    {
+      "name": "stream-space.js",
+      "bytes": 1640,
+      "sha256": "9788c79394d1c3e23ccc76406b3394bbac294b5dc81085a9b14aa150eac59f2b"
     },
     {
       "name": "style.css",
@@ -665,22 +675,22 @@
     {
       "name": "view-detail.js",
       "bytes": 4454,
-      "sha256": "aae140b54465c8ed6fa2bb5a3a569de2811a4df800fa4bd883bde220c72aaa7b"
+      "sha256": "0a81bb922df12c8ad96a5604abf046ad3081a4f8d59b2708367b5d48adf18a49"
     },
     {
       "name": "village-v13.js",
-      "bytes": 15688,
-      "sha256": "883492999c0a295a0227b8b931ea106848205bff35906115dfa9303306c81623"
+      "bytes": 15784,
+      "sha256": "4f6cf00f76bb6c2aa1398b32aaba8658cae879f3dea2c4271acc68e47d79fd0e"
     },
     {
       "name": "village.js",
       "bytes": 11542,
-      "sha256": "a60a3c84e9eaecad740a98d708e3da468c0dd3faf9932f6c16f7df3a1d8e2d1b"
+      "sha256": "ce2b4f2b2384e58608b8ddafba44507e487a69709e8b224302645084b7d68c6d"
     },
     {
       "name": "water-residents.js",
       "bytes": 5432,
-      "sha256": "a99cbfc518b09b361bcc03cc7ac3fa2041d5f76dd463d7c51b02ae5f33f4dc1e"
+      "sha256": "775e80149874fcd01a7faf3d68621abe1afe2f6f825572c53528743e5dd3ac66"
     },
     {
       "name": "water-space.js",
@@ -688,7 +698,7 @@
       "sha256": "fb282602fc2ee1f953e4b58bc73a0323cadaf84e7d372d1a58d1d65ca846d6b4"
     }
   ],
-  "totalBytes": 106408150,
+  "totalBytes": 106419242,
   "largestFiles": [
     {
       "name": "assets/rig-fix-v33/models/avatar-vat.bin",

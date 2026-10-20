@@ -34,27 +34,41 @@ export function paintIslandSites(sites){return sites.concat([
 
 const smooth=(a,b,v)=>{const u=T.MathUtils.clamp((v-a)/(b-a),0,1);return u*u*(3-2*u);};
 export function createPaintIslandStudy(){
- const curve=new T.CatmullRomCurve3([[-68,-40],[-65,-20],[-49,1],[-36,22],[-52,45],[-75,63],[-102,72]].map(([x,z])=>new T.Vector3(x,0,z)));
- const samples=curve.getSpacedPoints(150),bins=new Map(),cell=12;
- samples.forEach((p,i)=>{p.width=2.0+Math.sin(i*.09)*.32+i/samples.length*.8;p.index=i;const key=(x,z)=>`${x},${z}`;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){const k=key(Math.floor(p.x/cell)+dx,Math.floor(p.z/cell)+dz);if(!bins.has(k))bins.set(k,[]);bins.get(k).push(p);}});
- function closest(x,z){let best=null,d2=Infinity;for(const p of bins.get(`${Math.floor(x/cell)},${Math.floor(z/cell)}`)||[]){const d=(p.x-x)**2+(p.z-z)**2;if(d<d2){d2=d;best=p;}}return best?{point:best,d:Math.sqrt(d2)}:null;}
- const world={regions:paintRegions,landmarks:landmarkSites,river:samples,closestRiver:closest,riverCurve:curve,originalCoast:true};
+ // Start in the high western hills and descend to the western sea, never
+ // animate an uphill ribbon over the original uncut terrain.
+ const curve=new T.CatmullRomCurve3([[-72,61],[-59,51],[-48,40],[-36,22],[-32,10],[-43,-8],[-65,-24],[-84,-35],[-106,-48]].map(([x,z])=>new T.Vector3(x,0,z)));
+ const samples=curve.getSpacedPoints(210),bins=new Map(),cell=10;
+ samples.forEach((p,i)=>{p.width=2.65+Math.sin(i*.07)*.28;p.index=i;});
+ for(let i=0;i<samples.length-1;i++){
+  const a=samples[i],b=samples[i+1],pad=7;
+  for(let z=Math.floor((Math.min(a.z,b.z)-pad)/cell);z<=Math.floor((Math.max(a.z,b.z)+pad)/cell);z++)for(let x=Math.floor((Math.min(a.x,b.x)-pad)/cell);x<=Math.floor((Math.max(a.x,b.x)+pad)/cell);x++){
+   const k=x+','+z;if(!bins.has(k))bins.set(k,[]);bins.get(k).push(i);
+  }
+ }
+ function sample(x,z,out={}){
+  let best=-1,bestT=0,d2=Infinity;
+  for(const i of bins.get(Math.floor(x/cell)+','+Math.floor(z/cell))||[]){const a=samples[i],b=samples[i+1],dx=b.x-a.x,dz=b.z-a.z,t=T.MathUtils.clamp(((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz),0,1),d=(x-a.x-dx*t)**2+(z-a.z-dz*t)**2;if(d<d2){d2=d;best=i;bestT=t;}}
+  if(best<0)return null;const a=samples[best],b=samples[best+1],dx=b.x-a.x,dz=b.z-a.z,l=Math.hypot(dx,dz),t=bestT;
+  Object.assign(out,{x:a.x+dx*t,z:a.z+dz*t,d:Math.sqrt(d2),level:T.MathUtils.lerp(a.y,b.y,t)+.025,width:T.MathUtils.lerp(a.width,b.width,t),flowX:dx/l,flowZ:dz/l,index:best,t,depth:1.45+.25*Math.sin(best*.055)**2});return out;
+ }
+ function closest(x,z){const r=sample(x,z);return r?{d:r.d,point:{...r,y:r.level-.025}}:null;}
+ const scratch={};
+ function carve(x,z,original){const r=sample(x,z,scratch);if(!r||r.d>r.width+2.5)return original;
+  const u=Math.min(1,r.d/r.width),bed=r.level-.20-(r.depth-.20)*(1-u*u*u*u),weight=1-smooth(r.width,r.width+2.5,r.d);
+  return T.MathUtils.lerp(original,Math.min(original,bed),weight);
+ }
+ const world={regions:paintRegions,landmarks:landmarkSites,river:samples,closestRiver:closest,sampleStream:sample,carveStream:carve,riverCurve:curve,originalCoast:true};
  return {world,heightTransform(base){
   // Sample the unmodified island before carving, so water and banks agree.
   world.baseHeight=base;
   const pads=landmarkSites.map(p=>({...p,y:base(p.x,p.z)}));
-  for(const p of samples)p.y=Math.max(-8.94,base(p.x,p.z)-.66);
+  let level=Infinity;for(const p of samples){level=Math.min(level,base(p.x,p.z)-.50);p.y=Math.max(-8.975,level);}
   return (x,z)=>{
    const original=base(x,z);let y=original;
    if(original>-6)for(const p of pads){if(p.y<-6)continue;y=T.MathUtils.lerp(y,p.y,1-smooth(p.r,p.r+5,Math.hypot(x-p.x,z-p.z)));}
-   const river=closest(x,z);
-   if(river&&river.d<river.point.width+2.1&&original>-10){
-    const p=river.point,channel=1-smooth(p.width*.55,p.width+1.8,river.d);
-    y=T.MathUtils.lerp(y,Math.min(y,p.y-.72),channel);
-   }
-   return y;
+   return carve(x,z,y);
   };
- },addSurfaces(_scene,height){
+ },carveFinal:carve,addSurfaces(_scene,height){
   // The visible existing Tripo palette bridge crosses this same stream.
   // Its collision deck is invisible; rendered terrain is never an overlay.
   const y=Math.max(height(-41,22),height(-31,22))+.28;

@@ -32,7 +32,7 @@ export function makeViewDetail(scene,camera,crowd,details,viewportHeight){
     const at=i*16,scale=Math.hypot(data[at],data[at+1],data[at+2]);if(scale<.001){metrics.culled++;continue;}
     position.set(data[at+12],data[at+13]+scale*.5,data[at+14]);sphere.set(position,scale*.95);
     if(!r.environment&&!frustum.intersectsSphere(sphere)){metrics.culled++;continue;}
-    const px=scale*screenFactor/Math.max(1,camera.position.distanceTo(position)),threshold=r.environment?150:r.chosen[i]===0?48:65,level=px>=threshold?0:1;r.chosen[i]=level;
+    const px=scale*screenFactor/Math.max(1,camera.position.distanceTo(position)),threshold=r.environment?150:r.chosen[i]===0?22:30,level=px>=threshold?0:1;r.chosen[i]=level;
     const target=r.levels[level],index=counts[level]++;for(let k=0;k<16;k++)target.instanceMatrix.array[index*16+k]=data[at+k];
     for(const [name,a]of r.attributes){const dst=target.geometry.attributes[name].array;for(let k=0;k<a.itemSize;k++)dst[index*a.itemSize+k]=a.array[i*a.itemSize+k];}
     if(source.instanceColor)for(let k=0;k<3;k++)target.instanceColor.array[index*3+k]=source.instanceColor.array[i*3+k];
