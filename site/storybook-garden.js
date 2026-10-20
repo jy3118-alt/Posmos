@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {storybookBeds,bedPoint,pathDistance} from './storybook-landscape.js?v=33a550a771a7';
+import {storybookBeds,bedPoint,pathDistance} from './storybook-landscape.js?v=a1ea6da47f55';
 
 // Shared paper-cut blades and five-petal flowers, not hundreds of materials or
 // per-flower objects. Both batches are static after loading.

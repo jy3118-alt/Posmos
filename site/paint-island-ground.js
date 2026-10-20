@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {paintRegions,regionWeights} from './paint-island-plan.js?v=33a550a771a7';
+import {paintRegions,regionWeights} from './paint-island-plan.js?v=a1ea6da47f55';
 
 // A single startup-baked ground map: soft overlapping colour fields, continuous
 // paths and distinct small garden beds on the real original terrain triangles.

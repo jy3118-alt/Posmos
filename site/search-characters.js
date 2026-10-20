@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {paintMaterial} from './paint.js?v=33a550a771a7';
+import {paintMaterial} from './paint.js?v=a1ea6da47f55';
 
 export function createHiddenLayout(city,config,poses){
  if(city.village)return createVillageFriends(city,config,poses);

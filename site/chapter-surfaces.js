@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {chapterLinks,chapters} from './storybook-chapters.js?v=33a550a771a7';
+import {chapterLinks,chapters} from './storybook-chapters.js?v=a1ea6da47f55';
 
 // Five reusable painted ribbons connect the chapter islands. Their deck
 // triangles join the SAME height sampler as the land; the ocean stays beneath.

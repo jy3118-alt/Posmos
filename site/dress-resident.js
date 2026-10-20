@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=33a550a771a7';
-import {createFollower} from './friend-locomotion.js?v=33a550a771a7';
-import {villageTrafficSafety} from './friend-traffic.js?v=33a550a771a7';
+import {gameObject} from './game-material.js?v=a1ea6da47f55';
+import {createFollower} from './friend-locomotion.js?v=a1ea6da47f55';
+import {villageTrafficSafety} from './friend-traffic.js?v=a1ea6da47f55';
 
 export function safeDressRoute(city,height){
  const safe=villageTrafficSafety(city),body={radius:height*.43},segments=[];
@@ -21,7 +21,7 @@ export function createDressResident(scene,gltf,city,traffic,config){
  const follower=createFollower(traffic,safeDressRoute(city,config.height),{id:'dress',height:config.height,radius:config.height*.43,fraction:.30,direction:1,speedMultiplier:config.speedMultiplier||1.5});
  const weights={idle:1,walk:0,run:0,turn:0},wanted={idle:0,walk:0,run:0,turn:0},entries=Object.entries(actions),names=Object.keys(actions);let speed=0,behavior='idle',lastYaw=0,blockedFor=0;
  function floor(name){const frames=config.motionFloorFrames?.[name],a=actions[name];if(!frames||!a)return 0;const f=a.time/a.getClip().duration*frames.length,i=Math.floor(f)%frames.length;return T.MathUtils.lerp(frames[i],frames[(i+1)%frames.length],f-Math.floor(f));}
- function prepare(dt,t){const phase=t%43;behavior=phase<17?'walk':phase<29?'run':phase<36?'idle':'walk';follower.prepare(dt,behavior==='run'?1.02:behavior==='walk'?.52:0);}
+ function prepare(dt,t){if(follower.body.social){behavior='idle';follower.prepare(dt,0);return;}const phase=t%43;behavior=phase<17?'walk':phase<29?'run':phase<36?'idle':'walk';follower.prepare(dt,behavior==='run'?1.02:behavior==='walk'?.52:0);}
  function update(dt,t){
   const p=follower.finish(dt),angle=Math.atan2(Math.sin(p.yaw-lastYaw),Math.cos(p.yaw-lastYaw)),turnRate=dt?Math.abs(angle)/dt:0;
   blockedFor=behavior!=='idle'&&p.travel<.001?blockedFor+dt:0;if(blockedFor>3.5){follower.state.direction*=-1;follower.state.speed=0;blockedFor=0;}

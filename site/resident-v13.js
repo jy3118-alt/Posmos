@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {gameObject} from './game-material.js?v=33a550a771a7';
-import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=33a550a771a7';
+import {gameObject} from './game-material.js?v=a1ea6da47f55';
+import {createFollower,groundPatch,forwardSlope,painterSchedule} from './friend-locomotion.js?v=a1ea6da47f55';
 export function createGameResident(scene,gltf,config,height,onActivity,traffic){
  const model=gltf.scene;model.updateMatrixWorld(true);const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),root=new T.Group();root.name='painter-resident-v20';root.scale.setScalar(config.height/size.y);model.position.sub(new T.Vector3(center.x,box.min.y,center.z));root.add(model);scene.add(root);gameObject(model);model.traverse(o=>{if(o.isSkinnedMesh){o.frustumCulled=false;o.receiveShadow=false;}});
  const mixer=new T.AnimationMixer(model),actions={},weights={};for(const clip of gltf.animations){const a=mixer.clipAction(clip);a.setEffectiveWeight(0).play();if(['sit','lie','slide_enter'].includes(clip.name)){a.setLoop(T.LoopOnce,1);a.clampWhenFinished=true;}actions[clip.name]=a;weights[clip.name]=0;}actions.idle?.setEffectiveWeight(1);
@@ -8,6 +8,7 @@ export function createGameResident(scene,gltf,config,height,onActivity,traffic){
  const follower=createFollower(traffic,curve.getSpacedPoints(240),{id:'hero',height:config.height,closed:true,speedMultiplier:config.speedMultiplier});let speed=0,lastActivity='',requested='idle',turnMix=0,runMix=0,desperateMix=0,sitMix=0,lieMix=0,slideMix=0,restMode='idle',sliding=false,slideEntering=false;
  const floor=name=>{const frames=config.motionFloorFrames?.[name],action=actions[name];if(!frames||!action)return config.motionFloors?.[name]||0;const ratio=action.time/action.getClip().duration,once=['sit','lie','slide_enter'].includes(name),f=once?T.MathUtils.clamp(ratio,0,1)*(frames.length-1):(ratio%1)*frames.length,i=Math.floor(f),next=once?Math.min(frames.length-1,i+1):(i+1)%frames.length;return T.MathUtils.lerp(frames[i],frames[next],f-i);};
  function prepare(dt,t){
+  if(follower.body.social){requested='walk';follower.prepare(dt,0);return;}
   requested=config.previewAction||painterSchedule(t);if(restMode!=='idle'&&actions[restMode].time<actions[restMode].getClip().duration-.04)requested=restMode;const resting=requested==='sit'||requested==='lie';
   if(resting&&!groundPatch(height,follower.body.x,follower.body.z).flat)requested='idle';
   // Seated/lying bodies become stationary obstacles once braking is complete.

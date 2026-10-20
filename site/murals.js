@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {paintMaterial} from './paint.js?v=33a550a771a7';
+import {paintMaterial} from './paint.js?v=a1ea6da47f55';
 
 // Enlarged paint stays on its physical surface. Cropping changes UV coverage,
 // never shrinks the requested mural; round facades bend the painted plane.
