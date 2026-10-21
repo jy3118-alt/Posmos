@@ -1,18 +1,18 @@
-import {createCharacterArtRegistry} from './character-art.js?v=573fab3a318f';
-import {makeDistrictCrowd} from './district-crowd-v67.js?v=573fab3a318f';
-import {loadPoVariants} from './po-variants.js?v=573fab3a318f';
-import {loadViewDetails} from './view-detail.js?v=573fab3a318f';
+import {createCharacterArtRegistry} from './character-art.js?v=ebada2d6e6f2';
+import {makeDistrictCrowd} from './district-crowd-v69.js?v=ebada2d6e6f2';
+import {loadPoVariants,loadViewDetails} from './resident-loading-v69.js?v=ebada2d6e6f2';
+import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=ebada2d6e6f2';
 import * as T from 'three';
 import {clone as cloneSkin} from 'three/addons/utils/SkeletonUtils.js';
-import {createFollower,groundPatch} from './friend-locomotion.js?v=573fab3a318f';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=573fab3a318f';
-import {makeEncounters} from './encounters-v62.js?v=573fab3a318f';
+import {createFollower,groundPatch} from './friend-locomotion.js?v=ebada2d6e6f2';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=ebada2d6e6f2';
+import {makeEncounters} from './encounters-v62.js?v=ebada2d6e6f2';
 
 // A bounded cast for the authored district. Original approved skins and clips;
 // shared model files, no per-resident download or replacement/teleport cycle.
 export async function makeDistrictResidents(scene,renderer,camera,city,plan,config,load,cel){
- const [base,moa,dress,acting,baseMeta,variants,details]=await Promise.all([load(config.character.file),load(config.guestCharacter.file),load(config.dressCharacter.file),fetch('./assets/encounters-v52/models/acting.json?v=09f9f66b2ca6').then(r=>r.json()),fetch('./assets/district-v60/models/base-bones.json?v=70b3e8c2fac6').then(r=>r.json()),loadPoVariants(config.search.variants,load),loadViewDetails('./assets/encounters-v52/models/lods.json?v=feecff107fd0')]);
- const baseFrames=Float32Array.from(new Uint16Array(await fetch(baseMeta.texture).then(r=>r.arrayBuffer())),T.DataUtils.fromHalfFloat);
+ const [base,moa,dress,acting,baseMeta,variants,details]=await Promise.all([load(config.character.file),load(config.guestCharacter.file),load(config.dressCharacter.file),checkedJSON('./assets/encounters-v52/models/acting.json?v=09f9f66b2ca6'),checkedJSON('./assets/district-v60/models/base-bones.json?v=70b3e8c2fac6'),loadPoVariants(config.search.variants,load),loadViewDetails('./assets/encounters-v52/models/lods.json?v=feecff107fd0')]);
+ const baseFrames=Float32Array.from(new Uint16Array(await fetchResource(baseMeta.texture,'arrayBuffer')),T.DataUtils.fromHalfFloat);
  const library=new Map([['base',{gltf:base,config:config.character,meta:baseMeta,frames:baseFrames}],['moa',{gltf:moa,config:config.guestCharacter}],['dress',{gltf:dress,config:config.dressCharacter}],...variants.map(v=>[v.key,{...v,config:{height:1.65,speedMultiplier:1.5,motionNativeSpeeds:Object.fromEntries(Object.entries(v.meta.clips).map(([n,c])=>[n,c.nativeSpeed])),motionFloorFrames:Object.fromEntries(Object.entries(v.meta.clips).map(([n,c])=>[n,c.floors]))}}])]);
  const artRegistry=createCharacterArtRegistry(library);
  const originalSafe=villageTrafficSafety(city),safe=(x,z,a)=>originalSafe(x,z,a)&&!(plan.obstacles||[]).some(o=>Math.hypot(x-o.x,z-o.z)<o.r+a.radius*.8);
@@ -28,7 +28,7 @@ export async function makeDistrictResidents(scene,renderer,camera,city,plan,conf
   {skin:'dress',route:'studio',fraction:.46},{skin:'moa',route:'studio',fraction:.30}
  ];
  const actors=[],realActors=[],point=new T.Vector3();let maxStep=0,lastDiagnostics=0;
- for(let i=0;i<specs.length;i++){
+ for(let i=0;i<specs.length;i++){await yieldTask();
   const spec=specs[i],def=library.get(spec.skin),cfg=def.config,model=cloneSkin(def.gltf.scene),mixer=new T.AnimationMixer(model),actions={};
   for(const clip of def.gltf.animations){const a=mixer.clipAction(clip).setEffectiveWeight(clip.name==='idle'?1:0).play();if(['sit','lie'].includes(clip.name)){a.setLoop(T.LoopOnce,1);a.clampWhenFinished=true;}actions[clip.name]=a;}
   mixer.update(0);model.updateMatrixWorld(true);const bounds=new T.Box3().setFromObject(model),size=bounds.getSize(new T.Vector3()),centre=bounds.getCenter(new T.Vector3());model.position.sub(new T.Vector3(centre.x,bounds.min.y,centre.z));
@@ -70,7 +70,7 @@ export async function makeDistrictResidents(scene,renderer,camera,city,plan,conf
  function prepare(dt,t){encounters.prepare(dt,t);for(const a of actors)a.prepare(dt,t);crowd.prepare(dt,t);encounters.steer();traffic.step(dt);}
  let completedWorks=0,lastWork=null;function update(dt,t){const before=encounters.active;for(const a of actors)a.update(dt,t);crowd.update(dt,t);encounters.update(dt);if(before&&!encounters.active){completedWorks=encounters.diagnostics().completed;lastWork={painter:before.painter.skin,model:before.model.skin,painterLabel:artRegistry.get(before.painter.skin).label,modelLabel:artRegistry.get(before.model.skin).label};}}
  return {actors,traffic,encounters,crowd,artRegistry,prepare,update,get completedWorks(){return completedWorks;},get lastWork(){return lastWork;},get latestWork(){return encounters.artwork;},get latestPicture(){return encounters.stage.children.find(o=>o.name==='actual-painted-portrait')?.material.map.image;},
-  async warmup(){const visible=encounters.stage.visible;encounters.stage.visible=true;for(const a of encounters.pool.actors.values())a.root.visible=true;await crowd.warmup(renderer);await renderer.compileAsync(scene,camera);for(const a of encounters.pool.actors.values())a.root.visible=false;encounters.stage.visible=visible;},
+  async warmup(){const visible=encounters.stage.visible;encounters.stage.visible=true;for(const a of encounters.pool.actors.values())a.root.visible=true;try{await crowd.warmup(renderer);}finally{for(const a of encounters.pool.actors.values())a.root.visible=false;encounters.stage.visible=visible;}},
   diagnostics(){return {count:actors.length+crowd.placements.length,displayed:actors.filter(a=>a.root.visible).length+[...encounters.pool.actors.values()].filter(a=>a.root.visible).length+crowd.placements.filter(p=>!p.social).length,crowd:crowd.diagnostics(),art:artRegistry.diagnostics(),completedWorks,skinCounts:[...actors,...crowd.placements].reduce((r,p)=>(r[p.skin]=(r[p.skin]||0)+1,r),{}),kinds:actors.reduce((s,a)=>(s[a.kind]=(s[a.kind]||0)+1,s),{}),travel:actors.map(a=>({id:a.id,skin:a.skin,metres:+a.travel.toFixed(2),position:a.root.position.toArray(),visible:a.root.visible})),maxFrameStep:+maxStep.toFixed(3),traffic:traffic.metrics(),encounter:encounters.diagnostics()};}
  };
 }

@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {characterMaterial} from './game-material.js?v=573fab3a318f';
-import {prepareSmoothNormals} from './normal-smoothing.js?v=573fab3a318f';
+import {characterMaterial} from './game-material.js?v=ebada2d6e6f2';
+import {prepareSmoothNormals} from './normal-smoothing.js?v=ebada2d6e6f2';
 
 export async function loadPoVariants(config,load){
  return (await Promise.all((config||[]).map(async item=>{

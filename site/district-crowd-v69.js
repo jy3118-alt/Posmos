@@ -1,10 +1,11 @@
 import * as T from 'three';
-import {makeRoute,sampleRoute,makeRouteState,advanceRoute} from './route-motion-v67.js?v=573fab3a318f';
-import {createFollower,groundPatch} from './friend-locomotion.js?v=573fab3a318f';
-import {createPoVariantCrowd} from './po-variants.js?v=573fab3a318f';
-import {createWaterResidents} from './water-residents.js?v=573fab3a318f';
-import {makeViewDetail} from './view-detail-v67.js?v=573fab3a318f';
-import {createStreamResidents} from './stream-residents-v65.js?v=573fab3a318f';
+import {yieldTask} from './runtime-budget-v69.js?v=ebada2d6e6f2';
+import {makeRoute,sampleRoute,makeRouteState,advanceRoute} from './route-motion-v67.js?v=ebada2d6e6f2';
+import {createFollower,groundPatch} from './friend-locomotion.js?v=ebada2d6e6f2';
+import {createPoVariantCrowd} from './po-variants.js?v=ebada2d6e6f2';
+import {createWaterResidents} from './water-residents.js?v=ebada2d6e6f2';
+import {makeViewDetail} from './view-detail-v67.js?v=ebada2d6e6f2';
+import {createStreamResidents} from './stream-residents-v65.js?v=ebada2d6e6f2';
 
 // Existing Po population, compact bone animation batches, and six real swimmers.
 // Twelve close residents are owned by the district actor controller separately.
@@ -50,7 +51,7 @@ export async function makeDistrictCrowd(scene,camera,city,config,library,actors,
  const drawLibrary=[...needed].filter(([skin,n])=>n>0).map(([key])=>({...library.get(key),key,count:placements.filter(p=>p.skin===key&&!p.water).length,heightScale:1}));
  const batches=[];
  // A separate call per kind preserves source identity without reshuffling skins.
- const crowds=drawLibrary.map(item=>{const members=placements.filter(p=>p.skin===item.key);return createPoVariantCrowd(scene,[item],members,clocks,transitions,previous,mixes,-1);});
+ const crowds=[];for(const item of drawLibrary){await yieldTask();const members=placements.filter(p=>p.skin===item.key);crowds.push(createPoVariantCrowd(scene,[item],members,clocks,transitions,previous,mixes,-1));}
  for(const c of crowds)for(const batch of c.batches){const animationHook=batch.material.onBeforeCompile,replacement=cel(batch.material,{skin:true}),paintHook=replacement.onBeforeCompile;replacement.onBeforeCompile=s=>{animationHook(s);paintHook(s);};replacement.customProgramCacheKey=()=> 'district-crowd-v60-'+batch.name;batch.material=replacement;batches.push(batch);}
  const collection={batches},detail=makeViewDetail(scene,camera,collection,details,()=>innerHeight),guide=new T.Object3D(),stream=createStreamResidents(scene,waterGltf,city,{placements},config.character);
  for(const a of stream.pool)a.root.traverse(o=>{if(o.isMesh)o.material=cel(o.material,{skin:true});});
@@ -65,7 +66,7 @@ export async function makeDistrictCrowd(scene,camera,city,config,library,actors,
  }
  update(0,0);detail.update();
  return {placements,batches,water,stream,prepare,update,detailUpdate:detail.update,
-  warmup:async renderer=>{for(const a of stream.pool)a.root.visible=true;await renderer.compileAsync(scene,camera);for(const a of stream.pool)a.root.visible=!!a.p;},
+  warmup:async renderer=>{for(const a of stream.pool)a.root.visible=true;try{await renderer.compileAsync(scene,camera);}finally{for(const a of stream.pool)a.root.visible=!!a.p;}},
   diagnostics(){return {count,upsideDown:placements.filter(p=>p.sky).map(p=>({id:p.id,position:[...p.position],travel:+(p.travel||0).toFixed(2),gait:+p.animationFrame.toFixed(2),gravity:[0,1,0],surfaceY:city.skyResidents.centre[1]-.05})),land:count-water.count,swimmers:water.count,stream:stream.diagnostics(),crossings:crossings.length,lakeCrossings:usedLakeCrossings,groups:drawLibrary.map(g=>({kind:g.key,count:g.count})),boneBytes:drawLibrary.reduce((s,g)=>s+g.frames.byteLength,0),movers:placements.filter(p=>p.follower).length,visitors:placements.filter(p=>p.visitor).map(p=>({id:p.id,route:p.visitorName,length:+p.follower.route.length.toFixed(1),travel:+(p.travel||0).toFixed(2)})),districtCounts:regions.map(([x,z])=>placements.filter(p=>Math.hypot(p.position[0]-x,p.position[2]-z)<26).length),view:detail.metrics,water:water.actors.map(a=>({id:a.p.id,mode:a.p.waterActivity,depth:+a.p.waterDepth.toFixed(3),position:a.p.position})),movingResidents:placements.filter(p=>p.travel>.01).length};}
  };
 }

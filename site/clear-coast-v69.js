@@ -1,6 +1,7 @@
 import * as T from 'three';
+import {yieldTask} from './runtime-budget-v69.js?v=ebada2d6e6f2';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {makeLiquidWater} from './liquid-water-v67.js?v=573fab3a318f';
+import {makeLiquidWater} from './liquid-water-v67.js?v=ebada2d6e6f2';
 
 // Painted panorama and shared liquid surfaces use the existing CC0 1K HDRI.
 // Shared sunlight and time keep the background coherent through a full orbit.
@@ -30,11 +31,12 @@ export async function makeClearCoast(scene,camera,height,seaLevel,bay,options={}
  const detailed=!!options.shoreDetail,n=detailed?(options.depthSize||512):256,span=detailed?(options.depthWidth||128):320,pixels=new Uint8Array(n*n*4);
  // Linear RG decoding retains 16-bit height precision with universally filterable
  // RGBA8, rather than requiring float-texture linear filtering on mobile.
- for(let z=0;z<n;z++)for(let x=0;x<n;x++){const y=height((x+.5)/n*span-span/2,(z+.5)/n*span-span/2),i=(z*n+x)*4;if(detailed){const v=Math.round(T.MathUtils.clamp((y+8)/40,0,1)*65535);pixels.set([v>>8,v&255,0,255],i);}else{const v=Math.round(T.MathUtils.clamp((y+20)/70,0,1)*255);pixels.set([v,v,v,255],i);}}
+ for(let z=0;z<n;z++){if(z%32===0)await yieldTask();for(let x=0;x<n;x++){const y=height((x+.5)/n*span-span/2,(z+.5)/n*span-span/2),i=(z*n+x)*4;if(detailed){const v=Math.round(T.MathUtils.clamp((y+8)/40,0,1)*65535);pixels[i]=v>>8;pixels[i+1]=v&255;pixels[i+3]=255;}else{const v=Math.round(T.MathUtils.clamp((y+20)/70,0,1)*255);pixels[i]=pixels[i+1]=pixels[i+2]=v;pixels[i+3]=255;}}}
  const coast=new T.DataTexture(pixels,n,n);coast.minFilter=coast.magFilter=T.LinearFilter;coast.needsUpdate=true;
  const disturbances=Array.from({length:4},()=>new T.Vector4(0,0,0,10));
  const waterContext={reflectionSky:{value:hdr},clock:time,night,sunset,coast:{value:coast},coastBounds:{value:new T.Vector3(-span/2,-span/2,span)},coastDecode:{value:detailed?new T.Vector3(256*255/65535*40,255/65535*40,-8):new T.Vector3(70,0,-20)},shoreDetail:{value:detailed?1:0},sunDirection:{value:sunDirection},seaLevel:{value:seaLevel},disturbances:{value:disturbances}};
+ const duskColour=new T.Color('#ffb54e');
  const water=makeLiquidWater(waterContext,{ocean:true});
  const ocean=new T.Mesh(new T.PlaneGeometry(20000,20000,64,64),water);ocean.rotation.x=-Math.PI/2;ocean.position.y=seaLevel;ocean.name='clear-turquoise-ocean';ocean.userData.keepCrayonMaterial=true;scene.add(ocean);
- return {material:skyMat,waterContext,setSunset(v){sunset.value=v;sunDirection.set(-31,T.MathUtils.lerp(23,9,v),26).normalize();sun.position.copy(sunDirection).multiplyScalar(450);sun.scale.setScalar(1+v*.25);sun.material.color.lerp(new T.Color('#ffb54e'),v*.85);},setNight(v){night.value=v;scene.environmentIntensity=.45*(1.-v*.8);sun.material.color.setRGB(1-v*.56,.94-v*.44,.72+v*.09);},update(t){time.value=t;sky.position.copy(camera.position);}};
+ return {material:skyMat,waterContext,setSunset(v){sunset.value=v;sunDirection.set(-31,T.MathUtils.lerp(23,9,v),26).normalize();sun.position.copy(sunDirection).multiplyScalar(450);sun.scale.setScalar(1+v*.25);sun.material.color.lerp(duskColour,v*.85);},setNight(v){night.value=v;scene.environmentIntensity=.45*(1.-v*.8);sun.material.color.setRGB(1-v*.56,.94-v*.44,.72+v*.09);},update(t){time.value=t;sky.position.copy(camera.position);}};
 }

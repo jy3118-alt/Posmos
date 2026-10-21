@@ -1,4 +1,4 @@
-import {makeRoute,makeRouteState,advanceRoute,sampleRoute} from './route-motion.js?v=573fab3a318f';
+import {makeRoute,makeRouteState,advanceRoute,sampleRoute} from './route-motion.js?v=ebada2d6e6f2';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 // Eligibility uses the same rendered surface as feet and traffic.
 export function groundPatch(height,x,z,radius=.95){

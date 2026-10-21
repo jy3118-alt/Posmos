@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {makeLiquidWater} from './liquid-water-v67.js?v=573fab3a318f';
+import {makeLiquidWater} from './liquid-water-v67.js?v=ebada2d6e6f2';
 // Shares the existing depth atlas, HDRI, day cycle, clock and four ripple slots.
 // No reflection camera, new depth render, fluid solver or per-frame upload.
 export function makeLakeWater(context,lake){

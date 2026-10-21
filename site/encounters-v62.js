@@ -1,10 +1,10 @@
 import * as T from 'three';
-import {createEncounterScheduler,encounterKind,pairKey} from './encounter-rules.js?v=573fab3a318f';
-import {createEncounterPerformers} from './encounter-performers.js?v=573fab3a318f';
-import {createSpitPortraitPaper} from './portrait-spit-paper-v62.js?v=573fab3a318f';
-import {createPaintSpitter} from './paint-spitter.js?v=573fab3a318f';
-import {villageTrafficSafety} from './friend-traffic.js?v=573fab3a318f';
-import {groundPatch} from './friend-locomotion.js?v=573fab3a318f';
+import {createEncounterScheduler,encounterKind,pairKey} from './encounter-rules.js?v=ebada2d6e6f2';
+import {createEncounterPerformers} from './encounter-performers.js?v=ebada2d6e6f2';
+import {createSpitPortraitPaper} from './portrait-spit-paper-v62.js?v=ebada2d6e6f2';
+import {createPaintSpitter} from './paint-spitter.js?v=ebada2d6e6f2';
+import {villageTrafficSafety} from './friend-traffic.js?v=ebada2d6e6f2';
+import {groundPatch} from './friend-locomotion.js?v=ebada2d6e6f2';
 
 export function makeEncounters(scene,renderer,camera,city,traffic,crowd,realActors,definitions,acting,artOptions={}){
  const pool=createEncounterPerformers(scene,definitions,acting),entities=[],safe=villageTrafficSafety(city),point=new T.Vector3(),projected=new T.Vector3(),painterPoint=new T.Vector3(),modelPoint=new T.Vector3(),canvasPoint=new T.Vector3(),dir=new T.Vector3();
