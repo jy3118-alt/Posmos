@@ -1,6 +1,8 @@
 {
   "repository": "jy3118-alt/Posmos",
-  "source": "forest-world/review",
+  "source": "forest-world/review/district-v67.html",
+  "revision": "573fab3a318f",
+  "version": 67,
   "files": [
     {
       "name": ".nojekyll",
@@ -8,9 +10,9 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "name": "animated-friends.js",
-      "bytes": 21446,
-      "sha256": "2fb80c52d71b1cfa5803c5272b075f089ee0ba488e5896025ed9f4f4bc46b6f5"
+      "name": "art-export-worker-v62.js",
+      "bytes": 466,
+      "sha256": "2d51d053aefe3e16342b1cc515b00b598902561e1eeeef399d554bc86ab389cc"
     },
     {
       "name": "assets/brand-v27/Inter-Medium.woff2",
@@ -33,9 +35,14 @@
       "sha256": "1297b91e04d05152d2614d15548e080c7337aba5125636f1658a9b91a8a74a64"
     },
     {
-      "name": "assets/crown-v16/painted-water.png",
-      "bytes": 2130762,
-      "sha256": "7be60faee79cf0e5318b337471387d8d5ee612d3c8d47562549e1a6387002fd3"
+      "name": "assets/district-v60/models/base-bones.bin",
+      "bytes": 180224,
+      "sha256": "bfd1fe17ed4f94773ec824958306570f15ec4c78e149126c26dde0b1dd32e88a"
+    },
+    {
+      "name": "assets/district-v60/models/base-bones.json",
+      "bytes": 1428,
+      "sha256": "70b3e8c2fac6c88d379f58f65b4f4d97d9aeff28d1be5e00023da39558835e89"
     },
     {
       "name": "assets/encounters-v52/models/acting.json",
@@ -98,9 +105,14 @@
       "sha256": "a717e67b658c3cec78e564425ad881749b1392bc0c0d8d73341b4ba2142e9de0"
     },
     {
+      "name": "assets/forest/painter-workstation-01-web.glb",
+      "bytes": 536740,
+      "sha256": "b4b9e447d8461ba5e7204efa185260519f3dfe5da657f857886528a84b968283"
+    },
+    {
       "name": "assets/forest/scene.json",
-      "bytes": 39371,
-      "sha256": "3257d5dd8c14a122b90c60ff8a5040ba29792b6402c98cfa5c39abcbd6d925b8"
+      "bytes": 15624,
+      "sha256": "5a0e2065edb16ef123b9ad938ba41970a8bdf173b43424a480e02db071a667c5"
     },
     {
       "name": "assets/moa-v17/moa-web.glb",
@@ -111,11 +123,6 @@
       "name": "assets/paint-island-v45/ink-grotto/ink-grotto-web.glb",
       "bytes": 794556,
       "sha256": "c32a6ecadad8691e5db882a6ec0b489010282475233e7f62bf63a8d8bed950e8"
-    },
-    {
-      "name": "assets/paint-island-v45/models.json",
-      "bytes": 566,
-      "sha256": "b9294c5fd3aa4a2b61adffa5e9eaa121944641a4db56197d925c8837dcfb4a33"
     },
     {
       "name": "assets/paint-island-v45/moon-observatory/moon-observatory-web.glb",
@@ -141,21 +148,6 @@
       "name": "assets/polish-v18/royal-po-statue-web.glb",
       "bytes": 2449280,
       "sha256": "21a5f3fe1c776e498b8f8714f6a4414ec41979af64ea967ce3e4cf82dc5674c9"
-    },
-    {
-      "name": "assets/rig-fix-v33/models/avatar-normals.bin",
-      "bytes": 18268160,
-      "sha256": "8910fa1d99417b76e6b38083653d25a1003106437b40e320fcacc6550053c01d"
-    },
-    {
-      "name": "assets/rig-fix-v33/models/avatar-vat.bin",
-      "bytes": 36536320,
-      "sha256": "8f3104f77f6afd2fd707457bdd985780a9ca2af9f7a5385198eaf2d374beb149"
-    },
-    {
-      "name": "assets/rig-fix-v33/models/avatar-vat.json",
-      "bytes": 36954,
-      "sha256": "5c7ff975ba7041156c3fad3f00464bcd03f9a8a9a225c455bfb6f2b11e18ec56"
     },
     {
       "name": "assets/rig-fix-v33/models/base.glb",
@@ -248,19 +240,9 @@
       "sha256": "e330799a10d4623ab507bd9da16ab49f8df95be256472f822c3ca4f500aebf15"
     },
     {
-      "name": "assets/story-v14/manifest.json",
-      "bytes": 2709,
-      "sha256": "e43c59537f10b69c5bd5d411f5ce38e40c950b263fc00c0277ebdfeff0b7962a"
-    },
-    {
-      "name": "assets/story-v14/models/cloud-web.glb",
-      "bytes": 258284,
-      "sha256": "fa7c7f480a12ecd247b88bdb6cf1648a506451dd4f089b6578ab2e55d44fc635"
-    },
-    {
-      "name": "assets/story-v14/models/island-web.glb",
-      "bytes": 1365600,
-      "sha256": "71d3cb117979c37bf8b7e54ba68287dbeb7b13911f101f083b587c80042ebe9b"
+      "name": "assets/treasure-chest.glb",
+      "bytes": 2590676,
+      "sha256": "bd4d73ed3cd0b07d2f13ce218b762ade7055ec335bad65912a8dcb961866afaa"
     },
     {
       "name": "assets/village-v13/models/atelier-web.glb",
@@ -318,34 +300,34 @@
       "sha256": "ad077659ebe4573a1ef6d46693fc6e6b8e48344ade2cc32dd15286ffd3e7f08a"
     },
     {
-      "name": "bridge-grounding.js",
-      "bytes": 4954,
-      "sha256": "b18c8a7ae1169cb29c0acd5d66ba7e260184ec2252354403db35577397297000"
+      "name": "assets/world-v66/models/tree-lod.glb",
+      "bytes": 193664,
+      "sha256": "14f0793442f7e5502de782275d967c5b5dc48194022f6e1678c5f421cd5106ef"
     },
     {
-      "name": "chapter-paint.js",
-      "bytes": 4415,
-      "sha256": "98df2e4484bc485efeb9c5204e5d3f9663d7f4b2a94cf6a7348f2bea45ca7b25"
+      "name": "assets/world-v67/models/clouds.glb",
+      "bytes": 32804,
+      "sha256": "496f59632299008c044ad76eb0848bd6867c96850e4eb17af8c7955c9885c4c9"
     },
     {
-      "name": "chapter-surfaces.js",
-      "bytes": 5063,
-      "sha256": "083bd8b328e8db7fa647f835f1583b60dcfca83622492910aabe42b8ab7983bc"
+      "name": "assets/world-v67/models/world-web.glb",
+      "bytes": 6805948,
+      "sha256": "1a18eb88a80a30a731c106e7dde84f06ca2777525132439f4bd72ccca75a0ce2"
     },
     {
-      "name": "city-layout.js",
-      "bytes": 8453,
-      "sha256": "d09925c5159c7c31890b485bdffd9b1ad39a390d5be6a5c34e554c5b5c33a7da"
+      "name": "assets/world-v67/models/world.json",
+      "bytes": 3615165,
+      "sha256": "9fd20ebe0e8476657d72dac2703c1ad54e597fefaa4e064e04638e0191e35231"
     },
     {
-      "name": "clear-coast.js",
-      "bytes": 4668,
-      "sha256": "ec6b136d98df3668fef5620958101340cd0737a4fbb0f27c4eb1ff5d348f9a1e"
+      "name": "character-art.js",
+      "bytes": 3607,
+      "sha256": "b05204f0b21624819580c7a024fb5d0866fd5c991d868605e342addc6addd340"
     },
     {
-      "name": "crayon-world.js",
-      "bytes": 21532,
-      "sha256": "d166c91e759bba3d837f691714db188bd0fa3708ad8f02cf05911ff72ec16b9d"
+      "name": "clear-coast-v67.js",
+      "bytes": 5499,
+      "sha256": "ef8c8456e221b55c2e4efa0e2a9f9ad11a1531983af321a90bd797c458de8fa4"
     },
     {
       "name": "CREDITS.md",
@@ -353,74 +335,89 @@
       "sha256": "b80570375a19322421312a642f26fa148e160d05ce7c09a61eaee800a213f995"
     },
     {
-      "name": "dress-resident.js",
-      "bytes": 4149,
-      "sha256": "d5b79f845d8c7f5e4262572911e25a6b522d0284f5db92ea7ad960947be1cc29"
+      "name": "depth-stability-v67.js",
+      "bytes": 1807,
+      "sha256": "24fe2572ddc614a4fa038960e183a3fbe29aa65e1c9a2e5cde15fef17017d6dc"
+    },
+    {
+      "name": "district-crowd-v67.js",
+      "bytes": 11714,
+      "sha256": "f90a480396f71b82ee8c74a155627cfc35afe47a2277a88fa78bdbe528aa3b97"
+    },
+    {
+      "name": "district-cycle-v66.js",
+      "bytes": 2806,
+      "sha256": "66ab20bb59c83bb5211fd3e05529dc843838cf8b8c8ee94f98f140108307f9cf"
+    },
+    {
+      "name": "district-gallery-v62.js",
+      "bytes": 7613,
+      "sha256": "95ed7ad31fa776ec3d58924fd93d4f15fa25dcf02bf5eb30820372b6e322fbc4"
+    },
+    {
+      "name": "district-residents-v67.js",
+      "bytes": 10153,
+      "sha256": "db9cc81cb4bd82827a778c9fed4d1ba857a85b2a712af567659f6c533bd8eae0"
+    },
+    {
+      "name": "district-v67.js",
+      "bytes": 25364,
+      "sha256": "3f39992c024587ac707575f7e92c3ed0c84a7c1e6c95cdeda0ec21022767cbaf"
     },
     {
       "name": "encounter-performers.js",
-      "bytes": 6064,
-      "sha256": "f924165fc0c896d00e7177581c6f33a7a54ca51e1d9acdcbb914960cc7bb4536"
+      "bytes": 6074,
+      "sha256": "2a583ffa9faa95eca6a4dbb4625eb73645155b5fdc00884df1a48e483c5b7eda"
     },
     {
       "name": "encounter-rules.js",
-      "bytes": 3177,
-      "sha256": "4306c0770c4bc7d0fbac38be6ff63acdcae7b4002d3c864f5292d841033cd61f"
+      "bytes": 3753,
+      "sha256": "32b568fc32b53618ded979368a1195f6695e4e2cc43f21099f2b64a551240563"
     },
     {
-      "name": "encounters.js",
-      "bytes": 8086,
-      "sha256": "9a69e6458214854b4ce82648da934e3baf5466016bd42c5458b292bf207fb717"
-    },
-    {
-      "name": "forest.js",
-      "bytes": 17974,
-      "sha256": "77351f59de9c0cc08b2bce82a65d67a214976d57e37d534af2a5ef8ddb415dd8"
+      "name": "encounters-v62.js",
+      "bytes": 8332,
+      "sha256": "b79e774d17cc8a76908ef11320959c4cbbbe851d381b7be4d5786465eeae357d"
     },
     {
       "name": "friend-locomotion.js",
       "bytes": 2771,
-      "sha256": "0d5cd0cb60481f2c6fa43524c8f845305dbcca0e8c73ced90772d9314f755aae"
-    },
-    {
-      "name": "friend-places.js",
-      "bytes": 3423,
-      "sha256": "ec8a90ba1d3881da46cf9b2fdba46b24c2d89706ca807edd73bf2824e7a6bfc3"
+      "sha256": "a7fcf722ec9346f5018c9712e0e2096497c044c0bf92689488d91d8c7c2d09b7"
     },
     {
       "name": "friend-traffic.js",
-      "bytes": 5326,
-      "sha256": "c01d5c9bdacd3a52331cec081aff12f043880c95cfcb777e485ade83ad32434e"
+      "bytes": 6122,
+      "sha256": "4370dcce1982b0b6cd337933be054ce235343397400c712ed85fb56be807979c"
     },
     {
       "name": "game-material.js",
       "bytes": 2089,
-      "sha256": "182effe18172bac871a5833aafcc6cfa6e5d95f3d18dce5aff9a99d9e99fa8a3"
-    },
-    {
-      "name": "home-architecture.js",
-      "bytes": 4782,
-      "sha256": "1e1abce08ff6ebaed75dea44a4f053b78349339c7fce254c987f39fa68f29f1d"
+      "sha256": "0d34cf1c9ad360c4cfee63cf5cb1a7191cc47ffbcb90b0d765934ad824d61fe8"
     },
     {
       "name": "index.html",
-      "bytes": 2198,
-      "sha256": "b1bb834834f5ad67057a7c6d9264fe920446c1f2695c8fbdd6ed7a4eff5d471b"
+      "bytes": 7169,
+      "sha256": "0f6c417a4f9c13e3a5a316c21a02c6fc0a340156555b16eabc5350074e7ae4f0"
     },
     {
-      "name": "liquid-water.js",
-      "bytes": 3725,
-      "sha256": "ab5de795460e4205dd6c264cdc586be9273d310a09d61a434b1c57588af8b5e9"
+      "name": "island-terrain-v67.js",
+      "bytes": 3853,
+      "sha256": "a29759023f3a9e1032cbf3b978030a1fbae602417aa0d9602eabe223e960b8fd"
     },
     {
-      "name": "moa-resident.js",
-      "bytes": 1749,
-      "sha256": "a71c15df1b99314abf103441aa19217fd609073d3e3e5d4177b481171af6f132"
+      "name": "lake-space-v65.js",
+      "bytes": 1215,
+      "sha256": "38f6077be67651ffae8b391a22476d510fb205dae89eaf45c55b7c7143abe367"
     },
     {
-      "name": "murals.js",
-      "bytes": 2915,
-      "sha256": "f92d0b328fca5a25d710915a72b82b1f6ff01a4f2144fbd1a08202fb939f8892"
+      "name": "lake-water-v67.js",
+      "bytes": 1185,
+      "sha256": "8aba217724c44adc6f9d8ad20119f3ac9e16957a52b6bc81b031cb067eb1de8a"
+    },
+    {
+      "name": "liquid-water-v67.js",
+      "bytes": 4454,
+      "sha256": "c5e0fbfe5f92763ec99e09759caa787810c0abcb838b3056f35e5874331c2cc7"
     },
     {
       "name": "normal-smoothing.js",
@@ -428,29 +425,19 @@
       "sha256": "95b0aefd3ef6a4e09af40e888db3f4c4f9284edd6ec5c0df961c10353d78af0a"
     },
     {
-      "name": "paint-city.js",
-      "bytes": 22629,
-      "sha256": "33b89c3045d5e0c3040134180965beb93ac039a693b4fd431dcc58be529ddd8a"
+      "name": "paint-graph-po-v62.js",
+      "bytes": 1448,
+      "sha256": "eda269cef5ab9a7f171f86d6185663bac930704863c20af7551229d6f3838ec3"
     },
     {
-      "name": "paint-garden.js",
-      "bytes": 6073,
-      "sha256": "8d7cacfe45c8a92a13fe680c6a480d4fcd3857b0fd9463426892cb9c3e1bc2e7"
+      "name": "paint-graph-runtime-v62.js",
+      "bytes": 2016,
+      "sha256": "299ad2b0a0f484992475271a7a4567768fa9367bab32d1e3346a396ecdd903ba"
     },
     {
-      "name": "paint-island-details.js",
-      "bytes": 7117,
-      "sha256": "4ba7ad957bd670b052b8888bfa72a3a4c653f43e3ef74aee64076f2b08c2d6ed"
-    },
-    {
-      "name": "paint-island-ground.js",
-      "bytes": 3383,
-      "sha256": "216db50acb4015fe7a17e07be28b6252a07fe718018e74dc45794c6039f0fec0"
-    },
-    {
-      "name": "paint-island-plan.js",
-      "bytes": 6058,
-      "sha256": "550ae84263aea940c804ff75a162db3d2ef43de34272710e69a75981774b90fb"
+      "name": "paint-operators-v62.js",
+      "bytes": 12478,
+      "sha256": "613ec5889939b931fc6fa0feee43da08b2e71dd60a7c9ab8ccffc6bdbed22bb5"
     },
     {
       "name": "paint-spitter.js",
@@ -458,24 +445,34 @@
       "sha256": "e44283e9bda13ac982aafe65016cc2c414698abf22996dbe95f7d4476280d796"
     },
     {
-      "name": "paint-tools.js",
-      "bytes": 5972,
-      "sha256": "653d3ffc7715297813a6dfaaa023e0c964435bc17641d12dbf163cc46989aa0d"
-    },
-    {
-      "name": "paint.js",
-      "bytes": 7013,
-      "sha256": "8802733e88739335e5cb8764ffcdab05219e576970b1e281db7ab1eb249282ed"
-    },
-    {
       "name": "po-variants.js",
       "bytes": 5958,
-      "sha256": "cf396187494de1de1c85f2b0cf317e48a1bc8a9af25704e0073187a09bd6ecd7"
+      "sha256": "8610d1fc7400057133cee7f23ec7115f2e920b7653ff9a143df4cb5a18eaf5c3"
     },
     {
-      "name": "portrait-spit-paper.js",
-      "bytes": 6436,
-      "sha256": "881a107f344ac72273cae898f7e2e118c1708b799778a3b54f0f28b05b81ce9f"
+      "name": "portrait-abstract-v60.js",
+      "bytes": 5813,
+      "sha256": "b9498e16fd4e8823c83b049498b3d135b2fd93a28464df43c9e00524f65899e4"
+    },
+    {
+      "name": "portrait-abstract-worker-v60.js",
+      "bytes": 689,
+      "sha256": "f7affa10b9425207e3563195014bf3a119e04e8c9df29ce451a1f10bfdcc5728"
+    },
+    {
+      "name": "portrait-impasto-rules.js",
+      "bytes": 5763,
+      "sha256": "2398ccd5cbda933d7ae7329c7e2e7adea416b13622a161be1f63edf624b454e3"
+    },
+    {
+      "name": "portrait-impasto-worker.js",
+      "bytes": 781,
+      "sha256": "4284a914396c0ed0c1f21ee6bc4ad5167ec96028ecd96f1333038aae743f0592"
+    },
+    {
+      "name": "portrait-spit-paper-v62.js",
+      "bytes": 8720,
+      "sha256": "522e4145639b32adae77308226e9301bf61e5e3a93ef0700b92e573268723f2c"
     },
     {
       "name": "portrait-style-rules.js",
@@ -485,22 +482,27 @@
     {
       "name": "portrait-style-worker.js",
       "bytes": 382,
-      "sha256": "f2dc0782aafd01bf779813e492d01e275b3b9ab971ef69aa97baa1bbda2e82f2"
+      "sha256": "3a617644bba33fdf0fcbce3da30b06d9354e2acd3ae8cd07a8cab936945efe8c"
     },
     {
-      "name": "resident-v13.js",
-      "bytes": 5542,
-      "sha256": "917c920264edf826eef9b1c1c72f68d8651aea6e0e5d8bc6de2504c362fa9aa5"
+      "name": "portrait-system-v62.js",
+      "bytes": 2085,
+      "sha256": "10a838e9c88c24b668d323c44aa25c74402e7ca1f1cf6c54f0e745cb9b817f8e"
     },
     {
-      "name": "resident.js",
-      "bytes": 16727,
-      "sha256": "fbe7ed62902a2c7c1038ddad16fb7c382e7bfa1aa3b9896f70fc3094ad777b98"
+      "name": "portrait-vision-v61.js",
+      "bytes": 6017,
+      "sha256": "4828333babfb1de914972be195303b2a5c944cba4c805eb80d85d865408e8a28"
     },
     {
-      "name": "review.js",
-      "bytes": 38384,
-      "sha256": "56205cfe4fce282957ed3faf1d6572c2e39cf4f8e3ebb5c4c5dc0c72cde020de"
+      "name": "portrait-vision-worker-v62.js",
+      "bytes": 682,
+      "sha256": "af53026bcebccfacd3088e0dd81daaf3b1d695658bec72126a9ece2edf68c72a"
+    },
+    {
+      "name": "route-motion-v67.js",
+      "bytes": 2235,
+      "sha256": "a335201e1f3d22dbff50f74287354d204450fe1bc209d9f0f98740e06f4fab57"
     },
     {
       "name": "route-motion.js",
@@ -508,54 +510,19 @@
       "sha256": "4e80ad9bb21d5e2e0c9a1d43868983c682fca52192e6b18091ef4413d1ec93b4"
     },
     {
-      "name": "royal-outfit.js",
-      "bytes": 3156,
-      "sha256": "b4f58065434ba872187da1ceae8e21c4a8dd11d6de111752e000cd288c7c9438"
-    },
-    {
-      "name": "search-characters.js",
-      "bytes": 7352,
-      "sha256": "ed2f391a0a5a41938a08504da70f71aa56c00cf2da4f60f75f506cc6bc625e7b"
-    },
-    {
-      "name": "shadow-focus.js",
-      "bytes": 1607,
-      "sha256": "011c4dd3d84bad6e7a63ffcefe8e15d3802e96be9b88e8777562d6b0f5cf6eef"
-    },
-    {
-      "name": "statue-play.js",
-      "bytes": 5497,
-      "sha256": "8a38bf2955978623c9c9a3bdaef7351bd876697133f29c12870214f1fd460d62"
-    },
-    {
-      "name": "story-art.js",
-      "bytes": 3867,
-      "sha256": "84e2117d2d9fc92251a92030c9f456b8b56eb395c984d4894b956c187b165d81"
+      "name": "sky-weather-v67.js",
+      "bytes": 2252,
+      "sha256": "fb8fec053e7e08908d257dc53d973958476b369e7adb05d5b79d3603dd2d1716"
     },
     {
       "name": "story-surface.js",
       "bytes": 8737,
-      "sha256": "fb7cd4ba5c4e1c3615a1d357f2d71f01439e5b47deef2cb94a68f9035f887e4e"
+      "sha256": "9161c837a3b93baffc497cdca30be152aa085bd5920d96656cf94f61d3c2887a"
     },
     {
-      "name": "storybook-chapters.js",
-      "bytes": 5834,
-      "sha256": "c30131818205a1e1a39f99e7d7101c3b3f3e151ed9b80da4d9b6912189c6cad6"
-    },
-    {
-      "name": "storybook-garden.js",
-      "bytes": 3301,
-      "sha256": "2fd063d98c558f8257399b73a0d1fb6eb67e32473cfed7287af108e4c9c5f7a0"
-    },
-    {
-      "name": "storybook-landscape.js",
-      "bytes": 3933,
-      "sha256": "a39b93ae7996acec38e72822635e0af79cf91786ed6e5116a2272bad46d9e00f"
-    },
-    {
-      "name": "stream-residents.js",
-      "bytes": 6080,
-      "sha256": "93d8a142fd2fa31273da0537d8e20900ad51484e3dceab57b8d139fe0e871546"
+      "name": "stream-residents-v65.js",
+      "bytes": 6548,
+      "sha256": "987ba3b8d78509d152662818b22a5bbc727068038e143a1e9ece0c7bf6618492"
     },
     {
       "name": "stream-space.js",
@@ -563,9 +530,9 @@
       "sha256": "a9558fc797852185ea093d83f269f7382d9f33a6359e0edc7876dc84726440ac"
     },
     {
-      "name": "style.css",
-      "bytes": 2715,
-      "sha256": "fd92eeba568c5069019719eb697240965ac2612df39781c244b7c91af78d9dc3"
+      "name": "surface-grid-v66.js",
+      "bytes": 1325,
+      "sha256": "d71ab316d055e4b105e920570ef7367b0153edd8785777f8dd2946a47d28546b"
     },
     {
       "name": "terrain-grid.js",
@@ -573,9 +540,9 @@
       "sha256": "c1e47e20a179a29d059c0861cdf24eb6917f80f39d09eda964af1296ecbb1ff2"
     },
     {
-      "name": "tilt-shift.js",
-      "bytes": 4520,
-      "sha256": "b632184ef2581db5ce7ab0e5459bce7f3a09696527bbab20388cd5158ce5d9ec"
+      "name": "terrain-topology-v63.js",
+      "bytes": 1411,
+      "sha256": "878559e83a381b756a9280d3c9494cdf2a305d8959e12824287d96a71e3a27b8"
     },
     {
       "name": "vendor/three/build/three.core.js",
@@ -593,21 +560,6 @@
       "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c"
     },
     {
-      "name": "vendor/three/examples/jsm/environments/RoomEnvironment.js",
-      "bytes": 4899,
-      "sha256": "c20f0b4677f6128a138d7152b85cbef9091f4f45cdfa05adca04d40c1697c7ae"
-    },
-    {
-      "name": "vendor/three/examples/jsm/geometries/ConvexGeometry.js",
-      "bytes": 1710,
-      "sha256": "f52f4c5f0cc42eaef25d7330e912693ae1d7a9b0df0a599cd35f5854e9ecb34e"
-    },
-    {
-      "name": "vendor/three/examples/jsm/geometries/DecalGeometry.js",
-      "bytes": 10112,
-      "sha256": "0c6893ccd5a5d3e3aa95a92db4c30172d03d89e97e146de334244c8476fd20b2"
-    },
-    {
       "name": "vendor/three/examples/jsm/loaders/GLTFLoader.js",
       "bytes": 114739,
       "sha256": "67ac5551fdafa6e349bd80c8f8e5e39c136d6b2fb1ad647db9abb21dc86f9e4a"
@@ -621,51 +573,6 @@
       "name": "vendor/three/examples/jsm/loaders/RGBELoader.js",
       "bytes": 268,
       "sha256": "6c08f9c441040a61a188ad7711078da4df48f8c5ac3b3725dd6f10ac9ff81162"
-    },
-    {
-      "name": "vendor/three/examples/jsm/math/ConvexHull.js",
-      "bytes": 32980,
-      "sha256": "d5e2e44cf567ba9df37f21c7d2c47336d20f5984ccbe50d063ad50407b32d967"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/EffectComposer.js",
-      "bytes": 8477,
-      "sha256": "4b8c855f28eed2570bed898adc0ab89c585a8a281ecb6d905c09d00697f9f50a"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/MaskPass.js",
-      "bytes": 4694,
-      "sha256": "7cd08eee9d5d6f5578beaddbdcbe9c384f6873810af27f22ab7db3ceeb127aa3"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/OutputPass.js",
-      "bytes": 4029,
-      "sha256": "f5b81c96e76b6b28b4b3ba8c41c4aeb982b1e03f3d82883242d951b2ab082fa2"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/Pass.js",
-      "bytes": 4218,
-      "sha256": "444b409c235ead986893c472e720da1b779a56985c7d10b279c7944b52bd61c5"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/RenderPass.js",
-      "bytes": 4112,
-      "sha256": "fd91229aacc5830e3984b0f2bdefcf566163ea028f4c1f1ab233fa6665a133ac"
-    },
-    {
-      "name": "vendor/three/examples/jsm/postprocessing/ShaderPass.js",
-      "bytes": 3228,
-      "sha256": "e2500a5913b26bbf5148ceaae644c6edcff06a18b01494ee37bf856353d2ab9d"
-    },
-    {
-      "name": "vendor/three/examples/jsm/shaders/CopyShader.js",
-      "bytes": 729,
-      "sha256": "a33057d5ac91c43304c186ac0e8816e62bb2ed471d3a00ff3018dfd5c0389718"
-    },
-    {
-      "name": "vendor/three/examples/jsm/shaders/OutputShader.js",
-      "bytes": 1876,
-      "sha256": "353479f77a8d7e2629d49ccac9fc2f5dbfdda5442e0adf867b00377a2fcb0cb2"
     },
     {
       "name": "vendor/three/examples/jsm/utils/BufferGeometryUtils.js",
@@ -683,24 +590,19 @@
       "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
     },
     {
+      "name": "view-detail-v67.js",
+      "bytes": 4487,
+      "sha256": "e38be07efab9f461270491db3e4c6c05f444dcce15ec7243cbcba0fd3153a738"
+    },
+    {
       "name": "view-detail.js",
       "bytes": 4454,
       "sha256": "0a81bb922df12c8ad96a5604abf046ad3081a4f8d59b2708367b5d48adf18a49"
     },
     {
-      "name": "village-v13.js",
-      "bytes": 16348,
-      "sha256": "ecc7b38921842647dd8e45fb213aeef5c9ea4e57fdef15d306731019e4d674c0"
-    },
-    {
-      "name": "village.js",
-      "bytes": 11542,
-      "sha256": "0a1ae3326da1e4bb5ed58e749389b9b1e35b1775b0e203ce5f1ee1091304179e"
-    },
-    {
       "name": "water-residents.js",
       "bytes": 5432,
-      "sha256": "e577d2e05cf3056c915ddd3600b4ddbf41f76c9f63e6c693f1add37d41dc7424"
+      "sha256": "1aa3ad7e183e7b0676f69d4960cdcf63d86c7269676495839b8357592a8dc1dd"
     },
     {
       "name": "water-space.js",
@@ -708,17 +610,12 @@
       "sha256": "fb282602fc2ee1f953e4b58bc73a0323cadaf84e7d372d1a58d1d65ca846d6b4"
     }
   ],
-  "totalBytes": 106425493,
+  "totalBytes": 61518727,
   "largestFiles": [
     {
-      "name": "assets/rig-fix-v33/models/avatar-vat.bin",
-      "bytes": 36536320,
-      "sha256": "8f3104f77f6afd2fd707457bdd985780a9ca2af9f7a5385198eaf2d374beb149"
-    },
-    {
-      "name": "assets/rig-fix-v33/models/avatar-normals.bin",
-      "bytes": 18268160,
-      "sha256": "8910fa1d99417b76e6b38083653d25a1003106437b40e320fcacc6550053c01d"
+      "name": "assets/world-v67/models/world-web.glb",
+      "bytes": 6805948,
+      "sha256": "1a18eb88a80a30a731c106e7dde84f06ca2777525132439f4bd72ccca75a0ce2"
     },
     {
       "name": "assets/royal-dress-v34/models/dress-po.glb",
@@ -729,6 +626,11 @@
       "name": "assets/polish-v18/island-albedo.png",
       "bytes": 4650528,
       "sha256": "4327b5c374343208c7a3b0c5faa9a065ad52b5fa1c981b726316d3c738fe1131"
+    },
+    {
+      "name": "assets/world-v67/models/world.json",
+      "bytes": 3615165,
+      "sha256": "9fd20ebe0e8476657d72dac2703c1ad54e597fefaa4e064e04638e0191e35231"
     },
     {
       "name": "assets/forest/character-graffiti-atlas-v9.png",

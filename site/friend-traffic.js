@@ -2,19 +2,22 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const length=(x,z)=>Math.hypot(x,z);
 // Everyone proposes before anyone moves. Anticipatory steering passes on the
 // right; a final disc constraint prevents bodies tunnelling through each other.
-export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null}={}){
+export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null,spatial=false}={}){
  const agents=[];let contacts=0,yielding=0;
+ const bins=new Map(),scratch=[];let checks=0;
+ function index(projected=false){for(const list of bins.values())list.length=0;for(const a of agents){const key=Math.floor((projected?a.nx:a.x)/8)*4096+Math.floor((projected?a.nz:a.z)/8);if(!bins.has(key))bins.set(key,[]);bins.get(key).push(a);}}
+ function neighbours(a,radius=1,projected=false){if(!spatial)return agents;scratch.length=0;const x=Math.floor((projected?a.nx:a.x)/8),z=Math.floor((projected?a.nz:a.z)/8);for(let dz=-radius;dz<=radius;dz++)for(let dx=-radius;dx<=radius;dx++){const list=bins.get((x+dx)*4096+z+dz);if(list)for(const b of list)scratch.push(b);}return scratch;}
  function add({id,x,z,y=height(x,z),radius=.61,height:bodyHeight=1.65,movable=true}){
-  const a={id,x,z,y,radius,height:bodyHeight,movable,vx:0,vz:0,wantX:0,wantZ:0,dx:0,dz:0,travel:0,yielding:false};agents.push(a);return a;
+  const a={id,index:agents.length,x,z,y,radius,height:bodyHeight,movable,vx:0,vz:0,wantX:0,wantZ:0,dx:0,dz:0,travel:0,yielding:false};agents.push(a);return a;
  }
  const sameLevel=(a,b)=>Math.abs((a.contactY??a.y)-(b.contactY??b.y))<Math.min(a.height,b.height)*.72;
  function allowed(a,x,z){const drop=a.y-height(x,z);return safe(x,z,a)&&(Math.abs(drop)<.42||a.canSwim&&water(x,z)&&drop>=0&&drop<2.6);}
  function step(dt){
-  dt=clamp(dt,0,.05);if(!dt)return;contacts=0;yielding=0;
+  dt=clamp(dt,0,.05);if(!dt)return;contacts=0;yielding=0;checks=0;if(spatial)index();
   for(const a of agents){a.nx=a.x;a.nz=a.z;a.yielding=false;if(!a.movable)continue;
    const speed=length(a.wantX,a.wantZ),fx=speed>.001?a.wantX/speed:0,fz=speed>.001?a.wantZ/speed:0,rx=fz,rz=-fx;
    let brake=1,side=0,pushX=0,pushZ=0;
-   for(const b of agents){if(a===b||!sameLevel(a,b))continue;
+   for(const b of neighbours(a,2)){if(a===b||!sameLevel(a,b))continue;checks++;
     const dx=b.x-a.x,dz=b.z-a.z,distance=length(dx,dz),clear=a.radius+b.radius+.10;
     if(distance>clear+speed*2.5+1.0)continue;
     const ahead=dx*fx+dz*fz,lateral=dx*rx+dz*rz;
@@ -41,8 +44,8 @@ export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null}=
   }
   // Position projection is normally tiny: steering starts before contact.
   // Resting friends, including rooftop poses, are immovable obstacles.
-  for(let pass=0;pass<5;pass++)for(let i=0;i<agents.length;i++)for(let j=i+1;j<agents.length;j++){
-   const a=agents[i],b=agents[j];if((!a.movable&&!b.movable)||!sameLevel(a,b))continue;
+  for(let pass=0;pass<5;pass++){if(spatial)index(true);for(let i=0;i<agents.length;i++)for(const b of neighbours(agents[i],1,true)){
+   const a=agents[i],j=b.index;if(j<=i||(!a.movable&&!b.movable)||!sameLevel(a,b))continue;checks++;
    let dx=a.nx-b.nx,dz=a.nz-b.nz,d=length(dx,dz),limit=a.radius+b.radius;
    if(d>=limit)continue;if(pass===0)contacts++;
    if(d<1e-7){dx=i%2?1:-1;dz=0;}else{dx/=d;dz/=d;}
@@ -52,14 +55,14 @@ export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null}=
    if(canA){a.nx=ax;a.nz=az;}if(canB){b.nx=bx;b.nz=bz;}
    if(aw&&!canA&&bw&&allowed(b,b.nx-dx*overlap,b.nz-dz*overlap)){b.nx-=dx*overlap;b.nz-=dz*overlap;}
    else if(bw&&!canB&&aw&&allowed(a,a.nx+dx*overlap,a.nz+dz*overlap)){a.nx+=dx*overlap;a.nz+=dz*overlap;}
-  }
+  }}
   for(const a of agents){a.dx=a.nx-a.x;a.dz=a.nz-a.z;a.travel=length(a.dx,a.dz);if(!a.movable)continue;a.x=a.nx;a.z=a.nz;a.y=height(a.x,a.z);
    // Contact projection is a constraint, never an impulse. In particular a
    // crowded initial spawn must not launch a walker across the village.
    const v=a.travel/dt,cap=Math.max(.55,length(a.wantX,a.wantZ)),f=v>cap?cap/v:1;a.vx=a.dx/dt*f;a.vz=a.dz/dt*f;
   }
  }
- function metrics(){let minGap=Infinity,overlaps=0;for(let i=0;i<agents.length;i++)for(let j=i+1;j<agents.length;j++){const a=agents[i],b=agents[j];if((!a.movable&&!b.movable)||!sameLevel(a,b))continue;const gap=length(a.x-b.x,a.z-b.z)-a.radius-b.radius;minGap=Math.min(minGap,gap);if(gap<-.015)overlaps++;}return {agents:agents.length,movers:agents.filter(a=>a.movable).length,contacts,yielding,overlaps,minGap:Number(minGap.toFixed(3))};}
+ function metrics(){let minGap=Infinity,overlaps=0;for(let i=0;i<agents.length;i++)for(let j=i+1;j<agents.length;j++){const a=agents[i],b=agents[j];if((!a.movable&&!b.movable)||!sameLevel(a,b))continue;const gap=length(a.x-b.x,a.z-b.z)-a.radius-b.radius;minGap=Math.min(minGap,gap);if(gap<-.015)overlaps++;}return {agents:agents.length,movers:agents.filter(a=>a.movable).length,contacts,yielding,overlaps,minGap:Number(minGap.toFixed(3)),spatial,neighbourChecks:checks};}
  return {agents,add,step,metrics};
 }
 export function villageTrafficSafety(city){

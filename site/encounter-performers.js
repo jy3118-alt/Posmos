@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {characterMaterial} from './game-material.js?v=50e1064b0d79';
+import {characterMaterial} from './game-material.js?v=573fab3a318f';
 
 // A small reusable pool of real accepted skins. Only the selected two mixers
 // run; their ordinary VAT/real residents are hidden for exactly the same time.
@@ -21,7 +21,7 @@ export function createEncounterPerformers(scene,definitions,acting){
   const head=find('Head'),marker=new T.Object3D();marker.name='PoMouthEmitter';marker.position.fromArray(acting.mouthInHead);if(head)head.add(marker);
   const feet=kind==='moa'?[find('LeftFoot'),find('RightFoot')]:[find('L_Foot'),find('R_Foot')],modifications=[];
   root.updateMatrixWorld(true);let baseline=Infinity;for(const foot of feet)if(foot)baseline=Math.min(baseline,foot.getWorldPosition(footPoint).y);baseline=Number.isFinite(baseline)?baseline:0;
-  const state={kind,root,model,mixer,actions,find,marker,sourceHeight:size.y,nativeSpeed:d.nativeSpeed||.32,height:1.65,entity:null,selected:'idle',yaw:0,phase:0,feet,baseline,modifications,offsets:new Map()};actors.set(kind,state);
+  const state={kind,art:d.art,root,model,mixer,actions,find,marker,sourceHeight:size.y,nativeSpeed:d.nativeSpeed||.32,height:1.65,entity:null,selected:'idle',yaw:0,phase:0,feet,baseline,modifications,offsets:new Map()};actors.set(kind,state);
  }
  function removeOffsets(a){for(const m of a.modifications){inverse.copy(m.q).invert();m.bone.quaternion.multiply(inverse);m.applied=false;}a.modifications.length=0;}
  function turn(a,name,v,angle){const b=a.find(name);if(!b||!angle)return;rootQ.copy(a.root.quaternion);axis.fromArray(v).applyQuaternion(rootQ).normalize();b.getWorldQuaternion(worldQ);b.parent.getWorldQuaternion(parentQ);delta.setFromAxisAngle(axis,angle);let m=a.offsets.get(b);if(!m){m={bone:b,q:new T.Quaternion(),old:new T.Quaternion(),applied:false};a.offsets.set(b,m);}if(!m.applied){m.old.copy(b.quaternion);m.applied=true;a.modifications.push(m);}b.quaternion.copy(parentQ.invert().multiply(delta).multiply(worldQ));m.q.copy(m.old).invert().multiply(b.quaternion);a.root.updateMatrixWorld(true);}

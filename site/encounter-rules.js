@@ -1,5 +1,5 @@
 export const ENCOUNTER_KINDS=Object.freeze(['po','ribbon','crown','dress','moa']);
-export const encounterKind=kind=>['ribbon','crown','dress','moa'].includes(kind)?kind:'po';
+export const encounterKind=kind=>{const id=String(kind||'po').toLowerCase();if(['po','base','coral','short','plump'].includes(id))return 'po';return ({'드레스 po':'dress','왕관 po':'crown','리본 po':'ribbon'})[id]||id;};
 export const pairKey=(a,b)=>[encounterKind(a),encounterKind(b)].sort().join(':');
 const definitions=[
  ['po','ribbon','ribbon','리본처럼 휘어진 초상','tilt','flutter'],
@@ -14,7 +14,8 @@ const definitions=[
  ['moa','dress','imitation','같은 포즈 다른 모습','playful','turn']
 ];
 export const ENCOUNTER_RULES=Object.freeze(Object.fromEntries(definitions.map(([a,b,id,title,pose,greeting],i)=>[pairKey(a,b),Object.freeze({id,title,pose,greeting,styleOffset:i*7,durations:{greet:2.2,pose:1.6,paint:8.8,admire:3.2,release:.6}})])));
-export function encounterRule(a,b){return encounterKind(a)===encounterKind(b)?null:ENCOUNTER_RULES[pairKey(a,b)]||null;}
+const additionalRules=new Map();
+export function encounterRule(a,b){const key=pairKey(a,b);if(encounterKind(a)===encounterKind(b))return null;if(ENCOUNTER_RULES[key])return ENCOUNTER_RULES[key];if(!additionalRules.has(key)){let hash=0;for(const c of key)hash=(Math.imul(hash,31)+c.charCodeAt(0))>>>0;additionalRules.set(key,Object.freeze({id:'portrait:'+key,title:'새 친구의 색',pose:['tilt','proud','playful'][hash%3],greeting:'nod',styleOffset:hash%100,durations:{greet:2.2,pose:1.6,paint:8.8,admire:3.2,release:.6}}));}return additionalRules.get(key);}
 
 // Broad phase runs on a short cadence. Simulation and camera still run at their
 // normal frame rate. One bounded stage prevents N² active scenes/canvas textures.
