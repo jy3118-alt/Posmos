@@ -1,0 +1,21 @@
+Quaternius Animated Fish Pack — Fish1 and Manta ray
+Author: Quaternius
+Source: https://quaternius.com/packs/animatedfish.html
+License: CC0 1.0 Universal Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Original OBJ/MTL files preserved in art/ocean-v77/sources/quaternius.
+Converted to indexed, vertex-coloured geometry by scripts/prepare-ocean-assets-v77.py.
+Runtime tail/wing motion and schooling were added by Posmos; these are not the
+original pack's skeletal animation clips. No image textures or runtime API calls.
+
+------------------------------------------------------
+Animated Fish Pack by Quaternius
+Consider supporting me on Patreon, even $1 helps me a lot!
+
+https://www.patreon.com/quaternius
+-------------------------------------------------------
+License:
+CC0 1.0 Universal (CC0 1.0)
+Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/

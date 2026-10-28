@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {characterMaterial} from './game-material.js?v=ebada2d6e6f2';
-import {streamImmersion} from './stream-space.js?v=ebada2d6e6f2';
+import {characterMaterial} from './game-material.js?v=caf5cc4587a0';
+import {streamImmersion} from './stream-space.js?v=caf5cc4587a0';
 
 // Four reusable real skins replace the selected ordinary crowd skins. All other
 // residents use dry paths/bridges; the stream never needs 150 live skeletons.

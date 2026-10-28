@@ -1,3 +1,4 @@
+import {indexVillageObstacles} from './static-obstacles-v73.js?v=caf5cc4587a0';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const length=(x,z)=>Math.hypot(x,z);
 // Everyone proposes before anyone moves. Anticipatory steering passes on the
@@ -66,13 +67,12 @@ export function createFriendTraffic({height=()=>0,safe=()=>true,water=()=>null,s
  return {agents,add,step,metrics};
 }
 export function villageTrafficSafety(city){
+ const obstacles=city.obstacleIndex||(city.obstacleIndex=indexVillageObstacles(city));city.obstacleDiagnostics=obstacles.diagnostics;
  return (x,z,a)=>{
   const y=city.height(x,z);if(y<city.sea+.7)return false;
   const water=city.waterAt?.(x,z,a.waterProbe||(a.waterProbe={}));if(water&&water.waterDepth>.18&&!a.canSwim)return false;
   const bank=a.canSwim&&city.streamNear?.(x,z,a.bankProbe||(a.bankProbe={})),r=a.radius*.7;
   if(!bank&&(Math.abs(city.height(x+r,z)-y)>.6||Math.abs(city.height(x-r,z)-y)>.6||Math.abs(city.height(x,z+r)-y)>.6||Math.abs(city.height(x,z-r)-y)>.6))return false;
-  for(const b of city.buildings){const dx=x-b.x,dz=z-b.z,c=Math.cos(b.yaw||0),s=Math.sin(b.yaw||0);if(Math.abs(c*dx-s*dz)<b.width*.48+r&&Math.abs(s*dx+c*dz)<b.depth*.48+r)return false;}
-  for(const t of city.treePositions)if(length(x-t.x,z-t.z)<Math.max(.38,t.h*.035)+r)return false;
-  return true;
+  return obstacles(x,z,r);
  };
 }

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {prepareSmoothNormals} from './normal-smoothing.js?v=ebada2d6e6f2';
+import {prepareSmoothNormals} from './normal-smoothing.js?v=caf5cc4587a0';
 const ramp=new T.DataTexture(new Uint8Array([76,126,181,228,255]),5,1,T.RedFormat);
 ramp.minFilter=ramp.magFilter=T.NearestFilter;ramp.needsUpdate=true;
 const cache=new WeakMap();

@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {yieldTask} from './runtime-budget-v69.js?v=ebada2d6e6f2';
-import {CHARACTER_ART} from './character-art.js?v=ebada2d6e6f2';
-import {abstractPreset,buildAbstractWork,renderAbstract,paintAbstractRows,exportArtworkSVG} from './portrait-system-v62.js?v=ebada2d6e6f2';
+import {yieldTask} from './runtime-budget-v69.js?v=caf5cc4587a0';
+import {CHARACTER_ART} from './character-art.js?v=caf5cc4587a0';
+import {abstractPreset,buildAbstractWork,renderAbstract,paintAbstractRows,exportArtworkSVG} from './portrait-system-v62.js?v=caf5cc4587a0';
 
 // Three live works plus three fixed hidden Po studies. Undiscovered studies do
 // not appear through the gallery arrows: they must be found in the landscape.
@@ -17,7 +17,7 @@ export async function makeDistrictGallery(atlas){
   if(busy||!current?.work)return;busy=true;buttons();const work=current.work,size=Number(dialog.querySelector('[data-export-size]').value);status.textContent='큰 크기로 작품을 다시 그리는 중…';
   try{
    let blob;const supported=typeof Worker!=='undefined'&&typeof OffscreenCanvas!=='undefined';
-   if(supported)try{blob=await new Promise((resolve,reject)=>{const worker=new Worker(new URL('./art-export-worker-v62.js?v=ebada2d6e6f2',import.meta.url),{type:'module'}),timeout=setTimeout(()=>{worker.terminate();reject(Error('저장 시간이 초과되었습니다.'));},90000);const stop=()=>{clearTimeout(timeout);worker.terminate();};worker.onmessage=({data:d})=>{stop();d.error?reject(Error(d.error)):resolve(d.blob);};worker.onerror=()=>{stop();reject(Error('작품 저장을 다시 시도합니다.'));};worker.postMessage({work,width:size,height:size*1.25});});}catch{blob=null;}
+   if(supported)try{blob=await new Promise((resolve,reject)=>{const worker=new Worker(new URL('./art-export-worker-v62.js?v=caf5cc4587a0',import.meta.url),{type:'module'}),timeout=setTimeout(()=>{worker.terminate();reject(Error('저장 시간이 초과되었습니다.'));},90000);const stop=()=>{clearTimeout(timeout);worker.terminate();};worker.onmessage=({data:d})=>{stop();d.error?reject(Error(d.error)):resolve(d.blob);};worker.onerror=()=>{stop();reject(Error('작품 저장을 다시 시도합니다.'));};worker.postMessage({work,width:size,height:size*1.25});});}catch{blob=null;}
    if(!blob){const c=document.createElement('canvas');c.width=size;c.height=size*1.25;try{for(const _ of paintAbstractRows(c.getContext('2d'),work,c.width,c.height))await new Promise(requestAnimationFrame);blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(Error('메모리가 부족합니다. 2048 크기 또는 SVG로 저장해 주세요.')),'image/png'));}finally{c.width=c.height=1;}}
    saveBlob(blob,filename('png'));status.textContent=`${size} × ${size*1.25} PNG · 원본 선과 물감 자국으로 저장`;
    dialog.dataset.exportSize=JSON.stringify([size,size*1.25]);

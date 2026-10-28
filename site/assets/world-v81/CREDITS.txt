@@ -1,0 +1,314 @@
+Posmos Paint Island — world revision 81 (2026-10-24)
+
+TERRAIN CODE
+THREE.Terrain — Isaac Sukin — MIT
+https://github.com/IceCreamYou/THREE.Terrain
+Pinned upstream commit: 6f05b60947971e53024f4fe6bc3b344181656379
+Vendored dist/three.terrain.js; only its Three.js import path changed for Node.
+PerlinDiamond, Smooth, Clamp and createSeededRandom generate the relief field at
+build time. Posmos adds the coastline, mountain placement, path grades, river
+channel, village clearings, shelf, islands and deep basin in editable Blender.
+Full MIT notice: terrain-LICENSE.txt (also scripts/vendor/three-terrain/LICENSE.txt).
+Noise implementation credits: Stefan Gustavson, Peter Eastman, Joseph Gentle.
+
+OCEAN CODE / NORMAL TEXTURE
+Three.js r180 Water.js — Three.js authors — MIT
+https://github.com/mrdoob/three.js/blob/r180/examples/jsm/objects/Water.js
+https://github.com/mrdoob/three.js/blob/r180/examples/textures/waternormals.jpg
+Adaptation: four scrolling normal samples (getNoise), scaled and combined with
+Posmos waves, filtered distant detail, bathymetric colour, shoreline wash and
+existing underwater light. The upstream reflection render target is not used.
+Full MIT notice: water-LICENSE.txt (also site/vendor/water-v81/LICENSE.txt).
+
+EXTRA NATURAL LANDMARKS
+Quaternius Stylized Nature MegaKit Standard — CC0 1.0
+Rock_Medium_1, Rock_Medium_2, Rock_Medium_3 edited into pale headlands and summit
+masses. Source textures replaced with Posmos rock/moss vertex colours. Existing
+CC0 trees/houses are reused as linked meshes; no paid assets or source shaders.
+
+REUSED ASSETS / ATTRIBUTION
+The detailed source credits below remain applicable, including the CC BY 3.0
+MiniPoly coral models. Scenery was regrouped and fitted to the v81 terrain.
+
+Posmos Paint Coast — scenery revision 80 (2026-10-24)
+
+Quaternius — Stylized Nature MegaKit, free Standard edition (68 models)
+https://quaternius.com/packs/stylizednaturemegakit.html
+https://quaternius.itch.io/stylized-nature-megakit
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Used: CommonTree_1, CommonTree_3, CommonTree_5, TwistedTree_1, Pine_2,
+Grass_Common_Short, Fern_1, Flower_3_Group, Bush_Common_Flowers.
+Edits: canopy width, height-based foliage palette, outward leaf normals, 1024-pixel
+texture limit, shared geometry/materials, terrain-fitted root placement. Original
+leaf cutout and painted bark textures retained. No paid Pro/Source files or shaders.
+
+Quaternius — complete Medieval Village / Ultimate Fantasy buildings
+Fantasy House (House_1): https://poly.pizza/m/BH2XHWUNmF
+Fantasy House (House_2): https://poly.pizza/m/dcPho4SUA3
+House (Houses_SecondAge_1_Level2): https://poly.pizza/m/RSwoYSLblu
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Source pack: https://quaternius.com/packs/medievalvillage.html
+Edits in Blender: cream plaster, warm timber, coral/blue/ochre roof tiles; larger
+entrance storeys for Po, compact loft proportions, foundations and yellow-shop
+awning. Source arches, window frames, dormers, beams and tile geometry preserved.
+
+Terrain, paths, bridge, dock, easels, paint traces, pots, brushes, awning and clouds
+were authored for Posmos. The v79 stretched Fantasy Town modules and old tree
+crowns were replaced. Kenney rocks and underwater plants remain.
+Runtime: instanced repeated geometry, material-aware batching, alpha-tested leaves,
+lossless meshopt geometry compression. No distance-based tree shape swaps.
+Editable Blender source: art/world-rebuild-v79/paint-coast-v80.blend
+
+Detailed attribution for reused v78 nature assets follows:
+
+Posmos v78 — imported free nature assets
+
+Kenney — Nature Kit 2.1
+https://kenney.nl/assets/nature-kit
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Changes: selected models, normalized pivots/scales, muted palette baked to vertex colours, removal of coincident reversed leaf faces (double-sided materials), exact-attribute welding, vertex/index cache optimization and meshopt compression.
+
+Coral Reef Set — MiniPoly
+https://poly.pizza/m/74GL45Fvdh
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Original GLB SHA256: 6e88ef745c36a30e62c251c6d4a5f99d072d241cb7ac42263aac81bbaf3687f0
+
+Coral Reef Set3 — MiniPoly
+https://poly.pizza/m/UyswwdHFiL
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original GLB SHA256: 41ea50085ae867a659050e0e7a38e86f7d46f0f6b822e93d8b3d7623fe631497
+
+Coral Reef Set5 — MiniPoly
+https://poly.pizza/m/AKpeJtOxNO
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original GLB SHA256: 4b8447a9bd4b2e86fb9f9196fd353f266e0eeb2d5091d4704ef714a4ce21190e
+
+Coral Reef Set4 — MiniPoly
+https://poly.pizza/m/1mE2eYsGFD
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original GLB SHA256: 9e170441d6c5ec21b86bc58b05282de55662b6a76313296c3db32636aee4c46c
+
+Coral Reef Set2 — MiniPoly
+https://poly.pizza/m/HdrPoAyuCJ
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original GLB SHA256: cf48b4acd7bf5fd98372db03bedc484cde204786059bec02ff3e890c7544574a
+
+Coral Reef Set6 — MiniPoly
+https://poly.pizza/m/hOBkCGKjlo
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original GLB SHA256: 9fe04ac1324ddac6980ff60cf276b0c7bdb6e6764ee04f1637f8f733ea351cf3
+
+MiniPoly changes: extracted individual coral variants, normalized orientation/pivots/scales, gradient textures sampled into slightly muted vertex colours; original emission/PBR maps omitted; exact-attribute welding and meshopt compression.
+Attribution applies to original meshes. No endorsement is implied.
+
+meshoptimizer 1.3.0 — Arseny Kapoulkine, MIT
+https://github.com/zeux/meshoptimizer
+Runtime decoder and full MIT notice: ../../vendor/meshoptimizer/meshopt_decoder.mjs and LICENSE.md
+The build uses vertex cache/fetch reordering and geometry compression; no shape-changing runtime LOD.
+
+
+No paid downloads, purchases, generation credits or runtime API services used.
+
+Quaternius Animated Fish Pack — Fish1 and Manta ray
+Author: Quaternius
+Source: https://quaternius.com/packs/animatedfish.html
+License: CC0 1.0 Universal Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Original OBJ/MTL files preserved in art/ocean-v77/sources/quaternius.
+Converted to indexed, vertex-coloured geometry by scripts/prepare-ocean-assets-v77.py.
+Runtime tail/wing motion and schooling were added by Posmos; these are not the
+original pack's skeletal animation clips. No image textures or runtime API calls.
+
+------------------------------------------------------
+Animated Fish Pack by Quaternius
+Consider supporting me on Patreon, even $1 helps me a lot!
+
+https://www.patreon.com/quaternius
+-------------------------------------------------------
+License:
+CC0 1.0 Universal (CC0 1.0)
+Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+
+NATURE REVISION 83
+KayKit Forest Nature Pack 1.0 FREE — Kay Lousberg — CC0 1.0
+https://kaylousberg.itch.io/kaykit-forest
+Free source trees: Tree_1_A/B/C, Tree_2_A/B/C/D/E, Tree_3_A/B/C, Tree_4_A/B/C.
+Free source rocks: Rock_1_A/C/G/L, Rock_2_A/C/G, Rock_3_A/D/G/L/R (Color1).
+Posmos edits: six custom pigment gradients, vertex-colour baking from atlas UVs,
+smooth surface normals, common scale, rooted placement on the existing terrain.
+Colours intermingle throughout the island without regional palette zones.
+Twelve stone meshes use muted gradients, grounded placement and collision footprints.
+Source geometry shared by repeated trees, with no distance-based shape replacement.
+Only the FREE download was used; EXTRA recolours and SOURCE files were not purchased.
+Full supplied license: kaykit-LICENSE.txt; hashes: art/trees-v82/source-manifest.json.
+Earlier Quaternius tree credits describe the retained original/v80 scenes.
+
+LANDSCAPE DETAIL REVISION 84
+Quaternius — Cloud1, Cloud2, Cloud_2 — CC0 1.0
+https://poly.pizza/m/KdFNOVn1Gf
+https://poly.pizza/m/pjiBiLJwAl
+https://poly.pizza/m/P1cMV8qtN2
+Edits: merged duplicate vertices, subdivided and smoothed cloud silhouettes, cream/blue
+vertex gradients, varied scale and height in one north-west sky corridor.
+
+KayKit Forest Nature Pack 1.0 FREE — Kay Lousberg — CC0 1.0
+Bush_1_B, Bush_3_B, Bush_4_A, Grass_1_A, Grass_1_C, Grass_2_B.
+Kenney Nature Kit 2.1 — CC0 1.0
+flower_yellowC, flower_purpleB, stone_smallFlatA, stone_smallB, pot_large, log_stack.
+Edits: atlas colours baked to vertices, grounded clumps, normalized scale against Po,
+shared geometry. The upper pool/riverbed and soil/path blends are authored edits to
+the existing THREE.Terrain landscape. Water uses the existing Three.js MIT source.
+Source files and hashes: art/detail-v84/source-manifest.json.
+Composition references: A Short Hike (ashorthike.com), Alba (albawildlife.com).
+No game assets or screenshots were extracted from the reference games.
+
+INHABITED EDGES REVISION 85
+Kenney Nature Kit 2.1 — CC0 1.0 — https://kenney.nl/assets/nature-kit
+Additional source meshes: fence_planks.glb, sign.glb.
+Edits: baked worn wood/sage vertex colours, scaled and grounded garden groups.
+Existing CC0 houses: tinted plaster, subtle foundation shading; terrain approach blends.
+Existing Kenney flat stones: edited width/length and grounded at the entrances.
+River surface: downstream wavelets, softened/broken foam and damp-bank vertex colours.
+Wind: Posmos vertex deformation on Three.js MIT, shared colour/depth displacement;
+root anchored, no distance-based geometry substitution, respects reduced motion.
+Sources and hashes: art/detail-v85/source-manifest.json.
+
+
+ORIGINAL FREE VILLAGE REVISION 86
+KayKit Medieval Hexagon Pack FREE - Kay Lousberg - CC0 1.0
+https://kaylousberg.itch.io/kaykit-medieval-hexagon
+https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0
+Source model shapes, normals, UVs and colours retained. Translation, uniform scale, rotation and material/mesh sharing only. No EXTRA or paid SOURCE files used.
+
+art-easel - reyshapes - CC0-1.0
+https://poly.pizza/m/2ZP3o8hyPA
+https://creativecommons.org/publicdomain/zero/1.0/
+Original appearance retained; normalized origin, scaled uniformly, rotated and placed in the scene.
+
+paint-can - Jarlan Perez - CC-BY-3.0
+https://poly.pizza/m/9pyBQ8e4tSy
+https://creativecommons.org/licenses/by/3.0/
+Original appearance retained; normalized origin, scaled uniformly, rotated and placed in the scene.
+
+paint-brush - reyshapes - CC0-1.0
+https://poly.pizza/m/Ha1JYRVRRX
+https://creativecommons.org/publicdomain/zero/1.0/
+Original appearance retained; normalized origin, scaled uniformly, rotated and placed in the scene.
+
+palette - Poly by Google - CC-BY-3.0
+https://poly.pizza/m/9QVrdl0i2c3
+https://creativecommons.org/licenses/by/3.0/
+Original appearance retained; normalized origin, scaled uniformly, rotated and placed in the scene.
+
+watercolor-set - Don Carson - CC-BY-3.0
+https://poly.pizza/m/cAmECzmVE2_
+https://creativecommons.org/licenses/by/3.0/
+Original appearance retained; normalized origin, scaled uniformly, rotated and placed in the scene.
+
+Hashes and per-model sources: art/village-v86/source-manifest.json.
+
+
+PAINT KITBASH REVISION 87
+KayKit CC0 buildings are combined in Blender with paint-can by Jarlan Perez (CC BY 3.0), palette by Poly by Google (CC BY 3.0), and paint-brush by reyshapes (CC0). Authors, source URLs and licenses are listed in revision 86 above.
+Changes: original components reused at new scales and orientations as chimney caps, wall signs and shop decorations. Smooth roof coatings, rounded paint drips and terrain-conforming yard spills newly authored for Posmos. These are modified/composite assemblies, not unmodified source buildings. No paid content.
+Editable source: art/paint-kitbash-v87/posmos-paint-kitbash-v87.blend. Build and source manifest: art/paint-kitbash-v87/source-manifest.json.
+
+
+V88 colour walk scenery (2026-10-24)
+Kenney Watercraft Kit 2.1 https://kenney.nl/assets/watercraft-kit CC0-1.0
+Kenney Pirate Kit 2.1 https://kenney.nl/assets/pirate-kit CC0-1.0
+Kenney Nature Kit 2.1 https://kenney.nl/assets/nature-kit CC0-1.0
+KayKit Medieval Hexagon FREE by Kay Lousberg https://kaylousberg.itch.io/kaykit-medieval-hexagon CC0-1.0
+Source material/atlas colours baked to vertex colours; smooth shading, uniform scale, grounded placement. Edited bottle and pennant tints. Five floating sea props. Reused easel and paint-can retain the credits above. Original Posmos collection UI, state and postcard drawing. No paid models.
+
+
+V89 varied island scenery (2026-10-24)
+Reuses the CC0 Kenney Nature Kit, Pirate Kit, Watercraft Kit and KayKit Medieval Hexagon FREE sources cited above: flowers, mushrooms, vegetables, planters, logs, buckets, sacks, crates, wheelbarrows, houseboat, rowing/sailing/fishing boats and buoys.
+Reuses art-easel by reyshapes (CC0) and paint-can by Jarlan Perez (CC BY 3.0), source URLs and licenses in revision 86 above.
+281 added objects from 43 models across 20 arrangements, including 7 floating sea props. Source colours baked to vertices, smooth normals, uniform scales, terrain grounding and shared render batches. 18 terrain-following paint spills authored for Posmos. No paid content.
+Editable source: art/scenery-v89/posmos-scenery-v89.blend. Detailed model provenance: art/scenery-v89/source-manifest.json.
+
+V90 winter island and Aurora suspension bridge (2026-10-24)
+Golden Gate bridge - Steren Giannini - CC BY 3.0
+https://poly.pizza/m/a648BwpXx-A
+https://creativecommons.org/licenses/by/3.0/
+Changes: removed original diorama sea/land base and sign; rescaled the suspension
+mesh to an 84 m crossing with a wider promenade; coral pylons, champagne cables
+and ivory deck. Added grounded pier extensions, handrails and terrain-linked ramps.
+
+Kenney Holiday Kit 2.0 - Kenney - CC0 1.0
+https://kenney.nl/assets/holiday-kit
+https://creativecommons.org/publicdomain/zero/1.0/
+104 snow pines, three modular log cabins, sleds, snowmen, benches, lanterns and rocks.
+Source colours baked to vertices, scale and grounded placement; cabin modules joined.
+Full original license: kenney-holiday-LICENSE.txt.
+Existing Quaternius CC0 cloud (revision 84 above): enlarged over the winter peaks.
+Winter terrain, frozen pond and one-batch snow shader authored for Posmos.
+Editable source: art/winter-v90/posmos-winter-v90.blend.
+Per-source URLs, changes and hashes: art/winter-v90/source-manifest.json. No paid assets.
+
+Revision 91 — Stone bridge replacement
+Stylized stone bridge — NEXIC
+https://sketchfab.com/3d-models/stylized-stone-bridge-5cdb5204d50f45bf9d9842cd5bffcb8e
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Official downloadable GLB used. Source bridge3 masonry and curved deck reused as three linked arches. Scale, orientation and placement edited for the 84m crossing. Original rock meshes recomposed as four piers with lower vertices extended into the seafloor. Original base-colour UVs and normal maps retained; texture resolution reduced and unused PBR channels omitted. Existing approach ramps recoloured and lanterns fitted to the curved surface. The curved visible deck is also the walking surface. The v90 Golden Gate assembly is removed from this runtime; its credit remains above for the archived v90 source.
+Editable scene: art/stone-bridge-v91/posmos-stone-bridge-v91.blend
+Source provenance and hash: art/stone-bridge-v91/source-manifest.json
+No paid assets.
+
+
+Revision 92 - Snow village and towering winter cloud (2026-10-24)
+Kenney Holiday Kit 2.0 - Kenney - CC0 1.0
+https://kenney.nl/assets/holiday-kit
+KayKit Medieval Hexagon FREE - Kay Lousberg - CC0 1.0
+https://kaylousberg.itch.io/kaykit-medieval-hexagon
+License: https://creativecommons.org/publicdomain/zero/1.0/
+45 source model variants actually placed in the v92 pass: 12 additional buildings, 97 snow trees, train and rails, benches, snowmen, sleds, reindeer, gifts, market/workshop supplies and rocks. Existing three modular cabins retained. Original source colours baked to shared vertex colours; uniform scales, rotations and grounded placements edited. Snow coatings extracted from upward building roof facets. Terrain reshaped and graded with headlands, a cove, two ridges, an irregular frozen lake and linked paths.
+Existing Quaternius CC0 clouds (revision 84): source geometry recomposed into seven large billows, voxel union and smoothing in Blender. The snowfall shader and terrain/roof landing sampling are original Posmos code, one draw call for 1900 desktop or 700 mobile-profile flakes. Source models are free; no paid generation or assets used.
+Editable scene: art/winter-v92/posmos-winter-v92.blend
+Provenance: art/winter-v92/source-manifest.json and qa/placements.json
+NEXIC CC BY 4.0 stone bridge and earlier credited assets remain in use.
+
+
+Revision 93 - Single cumulus cloud island
+Original Posmos geometry authored in Blender from 17 overlapping rounded volumes, voxel union, smoothing and mesh reduction. Replaces the winter crown only; the archived v92 crown used Quaternius CC0 components. Other Quaternius CC0 clouds remain unchanged and credited above. No new third-party assets, service fees or paid generation.
+Editable scene: art/cloud-island-v93/posmos-cloud-island-v93.blend
+Builder: scripts/build-cloud-island-v93.py
+
+
+Revision 94 - Single long stone arch (2026-10-25)
+Stylized stone bridge - NEXIC - CC BY 4.0
+https://sketchfab.com/3d-models/stylized-stone-bridge-5cdb5204d50f45bf9d9842cd5bffcb8e
+https://creativecommons.org/licenses/by/4.0/
+One imported source arch is stretched longitudinally from 28 m to the full 84 m crossing. Its centre curve is raised smoothly by up to 7.8 m while the walkway width and local curb height/thickness remain unchanged. The duplicated arches and two central piers are removed. Two shore abutments remain grounded; lamps follow the new visible deck. Original UVs, base colour and normal textures retained. The source deck remains the navigation surface. No paid assets.
+Editable scene: art/long-bridge-v94/posmos-long-bridge-v94.blend
+Provenance and changes: art/long-bridge-v94/source-manifest.json
+
+
+Revision 95 - Grand single stone arch (2026-10-25)
+Stylized stone bridge - NEXIC - CC BY 4.0
+https://sketchfab.com/3d-models/stylized-stone-bridge-5cdb5204d50f45bf9d9842cd5bffcb8e
+https://creativecommons.org/licenses/by/4.0/
+The accepted 84 m arch profile is retained. Central clear width increased to 9.44 m, tapering to 5.64 m at the existing shores; overall width 12.2 m. Continuous structural depth 3.2 m. Nine authored source stone components recomposed into 256 short blocks, staggered in two arch courses and one parapet course on each side. Per-stone atlas UV and original normal textures retained. Deck atlas patch remapped across small repeating panels to avoid stretched stones. Lamps moved to the wider, higher parapets. Grounded shore supports and all unrelated scene geometry unchanged. No paid assets.
+Editable scene: art/grand-bridge-v95/posmos-grand-bridge-v95.blend
+Provenance: art/grand-bridge-v95/source-manifest.json
+
+
+Revision 96 - Po village monument (2026-10-25)
+Reuses the existing Posmos sculpture at assets/polish-v18/royal-po-statue-web.glb.
+Original source preserved. The crown, cape, raised hand and asymmetric face are retained.
+Static derivative simplified from 100,000 to 50,000 triangles. Smooth normals, warm golden vertex colours with subtle cavity tint, and sculpture-specific smooth lighting. World shadows are cast onto the ground; coarse self-shadow reception is disabled only for this sculpture.
+Placed at (-3, 4.68, 12), 8 m high. Feet directly meet a locally levelled terrain patch with no pedestal. Maximum terrain height adjustment 0.073 m, blended within a 5.5 m radius. One bounded collision obstacle and a dedicated Po view are added. No new paid assets or generation requests.
+Editable scene: art/po-monument-v96/posmos-po-monument-v96.blend
+Provenance: art/po-monument-v96/source-manifest.json
+
+Revision 97 - Double-scale metal Po (2026-10-25)
+Existing v96 royal sculpture uniformly enlarged 2x to 16 m; same 50,000 triangles and original face. Polished gold PBR material, metallic 1, roughness 0.23. Runtime uses Three.js (MIT, existing vendored library) and a filtered local cubemap of the island. No external HDRI, paid assets, textures or generation service.
+At (-3, 4.71, 17), two local footprint patches adjusted by at most 0.084 m. No pedestal. One rest position relocated to avoid the larger sculpture. Other object geometry unchanged.
+Editable scene: art/po-metal-v97/posmos-po-metal-v97.blend
+Provenance: art/po-metal-v97/source-manifest.json
+
+V98: Existing Po sculpture remeshed and seam-smoothed in Blender. Original asymmetric face and pose retained. Warm polished gold PBR material; 16m height. Retired Colour Walk, preserving pigment bottles as ordinary scenery. Current world is the sole main entry. No paid assets or generation services.

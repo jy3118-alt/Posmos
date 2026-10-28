@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {gameObject} from './game-material.js?v=ebada2d6e6f2';
-import {bayPoint,swimmingState} from './water-space.js?v=ebada2d6e6f2';
+import {gameObject} from './game-material.js?v=caf5cc4587a0';
+import {bayPoint,swimmingState} from './water-space.js?v=caf5cc4587a0';
 
 // Six real skins replace six crowd slots; they never add to the Po population.
 // Geometry, material and clips are shared, with small independent bone palettes.
