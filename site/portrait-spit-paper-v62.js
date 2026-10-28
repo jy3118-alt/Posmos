@@ -1,8 +1,8 @@
 import * as T from 'three';
-import * as visionArt from './portrait-system-v62.js?v=d644c435c5eb';
-import {ABSTRACT_PRESETS,abstractStyleForWork,abstractPreset,buildAbstractWork,paintAbstractRows} from './portrait-abstract-v60.js?v=d644c435c5eb';
-import {styleForWork,stylePortraitRows,PORTRAIT_STYLE_PRESETS} from './portrait-style-rules.js?v=d644c435c5eb';
-import {IMPASTO_PRESETS,impastoStyleForWork,buildImpastoWork,paintImpastoRows} from './portrait-impasto-rules.js?v=d644c435c5eb';
+import * as visionArt from './portrait-system-v62.js?v=4baf9416a5b8';
+import {ABSTRACT_PRESETS,abstractStyleForWork,abstractPreset,buildAbstractWork,paintAbstractRows} from './portrait-abstract-v60.js?v=4baf9416a5b8';
+import {styleForWork,stylePortraitRows,PORTRAIT_STYLE_PRESETS} from './portrait-style-rules.js?v=4baf9416a5b8';
+import {IMPASTO_PRESETS,impastoStyleForWork,buildImpastoWork,paintImpastoRows} from './portrait-impasto-rules.js?v=4baf9416a5b8';
 
 // One capture target, one live canvas texture, and one worker shared by all 100
 // style rules. A finished work is rendered once, then revealed by paint impacts.
@@ -21,7 +21,7 @@ export function createSpitPortraitPaper(renderer,scene,actor,{width:w,height:h,c
  let pendingRaw=null;const callbacks=new Map();
  const label=document.createElement('span');label.className='art-style';if(showLabel)document.querySelector('.art-card')?.append(label);
  function styleLabel(){label.textContent=`${String(style.id+1).padStart(3,'0')} / ${style.name}`;}
- try{const url=vision?new URL('./portrait-vision-worker-v62.js?v=d644c435c5eb',import.meta.url):abstract?new URL('./portrait-abstract-worker-v60.js?v=d644c435c5eb',import.meta.url):impasto?new URL('./portrait-impasto-worker.js?v=d644c435c5eb',import.meta.url):new URL('./portrait-style-worker.js?v=d644c435c5eb',import.meta.url);worker=new Worker(url,{type:'module'});}catch{worker=null;}
+ try{const url=vision?new URL('./portrait-vision-worker-v62.js?v=4baf9416a5b8',import.meta.url):abstract?new URL('./portrait-abstract-worker-v60.js?v=4baf9416a5b8',import.meta.url):impasto?new URL('./portrait-impasto-worker.js?v=4baf9416a5b8',import.meta.url):new URL('./portrait-style-worker.js?v=4baf9416a5b8',import.meta.url);worker=new Worker(url,{type:'module'});}catch{worker=null;}
  if(worker){worker.onmessage=({data:d})=>{const done=callbacks.get(d.job);callbacks.delete(d.job);if(d.job!==job)return;if(d.error){if(impasto){worker.terminate();worker=null;}fallback(d.job,pendingRaw).catch(e=>{lastError=String(e);});return;}markCount=d.marks||0;guideCells=d.guideCells||0;done?.(new Uint8ClampedArray(d.pixels),d.work||null);};worker.onerror=()=>{worker.terminate();worker=null;if(pendingRaw)fallback(job,pendingRaw).catch(e=>{lastError=String(e);});};}
  function compose(){
   ctx.fillStyle=style.paper;ctx.fillRect(0,0,w,h);

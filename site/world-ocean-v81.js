@@ -1,8 +1,8 @@
 import * as T from 'three';
-import {yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
+import {yieldTask} from './runtime-budget-v69.js?v=4baf9416a5b8';
 import {HDRLoader} from 'three/addons/loaders/HDRLoader.js';
-import {makeLiquidWater} from './world-water-v81.js?v=d644c435c5eb';
-import {facetedSkyFragment} from './paint-clouds-v74.js?v=d644c435c5eb';
+import {makeLiquidWater} from './world-water-v81.js?v=4baf9416a5b8';
+import {facetedSkyFragment} from './paint-clouds-v74.js?v=4baf9416a5b8';
 
 // Painted panorama and shared liquid surfaces use the existing CC0 1K HDRI.
 // Shared sunlight and time keep the background coherent through a full orbit.

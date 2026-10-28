@@ -1,18 +1,18 @@
-import {createCharacterArtRegistry} from './character-art.js?v=d644c435c5eb';
-import {makeDistrictCrowd} from './district-crowd-v103.js?v=d644c435c5eb';
-import {loadPoVariants,loadViewDetails} from './resident-loading-v69.js?v=d644c435c5eb';
-import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
+import {createCharacterArtRegistry} from './character-art.js?v=4baf9416a5b8';
+import {makeDistrictCrowd} from './district-crowd-v103.js?v=4baf9416a5b8';
+import {loadPoVariants,loadViewDetails} from './resident-loading-v69.js?v=4baf9416a5b8';
+import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=4baf9416a5b8';
 import * as T from 'three';
-import {localResumeRoute} from './land-motion-v100.js?v=d644c435c5eb';
+import {localResumeRoute} from './land-motion-v100.js?v=4baf9416a5b8';
 import {clone as cloneSkin} from 'three/addons/utils/SkeletonUtils.js';
-import {createFollower,groundPatch} from './friend-locomotion-v100.js?v=d644c435c5eb';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=d644c435c5eb';
-import {makeEncounters} from './encounters-v100.js?v=d644c435c5eb';
+import {createFollower,groundPatch} from './friend-locomotion-v100.js?v=4baf9416a5b8';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=4baf9416a5b8';
+import {makeEncounters} from './encounters-v100.js?v=4baf9416a5b8';
 
 // A bounded cast for the authored district. Original approved skins and clips;
 // shared model files, no per-resident download or replacement/teleport cycle.
 export async function makeDistrictResidents(scene,renderer,camera,city,plan,config,load,cel){
- const [base,moa,dress,acting,baseMeta,variants,details]=await Promise.all([load(config.character.file),load(config.guestCharacter.file),load(config.dressCharacter.file),checkedJSON('./assets/encounters-v52/models/acting.json?v=09f9f66b2ca6'),checkedJSON('./assets/po-web-v103/models/base-bones.json?v=56c97698bbf3'),loadPoVariants(config.search.variants,load),loadViewDetails('./assets/po-web-v103/models/lods.json?v=d102ea07ea5a')]);
+ const [base,moa,dress,acting,baseMeta,variants,details]=await Promise.all([load(config.character.file),load(config.guestCharacter.file),load(config.dressCharacter.file),checkedJSON('./assets/encounters-v52/models/acting.json?v=09f9f66b2ca6'),checkedJSON('./assets/po-web-v103/models/base-bones.json?v=7e373e3fa6b2'),loadPoVariants(config.search.variants,load),loadViewDetails('./assets/po-web-v103/models/lods.json?v=d3bca1cc8e8c')]);
  const baseFrames=Float32Array.from(new Uint16Array(await fetchResource(baseMeta.texture,'arrayBuffer')),T.DataUtils.fromHalfFloat);
  const library=new Map([['base',{gltf:base,config:config.character,meta:baseMeta,frames:baseFrames}],['moa',{gltf:moa,config:config.guestCharacter}],['dress',{gltf:dress,config:config.dressCharacter}],...variants.map(v=>[v.key,{...v,config:{height:1.65,speedMultiplier:1.5,motionNativeSpeeds:Object.fromEntries(Object.entries(v.meta.clips).map(([n,c])=>[n,c.nativeSpeed])),motionFloorFrames:Object.fromEntries(Object.entries(v.meta.clips).map(([n,c])=>[n,c.floors]))}}])]);
  const artRegistry=createCharacterArtRegistry(library);

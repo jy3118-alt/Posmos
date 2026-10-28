@@ -1,13 +1,13 @@
-import {createCharacterArtRegistry} from './character-art.js?v=d644c435c5eb';
-import {makeDistrictCrowd} from './district-crowd-v100.js?v=d644c435c5eb';
-import {loadPoVariants,loadViewDetails} from './resident-loading-v69.js?v=d644c435c5eb';
-import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
+import {createCharacterArtRegistry} from './character-art.js?v=4baf9416a5b8';
+import {makeDistrictCrowd} from './district-crowd-v100.js?v=4baf9416a5b8';
+import {loadPoVariants,loadViewDetails} from './resident-loading-v69.js?v=4baf9416a5b8';
+import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=4baf9416a5b8';
 import * as T from 'three';
-import {localResumeRoute} from './land-motion-v100.js?v=d644c435c5eb';
+import {localResumeRoute} from './land-motion-v100.js?v=4baf9416a5b8';
 import {clone as cloneSkin} from 'three/addons/utils/SkeletonUtils.js';
-import {createFollower,groundPatch} from './friend-locomotion-v100.js?v=d644c435c5eb';
-import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=d644c435c5eb';
-import {makeEncounters} from './encounters-v100.js?v=d644c435c5eb';
+import {createFollower,groundPatch} from './friend-locomotion-v100.js?v=4baf9416a5b8';
+import {createFriendTraffic,villageTrafficSafety} from './friend-traffic.js?v=4baf9416a5b8';
+import {makeEncounters} from './encounters-v100.js?v=4baf9416a5b8';
 
 // A bounded cast for the authored district. Original approved skins and clips;
 // shared model files, no per-resident download or replacement/teleport cycle.

@@ -1,11 +1,11 @@
 import * as T from 'three';
-import {yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
-import {makeRoute,sampleRoute,makeRouteState,advanceRoute} from './route-motion-v67.js?v=d644c435c5eb';
-import {createFollower,groundPatch} from './friend-locomotion.js?v=d644c435c5eb';
-import {createPoVariantCrowd} from './po-variants.js?v=d644c435c5eb';
-import {createWaterResidents} from './water-residents.js?v=d644c435c5eb';
-import {makeViewDetail} from './view-detail-v67.js?v=d644c435c5eb';
-import {createStreamResidents} from './stream-residents-v65.js?v=d644c435c5eb';
+import {yieldTask} from './runtime-budget-v69.js?v=4baf9416a5b8';
+import {makeRoute,sampleRoute,makeRouteState,advanceRoute} from './route-motion-v67.js?v=4baf9416a5b8';
+import {createFollower,groundPatch} from './friend-locomotion.js?v=4baf9416a5b8';
+import {createPoVariantCrowd} from './po-variants.js?v=4baf9416a5b8';
+import {createWaterResidents} from './water-residents.js?v=4baf9416a5b8';
+import {makeViewDetail} from './view-detail-v67.js?v=4baf9416a5b8';
+import {createStreamResidents} from './stream-residents-v65.js?v=4baf9416a5b8';
 
 // Existing Po population, compact bone animation batches, and six real swimmers.
 // Twelve close residents are owned by the district actor controller separately.

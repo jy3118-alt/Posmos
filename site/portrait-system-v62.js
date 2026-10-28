@@ -1,7 +1,7 @@
-import {ABSTRACT_PRESETS,abstractPreset as presetV61,artLayers,paintAbstractRows,renderAbstract,exportArtworkSVG as svgV61} from './portrait-vision-v61.js?v=d644c435c5eb';
-import {compilePaintGraph} from './paint-graph-runtime-v62.js?v=d644c435c5eb';
-import {PAINT_OPERATORS} from './paint-operators-v62.js?v=d644c435c5eb';
-import {PO_PAINT_GRAPH} from './paint-graph-po-v62.js?v=d644c435c5eb';
+import {ABSTRACT_PRESETS,abstractPreset as presetV61,artLayers,paintAbstractRows,renderAbstract,exportArtworkSVG as svgV61} from './portrait-vision-v61.js?v=4baf9416a5b8';
+import {compilePaintGraph} from './paint-graph-runtime-v62.js?v=4baf9416a5b8';
+import {PAINT_OPERATORS} from './paint-operators-v62.js?v=4baf9416a5b8';
+import {PO_PAINT_GRAPH} from './paint-graph-po-v62.js?v=4baf9416a5b8';
 export {ABSTRACT_PRESETS,artLayers,paintAbstractRows,renderAbstract};
 export function abstractPreset(id,art){return {...presetV61(id,art),graph:PO_PAINT_GRAPH};}
 export function abstractStyleForWork(seed,serial,fixed,art){return abstractPreset(Number.isInteger(fixed)?fixed:((seed%100)+serial*37)%100,art);}

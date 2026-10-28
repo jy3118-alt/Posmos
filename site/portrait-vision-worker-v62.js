@@ -1,4 +1,4 @@
-import {abstractPreset,buildAbstractWork,renderAbstract} from './portrait-system-v62.js?v=d644c435c5eb';
+import {abstractPreset,buildAbstractWork,renderAbstract} from './portrait-system-v62.js?v=4baf9416a5b8';
 let canvas=null,ctx=null;
 self.onmessage=({data:d})=>{try{
  if(!canvas){canvas=new OffscreenCanvas(d.width,d.height);ctx=canvas.getContext('2d',{willReadFrequently:true});}

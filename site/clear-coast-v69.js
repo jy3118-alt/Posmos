@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
+import {yieldTask} from './runtime-budget-v69.js?v=4baf9416a5b8';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {makeLiquidWater} from './liquid-water-v67.js?v=d644c435c5eb';
+import {makeLiquidWater} from './liquid-water-v67.js?v=4baf9416a5b8';
 
 // Painted panorama and shared liquid surfaces use the existing CC0 1K HDRI.
 // Shared sunlight and time keep the background coherent through a full orbit.

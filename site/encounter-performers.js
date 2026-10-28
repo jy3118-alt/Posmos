@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {characterMaterial} from './game-material.js?v=d644c435c5eb';
+import {characterMaterial} from './game-material.js?v=4baf9416a5b8';
 
 // A small reusable pool of real accepted skins. Only the selected two mixers
 // run; their ordinary VAT/real residents are hidden for exactly the same time.

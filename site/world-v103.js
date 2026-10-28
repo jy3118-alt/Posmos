@@ -1,24 +1,24 @@
-import {makeMonumentReflections} from './world-monument-v97.js?v=d644c435c5eb';
-import {makeWinterWeather} from './world-winter-v92.js?v=d644c435c5eb';
-import {makeIslandWind} from './world-wind-v85.js?v=d644c435c5eb';
-import {oceanLighting} from './ocean-light-v77.js?v=d644c435c5eb';
-import {makeCoastFish} from './world-fish-v81.js?v=d644c435c5eb';
+import {makeMonumentReflections} from './world-monument-v97.js?v=4baf9416a5b8';
+import {makeWinterWeather} from './world-winter-v92.js?v=4baf9416a5b8';
+import {makeIslandWind} from './world-wind-v85.js?v=4baf9416a5b8';
+import {oceanLighting} from './ocean-light-v77.js?v=4baf9416a5b8';
+import {makeCoastFish} from './world-fish-v81.js?v=4baf9416a5b8';
 import * as T from 'three';
-import {MeshoptDecoder} from './vendor/meshoptimizer/meshopt_decoder.mjs?v=d644c435c5eb';
+import {MeshoptDecoder} from './vendor/meshoptimizer/meshopt_decoder.mjs?v=4baf9416a5b8';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {chooseBudget,queuedLoader,checkedJSON,yieldTask,recoveryState,installRecovery,shareModelTextures,prepareTextures,loadModel} from './runtime-budget-v69.js?v=d644c435c5eb';
-import {triangleSurface} from './world-surface-v81.js?v=d644c435c5eb';
-import {makeDistrictResidents} from './district-residents-v103.js?v=d644c435c5eb';
-import {makeDistrictGallery} from './district-gallery-v69.js?v=d644c435c5eb';
-import {makeDistrictCycle} from './district-cycle-v66.js?v=d644c435c5eb';
-import {makeClearCoast} from './world-ocean-v81.js?v=d644c435c5eb';
-import {makeLiquidWater} from './world-water-v81.js?v=d644c435c5eb';
-import {makePoExplorer} from './ocean-po-v100.js?v=d644c435c5eb';
-import {makeLandPlayer} from './land-player-v104.js?v=d644c435c5eb';
-import {prepareWorldDepth} from './depth-stability-v67.js?v=d644c435c5eb';
-import {sampleCoastRiver} from './coast-surface-v79.js?v=d644c435c5eb';
+import {chooseBudget,queuedLoader,checkedJSON,yieldTask,recoveryState,installRecovery,shareModelTextures,prepareTextures,loadModel} from './runtime-budget-v69.js?v=4baf9416a5b8';
+import {triangleSurface} from './world-surface-v81.js?v=4baf9416a5b8';
+import {makeDistrictResidents} from './district-residents-v103.js?v=4baf9416a5b8';
+import {makeDistrictGallery} from './district-gallery-v69.js?v=4baf9416a5b8';
+import {makeDistrictCycle} from './district-cycle-v66.js?v=4baf9416a5b8';
+import {makeClearCoast} from './world-ocean-v81.js?v=4baf9416a5b8';
+import {makeLiquidWater} from './world-water-v81.js?v=4baf9416a5b8';
+import {makePoExplorer} from './ocean-po-v100.js?v=4baf9416a5b8';
+import {makeLandPlayer} from './land-player-v104.js?v=4baf9416a5b8';
+import {prepareWorldDepth} from './depth-stability-v67.js?v=4baf9416a5b8';
+import {sampleCoastRiver} from './coast-surface-v79.js?v=4baf9416a5b8';
 try{localStorage.removeItem('posmos.colour-walk.v1');}catch{}
 const query=new URLSearchParams(location.search),canvas=document.querySelector('#district'),qualityLight={value:.72};
 const lighting={lit:{value:new T.Color('#fff8e8')},shadow:{value:new T.Color('#85839e')}};
@@ -45,7 +45,7 @@ function cel(source,{skin=false,tree=false}={}){
 }
 async function main(){
  loading(.03);canvas.dataset.phase='environment';canvas.dataset.budget=JSON.stringify(budget);
- const [plan,config,world]=await Promise.all([checkedJSON('./assets/world-v81/scene.json?v=0b19fc1254e0'),checkedJSON('./assets/po-web-v103/models/scene.json?v=b31372a1fb0a'),load('./assets/world-v81/world.glb?v=de8d9785aac7')]);
+ const [plan,config,world]=await Promise.all([checkedJSON('./assets/world-v81/scene.json?v=0b19fc1254e0'),checkedJSON('./assets/po-web-v103/models/scene.json?v=b00f085e4b1f'),load('./assets/world-v81/world.glb?v=de8d9785aac7')]);
  const scene=new T.Scene();scene.background=new T.Color('#b7e8f8');scene.fog=new T.Fog('#b7e8f8',900,5000);
  const renderer=new T.WebGLRenderer({canvas,antialias:budget.antialias,powerPreference:'high-performance',logarithmicDepthBuffer:true});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.LinearToneMapping;renderer.toneMappingExposure=1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  const camera=new T.PerspectiveCamera(42,1,.15,12000),controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=5;controls.maxDistance=innerWidth/innerHeight<.8?1100:720;controls.maxPolarAngle=Math.PI*.48;
@@ -129,7 +129,7 @@ async function main(){
  });
  function resize(){const portrait=innerWidth/innerHeight<.8,changed=portrait!==portraitMode;portraitMode=portrait;controls.maxDistance=innerWidth/innerHeight<.8?1100:720;const dpr=Math.min(devicePixelRatio,budget.dpr),scale=Math.min(1,Math.sqrt(budget.pixelLimit/(innerWidth*innerHeight*dpr*dpr)));renderer.setSize(Math.round(innerWidth*dpr*scale),Math.round(innerHeight*dpr*scale),false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();if(changed&&currentView&&!explore.active&&!land?.active&&!followed)view(currentView);}addEventListener('resize',resize);resize();view(query.get('view')||'overview');
  const monumentReflections=makeMonumentReflections({scene,renderer,meshes:metalMonuments,position:plan.monuments?.[0]?.position||[0,0,0],mobile:budget.mobile,canvas});
- loading(.86);canvas.dataset.phase='shaders';canvas.dataset.depth=JSON.stringify(prepareWorldDepth(scene));await prepareTextures(renderer,scene);monumentReflections.capture(coast.waterContext.night.value,cycle.diagnostics().sunset);await renderer.compileAsync(scene,camera);await residents.warmup();await explore.warmup(renderer);loading(1);document.querySelector('#loading').remove();canvas.dataset.phase='ready';canvas.dataset.ready='true';canvas.dataset.version='81';canvas.dataset.release='103';canvas.dataset.polishedModels=JSON.stringify(config.polishedModels);land.select(actors.find(a=>a.id==='district:0'));canvas.dataset.environment=JSON.stringify({trees:plan.treeCount,corals:plan.corals,houses:plan.buildings.length,drawGroups:batches.size+3+(paintGeos.length?1:0)+floating.length,artRevision:plan.artRevision||79,texturedMaterials:texturedMaterials.size,glb:'world.glb',effects:false,sharedTerrain:true,clouds:plan.clouds||null,upperPool:plan.upperPool||null,detailCounts:plan.detailCounts||null,finish:plan.finish||null,villageAssets:plan.villageAssets||null,paintKitbash:plan.paintKitbash||null,playgroundAssets:plan.playgroundAssets||null,sceneryExpansion:plan.sceneryExpansion||null,monuments:plan.monuments||[],winterIsland:plan.winterIsland?{...plan.winterIsland,bridge:{...plan.winterIsland.bridge,deckSamples:undefined},snowParticles:winterWeather.count}:null,wind:wind.diagnostics()});
+ loading(.86);canvas.dataset.phase='shaders';canvas.dataset.depth=JSON.stringify(prepareWorldDepth(scene));await prepareTextures(renderer,scene);monumentReflections.capture(coast.waterContext.night.value,cycle.diagnostics().sunset);await renderer.compileAsync(scene,camera);await residents.warmup();await explore.warmup(renderer);loading(1);document.querySelector('#loading').remove();canvas.dataset.phase='ready';canvas.dataset.ready='true';canvas.dataset.version='81';canvas.dataset.release='106';canvas.dataset.polishedModels=JSON.stringify(config.polishedModels);land.select(actors.find(a=>a.id==='district:0'));canvas.dataset.environment=JSON.stringify({trees:plan.treeCount,corals:plan.corals,houses:plan.buildings.length,drawGroups:batches.size+3+(paintGeos.length?1:0)+floating.length,artRevision:plan.artRevision||79,texturedMaterials:texturedMaterials.size,glb:'world.glb',effects:false,sharedTerrain:true,clouds:plan.clouds||null,upperPool:plan.upperPool||null,detailCounts:plan.detailCounts||null,finish:plan.finish||null,villageAssets:plan.villageAssets||null,paintKitbash:plan.paintKitbash||null,playgroundAssets:plan.playgroundAssets||null,sceneryExpansion:plan.sceneryExpansion||null,monuments:plan.monuments||[],winterIsland:plan.winterIsland?{...plan.winterIsland,bridge:{...plan.winterIsland.bridge,deckSamples:undefined},snowParticles:winterWeather.count}:null,wind:wind.diagnostics()});
  let last=performance.now(),clock=0,lastDiagnostics=0,lastShadow=0,displayedWorks=0;const frameTimes=[];
  addEventListener('visibilitychange',()=>{last=performance.now();});
  function animate(now){requestAnimationFrame(animate);const ms=now-last,dt=Math.min(.05,ms/1000);last=now;if(document.hidden||gallery.open||recovery.lost)return;clock+=dt;
