@@ -1,4 +1,4 @@
-import {ABSTRACT_PRESETS,abstractPreset as basePreset,buildAbstractWork as baseWork} from './portrait-abstract-v60.js?v=4baf9416a5b8';
+import {ABSTRACT_PRESETS,abstractPreset as basePreset,buildAbstractWork as baseWork} from './portrait-abstract-v60.js?v=5bc4fcffc216';
 export {ABSTRACT_PRESETS};
 // Po's invented optics, not a simulation of biological chameleon vision.
 // Two vertically displaced eyes see divergent directions with unequal scale.

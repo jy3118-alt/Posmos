@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {cloudShape} from './cloud-shape-v74.js?v=4baf9416a5b8';
+import {cloudShape} from './cloud-shape-v74.js?v=5bc4fcffc216';
 
 export const CLOUD_LAYOUT=[
  // One westerly drift, separated into loose clusters. The eastern sea and

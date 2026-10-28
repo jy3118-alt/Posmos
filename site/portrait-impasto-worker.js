@@ -1,4 +1,4 @@
-import {IMPASTO_PRESETS,buildImpastoWork,renderImpasto} from './portrait-impasto-rules.js?v=4baf9416a5b8';
+import {IMPASTO_PRESETS,buildImpastoWork,renderImpasto} from './portrait-impasto-rules.js?v=5bc4fcffc216';
 let canvas=null,ctx=null;
 self.onmessage=({data:d})=>{
  try{

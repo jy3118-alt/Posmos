@@ -1,6 +1,6 @@
 import * as T from 'three';
-import {chooseDistantResident,eligibleResident,landCameraPoint} from './land-motion-v100.js?v=4baf9416a5b8';
-import {planLandFlight,sampleLandFlight} from './land-camera-flight-v104.js?v=4baf9416a5b8';
+import {chooseDistantResident,eligibleResident,landCameraPoint} from './land-motion-v100.js?v=5bc4fcffc216';
+import {planLandFlight,sampleLandFlight} from './land-camera-flight-v104.js?v=5bc4fcffc216';
 
 // Control an existing resident in place. No extra model, mixer or crowd instance.
 export function makeLandPlayer({camera,controls,canvas,actors,residents,height,buildings,isDiving,leaveWater,onSelect}){

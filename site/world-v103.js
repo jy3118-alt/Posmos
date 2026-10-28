@@ -1,31 +1,32 @@
-import {makeMonumentReflections} from './world-monument-v97.js?v=4baf9416a5b8';
-import {makeWinterWeather} from './world-winter-v92.js?v=4baf9416a5b8';
-import {makeIslandWind} from './world-wind-v85.js?v=4baf9416a5b8';
-import {oceanLighting} from './ocean-light-v77.js?v=4baf9416a5b8';
-import {makeCoastFish} from './world-fish-v81.js?v=4baf9416a5b8';
+import {loadingScreen} from './loading-screen-v107.js?v=5bc4fcffc216';
+import {makeMonumentReflections} from './world-monument-v97.js?v=5bc4fcffc216';
+import {makeWinterWeather} from './world-winter-v92.js?v=5bc4fcffc216';
+import {makeIslandWind} from './world-wind-v85.js?v=5bc4fcffc216';
+import {oceanLighting} from './ocean-light-v77.js?v=5bc4fcffc216';
+import {makeCoastFish} from './world-fish-v81.js?v=5bc4fcffc216';
 import * as T from 'three';
-import {MeshoptDecoder} from './vendor/meshoptimizer/meshopt_decoder.mjs?v=4baf9416a5b8';
+import {MeshoptDecoder} from './vendor/meshoptimizer/meshopt_decoder.mjs?v=5bc4fcffc216';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {chooseBudget,queuedLoader,checkedJSON,yieldTask,recoveryState,installRecovery,shareModelTextures,prepareTextures,loadModel} from './runtime-budget-v69.js?v=4baf9416a5b8';
-import {triangleSurface} from './world-surface-v81.js?v=4baf9416a5b8';
-import {makeDistrictResidents} from './district-residents-v103.js?v=4baf9416a5b8';
-import {makeDistrictGallery} from './district-gallery-v69.js?v=4baf9416a5b8';
-import {makeDistrictCycle} from './district-cycle-v66.js?v=4baf9416a5b8';
-import {makeClearCoast} from './world-ocean-v81.js?v=4baf9416a5b8';
-import {makeLiquidWater} from './world-water-v81.js?v=4baf9416a5b8';
-import {makePoExplorer} from './ocean-po-v100.js?v=4baf9416a5b8';
-import {makeLandPlayer} from './land-player-v104.js?v=4baf9416a5b8';
-import {prepareWorldDepth} from './depth-stability-v67.js?v=4baf9416a5b8';
-import {sampleCoastRiver} from './coast-surface-v79.js?v=4baf9416a5b8';
+import {chooseBudget,queuedLoader,checkedJSON,yieldTask,recoveryState,installRecovery,shareModelTextures,prepareTextures,loadModel} from './runtime-budget-v69.js?v=5bc4fcffc216';
+import {triangleSurface} from './world-surface-v81.js?v=5bc4fcffc216';
+import {makeDistrictResidents} from './district-residents-v103.js?v=5bc4fcffc216';
+import {makeDistrictGallery} from './district-gallery-v69.js?v=5bc4fcffc216';
+import {makeDistrictCycle} from './district-cycle-v66.js?v=5bc4fcffc216';
+import {makeClearCoast} from './world-ocean-v81.js?v=5bc4fcffc216';
+import {makeLiquidWater} from './world-water-v81.js?v=5bc4fcffc216';
+import {makePoExplorer} from './ocean-po-v100.js?v=5bc4fcffc216';
+import {makeLandPlayer} from './land-player-v104.js?v=5bc4fcffc216';
+import {prepareWorldDepth} from './depth-stability-v67.js?v=5bc4fcffc216';
+import {sampleCoastRiver} from './coast-surface-v79.js?v=5bc4fcffc216';
 try{localStorage.removeItem('posmos.colour-walk.v1');}catch{}
 const query=new URLSearchParams(location.search),canvas=document.querySelector('#district'),qualityLight={value:.72};
 const lighting={lit:{value:new T.Color('#fff8e8')},shadow:{value:new T.Color('#85839e')}};
 const budget=chooseBudget({search:location.search,coarse:matchMedia('(pointer:coarse)').matches,touch:navigator.maxTouchPoints,memory:navigator.deviceMemory,mobileUA:/Android|iPhone|iPad|iPod/.test(navigator.userAgent),recovery:recoveryState()}),recovery=installRecovery(canvas),loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder),texturePool=new Map();
 const mobileAssets=budget.mobile?checkedJSON('./assets/mobile-v69/manifest.json?v=9fb974229341').then(m=>new Map(Object.entries(m.assets).map(([k,v])=>[k.split('?')[0],v]))):Promise.resolve(new Map());
 const load=queuedLoader(async file=>{const paths=await mobileAssets,g=await loadModel(loader,paths.get(file.split('?')[0])||file);return budget.mobile?shareModelTextures(g,texturePool):g;},budget.loadConcurrency);
-function loading(value){const f=document.querySelector('#loading-fill');if(f)f.style.transform=`scaleX(${value})`;document.querySelector('#loading-progress')?.setAttribute('aria-valuenow',String(Math.round(value*100)));}
+const loading=value=>loadingScreen.advance(value);
 function cel(source,{skin=false,tree=false}={}){
  const m=new T.MeshLambertMaterial({color:source.color?.clone()||new T.Color('white'),map:source.map||null,normalMap:source.normalMap||null,normalScale:source.normalScale?.clone()||new T.Vector2(1,1),vertexColors:!!source.vertexColors,side:source.side??T.FrontSide,transparent:source.transparent??false,alphaTest:source.alphaTest??0});
  const hook=m.onBeforeCompile;
@@ -129,7 +130,7 @@ async function main(){
  });
  function resize(){const portrait=innerWidth/innerHeight<.8,changed=portrait!==portraitMode;portraitMode=portrait;controls.maxDistance=innerWidth/innerHeight<.8?1100:720;const dpr=Math.min(devicePixelRatio,budget.dpr),scale=Math.min(1,Math.sqrt(budget.pixelLimit/(innerWidth*innerHeight*dpr*dpr)));renderer.setSize(Math.round(innerWidth*dpr*scale),Math.round(innerHeight*dpr*scale),false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();if(changed&&currentView&&!explore.active&&!land?.active&&!followed)view(currentView);}addEventListener('resize',resize);resize();view(query.get('view')||'overview');
  const monumentReflections=makeMonumentReflections({scene,renderer,meshes:metalMonuments,position:plan.monuments?.[0]?.position||[0,0,0],mobile:budget.mobile,canvas});
- loading(.86);canvas.dataset.phase='shaders';canvas.dataset.depth=JSON.stringify(prepareWorldDepth(scene));await prepareTextures(renderer,scene);monumentReflections.capture(coast.waterContext.night.value,cycle.diagnostics().sunset);await renderer.compileAsync(scene,camera);await residents.warmup();await explore.warmup(renderer);loading(1);document.querySelector('#loading').remove();canvas.dataset.phase='ready';canvas.dataset.ready='true';canvas.dataset.version='81';canvas.dataset.release='106';canvas.dataset.polishedModels=JSON.stringify(config.polishedModels);land.select(actors.find(a=>a.id==='district:0'));canvas.dataset.environment=JSON.stringify({trees:plan.treeCount,corals:plan.corals,houses:plan.buildings.length,drawGroups:batches.size+3+(paintGeos.length?1:0)+floating.length,artRevision:plan.artRevision||79,texturedMaterials:texturedMaterials.size,glb:'world.glb',effects:false,sharedTerrain:true,clouds:plan.clouds||null,upperPool:plan.upperPool||null,detailCounts:plan.detailCounts||null,finish:plan.finish||null,villageAssets:plan.villageAssets||null,paintKitbash:plan.paintKitbash||null,playgroundAssets:plan.playgroundAssets||null,sceneryExpansion:plan.sceneryExpansion||null,monuments:plan.monuments||[],winterIsland:plan.winterIsland?{...plan.winterIsland,bridge:{...plan.winterIsland.bridge,deckSamples:undefined},snowParticles:winterWeather.count}:null,wind:wind.diagnostics()});
+ loading(.86);canvas.dataset.phase='shaders';canvas.dataset.depth=JSON.stringify(prepareWorldDepth(scene));await prepareTextures(renderer,scene);monumentReflections.capture(coast.waterContext.night.value,cycle.diagnostics().sunset);await renderer.compileAsync(scene,camera);await residents.warmup();await explore.warmup(renderer);canvas.dataset.phase='ready';canvas.dataset.ready='true';canvas.dataset.version='81';canvas.dataset.release='107';canvas.dataset.polishedModels=JSON.stringify(config.polishedModels);land.select(actors.find(a=>a.id==='district:0'));canvas.dataset.environment=JSON.stringify({trees:plan.treeCount,corals:plan.corals,houses:plan.buildings.length,drawGroups:batches.size+3+(paintGeos.length?1:0)+floating.length,artRevision:plan.artRevision||79,texturedMaterials:texturedMaterials.size,glb:'world.glb',effects:false,sharedTerrain:true,clouds:plan.clouds||null,upperPool:plan.upperPool||null,detailCounts:plan.detailCounts||null,finish:plan.finish||null,villageAssets:plan.villageAssets||null,paintKitbash:plan.paintKitbash||null,playgroundAssets:plan.playgroundAssets||null,sceneryExpansion:plan.sceneryExpansion||null,monuments:plan.monuments||[],winterIsland:plan.winterIsland?{...plan.winterIsland,bridge:{...plan.winterIsland.bridge,deckSamples:undefined},snowParticles:winterWeather.count}:null,wind:wind.diagnostics()});
  let last=performance.now(),clock=0,lastDiagnostics=0,lastShadow=0,displayedWorks=0;const frameTimes=[];
  addEventListener('visibilitychange',()=>{last=performance.now();});
  function animate(now){requestAnimationFrame(animate);const ms=now-last,dt=Math.min(.05,ms/1000);last=now;if(document.hidden||gallery.open||recovery.lost)return;clock+=dt;
@@ -144,6 +145,6 @@ async function main(){
   if(clock>5&&ms<500){frameTimes.push(ms);if(frameTimes.length>300)frameTimes.shift();}
   if(budget.inspect&&now-lastDiagnostics>1500){const sorted=frameTimes.slice().sort((a,b)=>a-b);canvas.dataset.performance=JSON.stringify({viewport:[innerWidth,innerHeight],buffer:[canvas.width,canvas.height],samples:sorted.length,p95:sorted[Math.floor(sorted.length*.95)],p99:sorted[Math.floor(sorted.length*.99)],longFrames:sorted.filter(t=>t>50).length});canvas.dataset.renderer=JSON.stringify({calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures});canvas.dataset.residents=JSON.stringify(residents.diagnostics());canvas.dataset.gallery=JSON.stringify(gallery.diagnostics());canvas.dataset.camera=JSON.stringify({position:camera.position.toArray(),target:controls.target.toArray()});canvas.dataset.following=followed?.id||'';canvas.dataset.actorScreens=JSON.stringify(actors.filter(a=>a.root.visible).map(a=>{projected.set(a.body.x,actorY(a),a.body.z).project(camera);return {id:a.id,skin:a.skin,x:Math.round((projected.x*.5+.5)*innerWidth),y:Math.round((.5-projected.y*.5)*innerHeight),visible:Math.abs(projected.x)<1&&Math.abs(projected.y)<1};}));canvas.dataset.timeCycle=JSON.stringify(cycle.diagnostics());canvas.dataset.wind=JSON.stringify(wind.diagnostics());lastDiagnostics=now;}
  }
- requestAnimationFrame(animate);
+ renderer.render(scene,camera);await loadingScreen.finish();requestAnimationFrame(animate);
 }
-main().catch(e=>{canvas.dataset.phase='failed';canvas.dataset.error=e.message;recovery.fail(e);});
+main().catch(e=>{loadingScreen.fail();canvas.dataset.phase='failed';canvas.dataset.error=e.message;recovery.fail(e);});
