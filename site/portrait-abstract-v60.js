@@ -1,4 +1,4 @@
-import {CHARACTER_ART,normaliseArt} from './character-art.js?v=caf5cc4587a0';
+import {CHARACTER_ART,normaliseArt} from './character-art.js?v=d644c435c5eb';
 // One hundred sparse compositions; identity is colour/rhythm, never a traced face.
 export const ABSTRACT_PRESETS=Object.freeze(Array.from({length:100},(_,id)=>Object.freeze({id,family:'abstract',paper:['#eee7d8','#e9e6dc','#f2eadb'][id%3],sweep:Math.floor(id/10),direction:(id%10-4.5)*.13,markCount:13+id%7})));
 export function abstractPreset(id,art=CHARACTER_ART.base){const recipe=ABSTRACT_PRESETS[((id%100)+100)%100],identity=normaliseArt(art.id||'base',art);return {...recipe,name:identity.label+' · 색의 리듬',pigments:identity.palette,weights:identity.weights,rhythm:identity.rhythm,modelId:identity.id};}

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {yieldTask} from './runtime-budget-v69.js?v=caf5cc4587a0';
+import {yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 // The visible surface is the Blender-exported mesh. The same triangles answer

@@ -1,4 +1,4 @@
-import {indexVillageObstacles} from './static-obstacles-v73.js?v=caf5cc4587a0';
+import {indexVillageObstacles} from './static-obstacles-v73.js?v=d644c435c5eb';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const length=(x,z)=>Math.hypot(x,z);
 // Everyone proposes before anyone moves. Anticipatory steering passes on the

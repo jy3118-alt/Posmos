@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {gridTriangleHeight} from './terrain-grid.js?v=caf5cc4587a0';
-import {gameMaterial} from './game-material.js?v=caf5cc4587a0';
-import {planSwimmingBay,beachHeight} from './water-space.js?v=caf5cc4587a0';
+import {gridTriangleHeight} from './terrain-grid.js?v=d644c435c5eb';
+import {gameMaterial} from './game-material.js?v=d644c435c5eb';
+import {planSwimmingBay,beachHeight} from './water-space.js?v=d644c435c5eb';
 
 // Feet, props and camera use the rendered triangles, not an approximated heightfield.
 export function triangleSurface(geometries,minimumHeight=-11){

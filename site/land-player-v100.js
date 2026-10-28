@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {chooseDistantResident,eligibleResident,landCameraPoint} from './land-motion-v100.js?v=caf5cc4587a0';
+import {chooseDistantResident,eligibleResident,landCameraPoint} from './land-motion-v100.js?v=d644c435c5eb';
 
 // Control an existing resident in place. No extra model, mixer or crowd instance.
 export function makeLandPlayer({camera,controls,canvas,actors,residents,height,buildings,isDiving,leaveWater,onSelect}){

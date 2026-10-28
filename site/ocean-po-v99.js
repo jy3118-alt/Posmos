@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
-import {oceanLighting} from './ocean-light-v77.js?v=caf5cc4587a0';
-import {moveSwimmer,swimCameraPoint,swimFloor,SWIM_CLEARANCE,SWIM_SURFACE} from './swim-motion-v99.js?v=caf5cc4587a0';
+import {oceanLighting} from './ocean-light-v77.js?v=d644c435c5eb';
+import {moveSwimmer,swimCameraPoint,swimFloor,SWIM_CLEARANCE,SWIM_SURFACE} from './swim-motion-v99.js?v=d644c435c5eb';
 
 // One player uses the existing swimming Po asset and its actual skeletal clips.
 // The six autonomous residents keep their own animation and movement controllers.

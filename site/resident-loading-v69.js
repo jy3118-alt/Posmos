@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=caf5cc4587a0';
+import {checkedJSON,fetchResource,yieldTask} from './runtime-budget-v69.js?v=d644c435c5eb';
 
 export async function loadPoVariants(config,load){
  const result=[];

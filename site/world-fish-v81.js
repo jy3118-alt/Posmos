@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {marineMeshes} from './assets/ocean-v77/marine-meshes.js?v=9271a630b088';
-import {oceanLighting} from './ocean-light-v77.js?v=caf5cc4587a0';
+import {oceanLighting} from './ocean-light-v77.js?v=d644c435c5eb';
 // Reuse the existing CC0 Quaternius mesh; Posmos supplies the tail motion and schools.
 export function makeCoastFish(scene,height,context,cel,{mobile=false}={}){
  const data=marineMeshes.fish,g=new T.BufferGeometry();for(const key of ['position','color'])g.setAttribute(key,new T.Float32BufferAttribute(data[key],3));g.setIndex(data.index);g.computeVertexNormals();
